@@ -2,15 +2,20 @@ name: Crawl m3u8
 
 on:
   schedule:
-    - cron: "*/30 * * * *"   # chạy mỗi 30 phút
+    - cron: "*/15 * * * *"   # chạy mỗi 15 phút (GitHub cho phép tối thiểu 5 phút)
   workflow_dispatch:
 
 permissions:
   contents: write
 
+concurrency:               # không chạy chồng 2 lượt cùng lúc
+  group: crawl
+  cancel-in-progress: false
+
 jobs:
   crawl:
     runs-on: ubuntu-latest
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -23,5 +28,8 @@ jobs:
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add playlist.m3u
-          git diff --staged --quiet || git commit -m "Update playlist"
-          git push
+          git diff --staged --quiet || {
+            git commit -m "Update playlist"
+            git pull --rebase --autostash
+            git push
+          }
