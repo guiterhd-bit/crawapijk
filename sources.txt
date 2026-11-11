@@ -1,3 +1,5 @@
-# Mỗi dòng: url   hoặc   Tên nhóm | url
-# Tự động lấy theo danh sách trận ở trang chủ:  Tên nhóm | trang-chủ >> mẫu-link-trận
-Thể thao | https://colatv98.live/ >> /truc-tiep/
+# Cú pháp mỗi dòng:
+#   [Nhóm |] trang-chủ >> mẫu-link-trận ;; name=Tên nguồn ;; logo=link-logo-nguồn
+# - Nhóm       : group-title mặc định (nếu chưa lấy được tên giải)
+# - name, logo : x-source-name, x-source-logo (không bắt buộc)
+Bóng đá | https://colatv98.live/ >> /truc-tiep/ ;; name=Cola TV ;; logo=https://raw.githubusercontent.com/USER/REPO/main/colatv.png
