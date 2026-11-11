@@ -1,4 +1,22 @@
 #EXTM3U
-#EXTINF:-1 group-title="colatv98.live",Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD #1
-#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/doi-tuyen-quoc-gia-an-do-vs-maldives-luc-1630-ngay-11-11-2026-vmqy9iyjzzvhgk9?houseId=33982309
+#EXTINF:-1 group-title="Thể thao",Dtqg Viet Nam Vs Dai Bac Trung Hoa Luc 1900 Ngay 11 11 2026
+#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/dtqg-viet-nam-vs-dai-bac-trung-hoa-luc-1900-ngay-11-11-2026-ezk96ijne30a1kn?houseId=08552895
+https://live05.wecile.app/live/08552895.m3u8
+#EXTINF:-1 group-title="Thể thao",Dtqg Viet Nam Vs Dai Bac Trung Hoa Luc 1900 Ngay 11 11 2026 #2
+#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/dtqg-viet-nam-vs-dai-bac-trung-hoa-luc-1900-ngay-11-11-2026-ezk96ijne30a1kn?houseId=33982309
 https://live05.wecile.app/live/33982309.m3u8
+#EXTINF:-1 group-title="Thể thao",Dtqg Viet Nam Vs Dai Bac Trung Hoa Luc 1900 Ngay 11 11 2026 #3
+#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/dtqg-viet-nam-vs-dai-bac-trung-hoa-luc-1900-ngay-11-11-2026-ezk96ijne30a1kn?houseId=87547578
+https://live05.wecile.app/live/87547578.m3u8
+#EXTINF:-1 group-title="Thể thao",Trung Quoc U19 Vs Viet Nam U19 Luc 1835 Ngay 11 11 2026
+#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/trung-quoc-u19-vs-viet-nam-u19-luc-1835-ngay-11-11-2026-ndqmli9xz3esrkv?houseId=02456966
+https://live05.wecile.app/live/02456966.m3u8
+#EXTINF:-1 group-title="Thể thao",Urawa Reds Vs Cerezo Osaka Luc 1730 Ngay 11 11 2026
+#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/urawa-reds-vs-cerezo-osaka-luc-1730-ngay-11-11-2026-527r3i3enm9t47e
+https://live05.wecile.app/live/97885009.m3u8
+#EXTINF:-1 group-title="Thể thao",Phap U17 Vs Armenia U17 Luc 1800 Ngay 11 11 2026
+#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/phap-u17-vs-armenia-u17-luc-1800-ngay-11-11-2026-8lk2dirpnv3tz73
+https://live05.wecile.app/live/07808742.m3u8
+#EXTINF:-1 group-title="Thể thao",Cong Hoa Sec U19 Vs Ha Lan U19 Luc 2000 Ngay 11 11 2026
+#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/cong-hoa-sec-u19-vs-ha-lan-u19-luc-2000-ngay-11-11-2026-o07dnindwevimkn
+https://colatv88xi.cc/video2/output.m3u8
