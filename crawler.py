@@ -88,6 +88,53 @@ def extract_js(page_url):
     return [{"url": u, "title": title, "referer": page_url} for u in urls]
 
 
+def slug_to_name(link):
+    """.../doi-a-vs-doi-b-luc-1630-ngay-11-11-2026-vmqy9iyjzzvhgk9 -> tên trận."""
+    slug = urlparse(link).path.rstrip("/").split("/")[-1]
+    slug = re.sub(r"-[a-z0-9]{12,}$", "", slug)
+    return slug.replace("-", " ").title()
+
+
+def extract_follow_js(home_url, pattern, max_pages=40):
+    """Mở trang chủ, lấy mọi link chứa `pattern` (vd /truc-tiep/),
+    vào từng trang trận và bắt request .m3u8."""
+    from playwright.sync_api import sync_playwright
+
+    items = []
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page(user_agent=UA)
+        try:
+            page.goto(home_url, wait_until="networkidle", timeout=45000)
+            for _ in range(5):  # cuộn để trang nạp thêm trận
+                page.mouse.wheel(0, 3000)
+                page.wait_for_timeout(800)
+            hrefs = page.eval_on_selector_all("a[href]", "els => els.map(e => e.href)")
+        except Exception as e:
+            print(f"[!] Lỗi trang chủ {home_url}: {e}", file=sys.stderr)
+            hrefs = []
+        page.close()
+
+        links = list(dict.fromkeys(h for h in hrefs if pattern in h))[:max_pages]
+        print(f"    Tìm thấy {len(links)} trang trận")
+
+        for link in links:
+            urls = set()
+            pg = browser.new_page(user_agent=UA)
+            pg.on("request", lambda r, s=urls: s.add(r.url) if ".m3u8" in r.url else None)
+            try:
+                pg.goto(link, wait_until="networkidle", timeout=45000)
+                pg.wait_for_timeout(5000)
+            except Exception as e:
+                print(f"[!] Lỗi {link}: {e}", file=sys.stderr)
+            pg.close()
+            name = slug_to_name(link)
+            items += [{"url": u, "title": name, "name": name, "referer": link}
+                      for u in urls]
+        browser.close()
+    return items
+
+
 def is_alive(item):
     try:
         r = requests.get(item["url"], headers={"User-Agent": UA, "Referer": item["referer"]},
@@ -132,9 +179,14 @@ def main():
     items = []
     for group, url in read_sources(args.sources):
         print(f"[+] Quét {url}")
-        found = extract_js(url) if args.js else extract_static(url)
+        if ">>" in url:  # trang chủ >> mẫu link trận
+            home, pattern = [s.strip() for s in url.split(">>", 1)]
+            found = extract_follow_js(home, pattern)
+        else:
+            home = url
+            found = extract_js(url) if args.js else extract_static(url)
         for it in found:
-            it["group"] = group or urlparse(url).netloc
+            it["group"] = group or urlparse(home).netloc
         items += found
 
     # bỏ trùng theo URL
@@ -150,8 +202,11 @@ def main():
         items = [it for it, ok in zip(items, alive) if ok]
         print(f"[=] Còn sống: {len(items)}")
 
-    for n, it in enumerate(items, 1):
-        it["name"] = f'{it["title"][:60]} #{n}'
+    count = {}
+    for it in items:
+        base = it.get("name") or it["title"][:60]
+        count[base] = count.get(base, 0) + 1
+        it["name"] = base if count[base] == 1 else f"{base} #{count[base]}"
 
     write_m3u(items, args.out)
     print(f"[✓] Đã ghi {args.out}")
