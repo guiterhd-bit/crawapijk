@@ -1,25 +1,16 @@
 #EXTM3U
-#EXTINF:-1 tvg-id="colatv98-match-08552895" tvg-name="Dtqg Viet Nam Vs Dai Bac Trung Hoa - HLS1" group-title="colatv98.live" start="2026-11-11T19:00:00+07:00" x-source="colatv98" x-source-name="Cola TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/colatv.png",Dtqg Viet Nam Vs Dai Bac Trung Hoa | 11/11 19:00 | HLS1
-#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/dtqg-viet-nam-vs-dai-bac-trung-hoa-luc-1900-ngay-11-11-2026-ezk96ijne30a1kn?houseId=08552895
-https://live05.wecile.app/live/08552895.m3u8
-#EXTINF:-1 tvg-id="colatv98-match-33982309-2" tvg-name="Dtqg Viet Nam Vs Dai Bac Trung Hoa - HLS2" group-title="colatv98.live" start="2026-11-11T19:00:00+07:00" x-source="colatv98" x-source-name="Cola TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/colatv.png",Dtqg Viet Nam Vs Dai Bac Trung Hoa | 11/11 19:00 | HLS2
-#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/dtqg-viet-nam-vs-dai-bac-trung-hoa-luc-1900-ngay-11-11-2026-ezk96ijne30a1kn?houseId=33982309
-https://live05.wecile.app/live/33982309.m3u8
-#EXTINF:-1 tvg-id="colatv98-match-02456966" tvg-name="Trung Quoc U19 Vs Viet Nam U19 - HLS1" group-title="colatv98.live" start="2026-11-11T18:35:00+07:00" x-source="colatv98" x-source-name="Cola TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/colatv.png",Trung Quoc U19 Vs Viet Nam U19 | 11/11 18:35 | HLS1
-#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/trung-quoc-u19-vs-viet-nam-u19-luc-1835-ngay-11-11-2026-ndqmli9xz3esrkv?houseId=02456966
+#EXTINF:-1 tvg-id="colatv98-match-ezk96ijnygoh1kn" tvg-name="Hammarby Nu Vs Myjava Nu - HLS1" group-title="colatv98.live" start="2026-11-12T01:00:00+07:00" x-source="colatv98" x-source-name="Cola TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/colatv.png",Hammarby Nu Vs Myjava Nu | 12/11 01:00 | HLS1
+#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/hammarby-nu-vs-myjava-nu-luc-0100-ngay-12-11-2026-ezk96ijnygoh1kn
+https://live05.wecile.app/live/75748097.m3u8
+#EXTINF:-1 tvg-id="colatv98-match-9gklzi1g13ghm7x" tvg-name="Sheffield Wednesday Vs Accrington - HLS1" group-title="colatv98.live" start="2026-11-12T02:00:00+07:00" x-source="colatv98" x-source-name="Cola TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/colatv.png",Sheffield Wednesday Vs Accrington | 12/11 02:00 | HLS1
+#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/sheffield-wednesday-vs-accrington-luc-0200-ngay-12-11-2026-9gklzi1g13ghm7x
 https://live05.wecile.app/live/02456966.m3u8
-#EXTINF:-1 tvg-id="colatv98-match-o07dnindwevimkn" tvg-name="Cong Hoa Sec U19 Vs Ha Lan U19 - HLS1" group-title="colatv98.live" start="2026-11-11T20:00:00+07:00" x-source="colatv98" x-source-name="Cola TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/colatv.png",Cong Hoa Sec U19 Vs Ha Lan U19 | 11/11 20:00 | HLS1
-#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/cong-hoa-sec-u19-vs-ha-lan-u19-luc-2000-ngay-11-11-2026-o07dnindwevimkn
-https://live05.wecile.app/live/33860426.m3u8
-#EXTINF:-1 tvg-id="colatv98-match-j374oi0p0mnfgqo" tvg-name="Singapore U17 Vs India U17 - HLS1" group-title="colatv98.live" start="2026-11-11T20:00:00+07:00" x-source="colatv98" x-source-name="Cola TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/colatv.png",Singapore U17 Vs India U17 | 11/11 20:00 | HLS1
-#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/singapore-u17-vs-india-u17-luc-2000-ngay-11-11-2026-j374oi0p0mnfgqo
-https://live05.wecile.app/live/75915087.m3u8
-#EXTINF:-1 tvg-id="colatv98-match-vrqwni0og69c4qn" tvg-name="Tho Nhi Ky U19 Vs Slovakia U19 - HLS1" group-title="colatv98.live" start="2026-11-11T20:00:00+07:00" x-source="colatv98" x-source-name="Cola TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/colatv.png",Tho Nhi Ky U19 Vs Slovakia U19 | 11/11 20:00 | HLS1
-#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/tho-nhi-ky-u19-vs-slovakia-u19-luc-2000-ngay-11-11-2026-vrqwni0og69c4qn
-https://live05.wecile.app/live/16226575.m3u8
-#EXTINF:-1 tvg-id="colatv98-match-ndkz6i3y1g1sxq3" tvg-name="Montenegro U17 Vs Anh U17 - HLS1" group-title="colatv98.live" start="2026-11-11T21:00:00+07:00" x-source="colatv98" x-source-name="Cola TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/colatv.png",Montenegro U17 Vs Anh U17 | 11/11 21:00 | HLS1
-#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/montenegro-u17-vs-anh-u17-luc-2100-ngay-11-11-2026-ndkz6i3y1g1sxq3
-https://live05.wecile.app/live/97885009.m3u8
-#EXTINF:-1 tvg-id="colatv98-match-m2q15i8244wae76" tvg-name="Doi Tuyen Quoc Gia Bangladesh Vs Sri Lanka - HLS1" group-title="colatv98.live" start="2026-11-11T21:00:00+07:00" x-source="colatv98" x-source-name="Cola TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/colatv.png",Doi Tuyen Quoc Gia Bangladesh Vs Sri Lanka | 11/11 21:00 | HLS1
-#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/doi-tuyen-quoc-gia-bangladesh-vs-sri-lanka-luc-2100-ngay-11-11-2026-m2q15i8244wae76
+#EXTINF:-1 tvg-id="colatv98-match-527rjswdey5i4ke" tvg-name="Paris Basketball Vs Fenerbahce - HLS1" group-title="colatv98.live" start="2026-11-12T02:45:00+07:00" x-source="colatv98" x-source-name="Cola TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/colatv.png",Paris Basketball Vs Fenerbahce | 12/11 02:45 | HLS1
+#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/paris-basketball-vs-fenerbahce-luc-0245-ngay-12-11-2026-527rjswdey5i4ke
+https://live05.wecile.app/live/87379114.m3u8
+#EXTINF:-1 tvg-id="colatv98-match-34kgps1lvrwueko" tvg-name="Partizan Vs Saski Baskonia - HLS1" group-title="colatv98.live" start="2026-11-12T02:45:00+07:00" x-source="colatv98" x-source-name="Cola TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/colatv.png",Partizan Vs Saski Baskonia | 12/11 02:45 | HLS1
+#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/partizan-vs-saski-baskonia-luc-0245-ngay-12-11-2026-34kgps1lvrwueko
+https://live05.wecile.app/live/82054853.m3u8
+#EXTINF:-1 tvg-id="colatv98-match-jek33imxjz0s9ko" tvg-name="Juventus Nu Vs Clb Nu Lyon - HLS1" group-title="colatv98.live" start="2026-11-12T03:00:00+07:00" x-source="colatv98" x-source-name="Cola TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/colatv.png",Juventus Nu Vs Clb Nu Lyon | 12/11 03:00 | HLS1
+#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/juventus-nu-vs-clb-nu-lyon-luc-0300-ngay-12-11-2026-jek33imxjz0s9ko
 https://colatv88xi.cc/video2/output.m3u8
