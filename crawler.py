@@ -8,6 +8,7 @@ Dùng:
     python crawler.py --no-check     # bỏ qua bước kiểm tra link sống
 """
 import argparse
+import asyncio
 import html
 import re
 import sys
@@ -141,55 +142,68 @@ def extract_js(page_url):
     return [{"url": u, "match": title, "referer": page_url} for u in sorted(urls)]
 
 
-def extract_follow_js(home_url, pattern, max_pages=40):
-    """Mở trang chủ, lấy mọi link chứa `pattern` (vd /truc-tiep/),
-    vào từng trang trận và bắt request .m3u8 + ảnh/tiêu đề trận."""
-    from playwright.sync_api import sync_playwright
-
-    items = []
-    with sync_playwright() as p:
-        browser = p.chromium.launch()
-        page = browser.new_page(user_agent=UA)
+async def _scan_match(browser, link, sem, wait_ms=20000):
+    """Mở 1 trang trận, bắt m3u8 + ảnh/tiêu đề. Chạy song song nhiều trang."""
+    async with sem:
+        urls = set()
+        ctx = await browser.new_context(user_agent=UA)
+        pg = await ctx.new_page()
+        pg.on("request", lambda r: urls.add(r.url) if ".m3u8" in r.url else None)
         try:
-            page.goto(home_url, wait_until="domcontentloaded", timeout=30000)
-            page.wait_for_timeout(4000)
+            await pg.goto(link, wait_until="domcontentloaded", timeout=30000)
+        except Exception as e:
+            print(f"[!] Lỗi tải {link}: {e}", file=sys.stderr)
+        waited = 0
+        while waited < wait_ms and not urls:
+            await pg.wait_for_timeout(500)
+            waited += 500
+        if urls:
+            await pg.wait_for_timeout(2000)  # chờ thêm link phụ
+        try:
+            meta = await pg.evaluate(PAGE_META_JS)
+        except Exception:
+            meta = {}
+        await ctx.close()
+
+    h1 = meta.get("h1", "")
+    match = h1 if re.search(r"\bvs\b", h1, re.I) and len(h1) < 120 else slug_to_name(link)
+    print(f"    {match}: {len(urls)} link")
+    return [{"url": u, "referer": link, "match": match,
+             "when": slug_to_time(link), "start": slug_to_start(link),
+             "mid": match_id(link), "logo": meta.get("img", "")}
+            for u in sorted(urls)]
+
+
+async def _follow_async(home_url, pattern, max_pages, workers):
+    from playwright.async_api import async_playwright
+
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        page = await browser.new_page(user_agent=UA)
+        try:
+            await page.goto(home_url, wait_until="domcontentloaded", timeout=30000)
+            await page.wait_for_timeout(4000)
             for _ in range(5):  # cuộn để trang nạp thêm trận
-                page.mouse.wheel(0, 3000)
-                page.wait_for_timeout(800)
-            hrefs = page.eval_on_selector_all("a[href]", "els => els.map(e => e.href)")
+                await page.mouse.wheel(0, 3000)
+                await page.wait_for_timeout(800)
+            hrefs = await page.eval_on_selector_all("a[href]", "els => els.map(e => e.href)")
         except Exception as e:
             print(f"[!] Lỗi trang chủ {home_url}: {e}", file=sys.stderr)
             hrefs = []
-        page.close()
+        await page.close()
 
         links = list(dict.fromkeys(h for h in hrefs if pattern in h))[:max_pages]
         print(f"    Tìm thấy {len(links)} trang trận")
+        sem = asyncio.Semaphore(workers)
+        results = await asyncio.gather(*[_scan_match(browser, l, sem) for l in links])
+        await browser.close()
+    return [it for r in results for it in r]
 
-        for link in links:
-            urls = set()
-            pg = browser.new_page(user_agent=UA)
-            pg.on("request", lambda r, s=urls: s.add(r.url) if ".m3u8" in r.url else None)
-            try:
-                pg.goto(link, wait_until="domcontentloaded", timeout=30000)
-            except Exception as e:
-                print(f"[!] Lỗi tải {link}: {e}", file=sys.stderr)
-            sniff(pg, urls)
-            try:
-                meta = pg.evaluate(PAGE_META_JS)
-            except Exception:
-                meta = {}
-            pg.close()
 
-            h1 = meta.get("h1", "")
-            match = h1 if re.search(r"\bvs\b", h1, re.I) and len(h1) < 120 else slug_to_name(link)
-            print(f"    {match}: {len(urls)} link")
-            for u in sorted(urls):
-                items.append({"url": u, "referer": link, "match": match,
-                              "when": slug_to_time(link), "start": slug_to_start(link),
-                              "mid": match_id(link),
-                              "logo": meta.get("img", "")})
-        browser.close()
-    return items
+def extract_follow_js(home_url, pattern, max_pages=40, workers=5):
+    """Mở trang chủ, lấy mọi link chứa `pattern` (vd /truc-tiep/),
+    rồi quét song song `workers` trang trận cùng lúc."""
+    return asyncio.run(_follow_async(home_url, pattern, max_pages, workers))
 
 
 # ---------------------------------------------------------------- kiểm tra + ghi file
@@ -292,6 +306,9 @@ def main():
         items = [it for it, ok in zip(items, alive) if ok]
         print(f"[=] Còn sống: {len(items)}")
 
+    if not items:
+        print("[!] Không lấy được link nào -> giữ nguyên playlist cũ", file=sys.stderr)
+        return
     finalize(items)
     write_m3u(items, args.out)
     print(f"[✓] Đã ghi {args.out}")
