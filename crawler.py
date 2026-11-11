@@ -96,6 +96,12 @@ def slug_to_time(link):
     return f"{m.group(3)}/{m.group(4)} {m.group(1)}:{m.group(2)}" if m else ""
 
 
+def slug_to_start(link):
+    """.../luc-1630-ngay-11-11-2026-... -> '2026-11-11T16:30:00+07:00' (giờ Việt Nam)."""
+    m = re.search(r"luc-(\d{2})(\d{2})-ngay-(\d{2})-(\d{2})-(\d{4})", link)
+    return f"{m.group(5)}-{m.group(4)}-{m.group(3)}T{m.group(1)}:{m.group(2)}:00+07:00" if m else ""
+
+
 def match_id(link):
     q = parse_qs(urlparse(link).query).get("houseId")
     if q:
@@ -179,7 +185,8 @@ def extract_follow_js(home_url, pattern, max_pages=40):
             print(f"    {match}: {len(urls)} link")
             for u in sorted(urls):
                 items.append({"url": u, "referer": link, "match": match,
-                              "when": slug_to_time(link), "mid": match_id(link),
+                              "when": slug_to_time(link), "start": slug_to_start(link),
+                              "mid": match_id(link),
                               "logo": meta.get("img", "")})
         browser.close()
     return items
@@ -226,6 +233,7 @@ def write_m3u(items, path):
                     + attr("tvg-name", i["tvg_name"])
                     + attr("tvg-logo", i.get("logo"))
                     + attr("group-title", i["group"])
+                    + attr("start", i.get("start"))
                     + attr("x-source", i["source"])
                     + attr("x-source-name", i["source_name"])
                     + attr("x-source-logo", i.get("source_logo"))
@@ -240,7 +248,7 @@ def finalize(items):
     for n, it in enumerate(items, 1):
         match = (it.get("match") or "")[:80]
         k = count[match] = count.get(match, 0) + 1
-        label = f"Link {k}"
+        label = f"HLS{k}"  # app nhận HLS/HD/FLV ở cuối tên để gộp luồng
         it["name"] = " | ".join(x for x in (match, it.get("when"), label) if x)
         it["tvg_name"] = f"{match} - {label}"
         base = f'{it["source"]}-match-{it["mid"]}' if it.get("mid") else f'{it["source"]}-{n}'
