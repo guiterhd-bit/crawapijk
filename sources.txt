@@ -3,4 +3,4 @@
 # - Nhóm       : group-title mặc định (nếu chưa lấy được tên giải)
 # - name, logo : x-source-name, x-source-logo (không bắt buộc)
 https://colatv98.live/ >> /truc-tiep/ ;; name=Cola TV ;; logo=https://raw.githubusercontent.com/USER/REPO/main/colatv.png
-https://xoilaczci.tv/ >> /truc-tiep/ ;; name=Xôi Lạc TV ;; logo=https://raw.githubusercontent.com/USER/REPO/main/xoilactv.png
+https://bestfootforward.com/ >> /truc-tiep/ ;; name=Xôi Lạc TV ;; logo=https://raw.githubusercontent.com/USER/REPO/main/xoilactv.png
