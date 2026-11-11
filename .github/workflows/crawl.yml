@@ -16,8 +16,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install requests
-      - run: python crawler.py
+      - run: pip install requests playwright && playwright install --with-deps chromium
+      - run: python crawler.py --js
       - name: Commit playlist
         run: |
           git config user.name "github-actions"
