@@ -68,6 +68,16 @@ def extract_static(page_url, depth=1, seen=None):
     return items
 
 
+def sniff(page, urls, timeout=25000):
+    """Chờ tới khi bắt được request m3u8 (hoặc hết giờ), không đợi 'networkidle'."""
+    waited = 0
+    while waited < timeout and not urls:
+        page.wait_for_timeout(500)
+        waited += 500
+    if urls:
+        page.wait_for_timeout(2000)  # chờ thêm các link phụ (chất lượng khác)
+
+
 def extract_js(page_url):
     """Mở trang bằng trình duyệt thật, bắt request .m3u8 (trang render bằng JS)."""
     from playwright.sync_api import sync_playwright
@@ -78,8 +88,8 @@ def extract_js(page_url):
         page = browser.new_page(user_agent=UA)
         page.on("request", lambda req: urls.add(req.url) if ".m3u8" in req.url else None)
         try:
-            page.goto(page_url, wait_until="networkidle", timeout=45000)
-            page.wait_for_timeout(5000)
+            page.goto(page_url, wait_until="domcontentloaded", timeout=30000)
+            sniff(page, urls)
             title = page.title() or urlparse(page_url).netloc
         except Exception as e:
             print(f"[!] Lỗi {page_url}: {e}", file=sys.stderr)
@@ -105,7 +115,8 @@ def extract_follow_js(home_url, pattern, max_pages=40):
         browser = p.chromium.launch()
         page = browser.new_page(user_agent=UA)
         try:
-            page.goto(home_url, wait_until="networkidle", timeout=45000)
+            page.goto(home_url, wait_until="domcontentloaded", timeout=30000)
+            page.wait_for_timeout(4000)
             for _ in range(5):  # cuộn để trang nạp thêm trận
                 page.mouse.wheel(0, 3000)
                 page.wait_for_timeout(800)
@@ -123,10 +134,11 @@ def extract_follow_js(home_url, pattern, max_pages=40):
             pg = browser.new_page(user_agent=UA)
             pg.on("request", lambda r, s=urls: s.add(r.url) if ".m3u8" in r.url else None)
             try:
-                pg.goto(link, wait_until="networkidle", timeout=45000)
-                pg.wait_for_timeout(5000)
+                pg.goto(link, wait_until="domcontentloaded", timeout=30000)
             except Exception as e:
-                print(f"[!] Lỗi {link}: {e}", file=sys.stderr)
+                print(f"[!] Lỗi tải {link}: {e}", file=sys.stderr)
+            sniff(pg, urls)
+            print(f"    {slug_to_name(link)}: {len(urls)} link")
             pg.close()
             name = slug_to_name(link)
             items += [{"url": u, "title": name, "name": name, "referer": link}
