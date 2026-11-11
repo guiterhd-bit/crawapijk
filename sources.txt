@@ -1,4 +1,3 @@
 # Mỗi dòng: url   hoặc   Tên nhóm | url
 # Dòng bắt đầu bằng # là chú thích
-Cola TV | https://colatv98.live/
-https://example.com/trang-khac
+https://colatv98.live/truc-tiep/doi-tuyen-quoc-gia-an-do-vs-maldives-luc-1630-ngay-11-11-2026-vmqy9iyjzzvhgk9?houseId=33982309
