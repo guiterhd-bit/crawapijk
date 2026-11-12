@@ -10,6 +10,8 @@ Dùng:
 import argparse
 import asyncio
 import html
+import json
+import os
 import re
 import sys
 from datetime import datetime, timedelta, timezone
@@ -264,6 +266,49 @@ def is_alive(item):
         return False
 
 
+def check_stream(item):
+    """(sống?, referer cần thiết). Thử KHÔNG Referer trước; chỉ khi 401/403 mới thử có Referer
+    (giống cách scripts/update.py của sport-api quyết định có gắn Referer hay không)."""
+    def probe(ref):
+        headers = {"User-Agent": UA}
+        if ref:
+            headers["Referer"] = ref
+        try:
+            r = requests.get(item["url"], headers=headers, timeout=10, stream=True)
+            head = next(r.iter_content(64), b"")
+            r.close()
+            return r.status_code == 200 and head.lstrip().startswith(b"#EXTM3U")
+        except Exception:
+            return False
+
+    if probe(None):
+        return True, ""
+    if item.get("referer") and probe(item["referer"]):
+        return True, item["referer"]
+    return False, ""
+
+
+def write_staging(items, path):
+    """Ghi file trung gian mà sport-api/scripts/update.py đọc (data/crawler_tmp/m3u8_found.json)."""
+    streams = [{
+        "url": i["url"],
+        "verified": True,
+        "is_hls": True,
+        "site": i["source_name"],
+        "site_id": i["source"],
+        "match": i.get("match", ""),
+        "league": i.get("league", ""),
+        "logo": i.get("logo", ""),
+        "page": i.get("referer", ""),
+        "match_time": i.get("start", ""),
+        "referer": i.get("needs_referer", ""),
+        "source_logo": i.get("source_logo", ""),
+    } for i in items]
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump({"streams": streams}, f, ensure_ascii=False, indent=2)
+
+
 def read_sources(path):
     """Mỗi dòng: [Nhóm |] url [>> mẫu-link-trận] [;; name=... ;; logo=... ;; id=...]"""
     out = []
@@ -321,6 +366,9 @@ def main():
     ap.add_argument("--out", default="playlist.m3u")
     ap.add_argument("--js", action="store_true", help="dùng Playwright cho dòng không có '>>'")
     ap.add_argument("--no-check", action="store_true", help="không kiểm tra link sống")
+    ap.add_argument("--staging", default="",
+                    help="ghi thêm file JSON cho sport-api, vd data/crawler_tmp/m3u8_found.json")
+    ap.add_argument("--no-playlist", action="store_true", help="không ghi playlist.m3u")
     args = ap.parse_args()
 
     items = []
@@ -353,7 +401,10 @@ def main():
 
     if not args.no_check and items:
         with ThreadPoolExecutor(max_workers=10) as ex:
-            alive = list(ex.map(is_alive, items))
+            checks = list(ex.map(check_stream, items))
+        alive = [c[0] for c in checks]
+        for it, c in zip(items, checks):
+            it["needs_referer"] = c[1]
         stats = {}
         for it, ok in zip(items, alive):
             a, b = stats.get(it["source"], (0, 0))
@@ -367,8 +418,12 @@ def main():
         print("[!] Không lấy được link nào -> giữ nguyên playlist cũ", file=sys.stderr)
         return
     finalize(items)
-    write_m3u(items, args.out)
-    print(f"[✓] Đã ghi {args.out}")
+    if not args.no_playlist:
+        write_m3u(items, args.out)
+        print(f"[✓] Đã ghi {args.out}")
+    if args.staging:
+        write_staging(items, args.staging)
+        print(f"[✓] Đã ghi {args.staging} ({len(items)} link)")
 
 
 if __name__ == "__main__":
