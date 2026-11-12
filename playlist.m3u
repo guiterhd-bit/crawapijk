@@ -1,19 +1,25 @@
 #EXTM3U
-#EXTINF:-1 tvg-id="colatv98-match-59444581" tvg-name="Club America Nu Vs Toluca Nu - HLS1" group-title="colatv98.live" start="2026-11-12T08:00:00+07:00" x-source="colatv98" x-source-name="Cola TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/colatv.png",Club America Nu Vs Toluca Nu | 12/11 08:00 | HLS1
-#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/club-america-nu-vs-toluca-nu-luc-0800-ngay-12-11-2026-jr7owiy6ppougq0?houseId=59444581
-https://live05.wecile.app/live/59444581.m3u8
-#EXTINF:-1 tvg-id="colatv98-match-jek3psd410oc9qo" tvg-name="New York Knicks Vs Cleveland Cavaliers - HLS1" group-title="colatv98.live" start="2026-11-12T07:00:00+07:00" x-source="colatv98" x-source-name="Cola TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/colatv.png",New York Knicks Vs Cleveland Cavaliers | 12/11 07:00 | HLS1
-#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/new-york-knicks-vs-cleveland-cavaliers-luc-0700-ngay-12-11-2026-jek3psd410oc9qo
+#EXTINF:-1 tvg-id="colatv98-match-49572724" tvg-name="Piratas Fc Vs Atletico La Paz - HLS1" group-title="colatv98.live" start="2026-11-12T09:00:00+07:00" x-source="colatv98" x-source-name="Cola TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/colatv.png",Piratas Fc Vs Atletico La Paz | 12/11 09:00 | HLS1
+#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/piratas-fc-vs-atletico-la-paz-luc-0900-ngay-12-11-2026-l6kegirzr0rcv75?houseId=49572724
+https://live05.wecile.app/live/49572724.m3u8
+#EXTINF:-1 tvg-id="colatv98-match-90865415" tvg-name="Portland Trail Blazers Vs Oklahoma City Thunder - HLS1" group-title="colatv98.live" start="2026-11-12T10:00:00+07:00" x-source="colatv98" x-source-name="Cola TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/colatv.png",Portland Trail Blazers Vs Oklahoma City Thunder | 12/11 10:00 | HLS1
+#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/portland-trail-blazers-vs-oklahoma-city-thunder-luc-1000-ngay-12-11-2026-xvkjvszwvj0c8k9?houseId=90865415
 https://live05.wecile.app/live/90865415.m3u8
-#EXTINF:-1 tvg-id="colatv98-match-o07dzsmrg91hmkn" tvg-name="Toronto Raptors Vs Boston Celtics - HLS1" group-title="colatv98.live" start="2026-11-12T07:00:00+07:00" x-source="colatv98" x-source-name="Cola TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/colatv.png",Toronto Raptors Vs Boston Celtics | 12/11 07:00 | HLS1
-#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/toronto-raptors-vs-boston-celtics-luc-0700-ngay-12-11-2026-o07dzsmrg91hmkn
-https://live05.wecile.app/live/19919577.m3u8
+#EXTINF:-1 tvg-id="colatv98-match-99121525" tvg-name="Pachuca Nu Vs Monterrey Nu - HLS1" group-title="colatv98.live" start="2026-11-12T10:00:00+07:00" x-source="colatv98" x-source-name="Cola TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/colatv.png",Pachuca Nu Vs Monterrey Nu | 12/11 10:00 | HLS1
+#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/pachuca-nu-vs-monterrey-nu-luc-1000-ngay-12-11-2026-edq09i2mllrbeqx?houseId=99121525
+https://live05.wecile.app/live/99121525.m3u8
 #EXTINF:-1 tvg-id="colatv98-match-j374ws9gwxntgko" tvg-name="Milwaukee Bucks Vs Los Angeles Lakers - HLS1" group-title="colatv98.live" start="2026-11-12T08:00:00+07:00" x-source="colatv98" x-source-name="Cola TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/colatv.png",Milwaukee Bucks Vs Los Angeles Lakers | 12/11 08:00 | HLS1
 #EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/milwaukee-bucks-vs-los-angeles-lakers-luc-0800-ngay-12-11-2026-j374ws9gwxntgko
 https://live05.wecile.app/live/56998120.m3u8
-#EXTINF:-1 tvg-id="colatv98-match-l6kegirzr0rcv75" tvg-name="Piratas Fc Vs Atletico La Paz - HLS1" group-title="colatv98.live" start="2026-11-12T09:00:00+07:00" x-source="colatv98" x-source-name="Cola TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/colatv.png",Piratas Fc Vs Atletico La Paz | 12/11 09:00 | HLS1
-#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/piratas-fc-vs-atletico-la-paz-luc-0900-ngay-12-11-2026-l6kegirzr0rcv75
-https://live05.wecile.app/live/49572724.m3u8
 #EXTINF:-1 tvg-id="colatv98-match-l6kersm23dmsvq5" tvg-name="Houston Rockets Vs Golden State Warriors - HLS1" group-title="colatv98.live" start="2026-11-12T09:30:00+07:00" x-source="colatv98" x-source-name="Cola TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/colatv.png",Houston Rockets Vs Golden State Warriors | 12/11 09:30 | HLS1
 #EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/houston-rockets-vs-golden-state-warriors-luc-0930-ngay-12-11-2026-l6kersm23dmsvq5
+https://live05.wecile.app/live/19919577.m3u8
+#EXTINF:-1 tvg-id="colatv98-match-ezk96ij065mc1kn" tvg-name="New Zealand Vs Doi Tuyen Quoc Gia An Do - HLS1" group-title="colatv98.live" start="2026-11-12T13:00:00+07:00" x-source="colatv98" x-source-name="Cola TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/colatv.png",New Zealand Vs Doi Tuyen Quoc Gia An Do | 12/11 13:00 | HLS1
+#EXTVLCOPT:http-referrer=https://colatv98.live/truc-tiep/new-zealand-vs-doi-tuyen-quoc-gia-an-do-luc-1300-ngay-12-11-2026-ezk96ij065mc1kn
 https://colatv88xi.cc/video2/output.m3u8
+#EXTINF:-1 tvg-id="biaomtv-match-l5ergphkok7kr8k" tvg-name="Piratas FC vs Club Atletico La Paz 09:00 ngày 12/11/2026 Trực Tiếp Thể Thao - HLS1" tvg-logo="https://biaomtv.fun/logo.png" group-title="biaomtv.fun" x-source="biaomtv" x-source-name="BiaOm TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/biaomtv.png",Piratas FC vs Club Atletico La Paz 09:00 ngày 12/11/2026 Trực Tiếp Thể Thao | HLS1
+#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/piratas-fc-vs-club-atletico-la-paz-l5ergphkok7kr8k
+https://lilive1.eu.cc/live/543aa283ed66bb6c288e100c9435ce21/playlist.m3u8
+#EXTINF:-1 tvg-id="biaomtv-match-l5ergphkok7kr8k-2" tvg-name="Piratas FC vs Club Atletico La Paz 09:00 ngày 12/11/2026 Trực Tiếp Thể Thao - HLS2" tvg-logo="https://biaomtv.fun/logo.png" group-title="biaomtv.fun" x-source="biaomtv" x-source-name="BiaOm TV" x-source-logo="https://raw.githubusercontent.com/USER/REPO/main/biaomtv.png",Piratas FC vs Club Atletico La Paz 09:00 ngày 12/11/2026 Trực Tiếp Thể Thao | HLS2
+#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/piratas-fc-vs-club-atletico-la-paz-l5ergphkok7kr8k
+https://lilive1.eu.cc/live/748ef30d8341aca2dfcca6c1b15ea265/playlist.m3u8
