@@ -12,6 +12,7 @@ import asyncio
 import html
 import re
 import sys
+from datetime import datetime, timedelta, timezone
 from concurrent.futures import ThreadPoolExecutor
 from urllib.parse import parse_qs, urljoin, urlparse
 
@@ -30,7 +31,8 @@ PAGE_META_JS = """() => {
   const q = s => document.querySelector(s) || {};
   return {
     img: q('meta[property="og:image"]').content || '',
-    h1: (q('h1').innerText || '').trim()
+    h1: (q('h1').innerText || '').trim(),
+    title: (q('meta[property="og:title"]').content || document.title || '').trim()
   };
 }"""
 
@@ -103,10 +105,22 @@ def slug_to_start(link):
     return f"{m.group(5)}-{m.group(4)}-{m.group(3)}T{m.group(1)}:{m.group(2)}:00+07:00" if m else ""
 
 
+def too_far(link, hours):
+    """True nếu trận bắt đầu sau hơn `hours` giờ nữa (chưa có luồng, khỏi mất 20s chờ)."""
+    start = slug_to_start(link)
+    if not start:
+        return False
+    return datetime.fromisoformat(start) - datetime.now(timezone.utc) > timedelta(hours=hours)
+
+
 def match_id(link):
-    q = parse_qs(urlparse(link).query).get("houseId")
-    if q:
-        return q[0]
+    qs = parse_qs(urlparse(link).query)
+    for key in ("houseId", "scheduleId", "id"):
+        if qs.get(key) and qs[key][0]:
+            return qs[key][0]
+    for seg in urlparse(link).path.split("/"):  # vd /live/994936/ten-tran, /room/356042
+        if re.fullmatch(r"\d{4,}", seg):
+            return seg
     m = re.search(r"-([a-z0-9]{12,})$", _slug(link))
     return m.group(1) if m else ""
 
@@ -142,7 +156,21 @@ def extract_js(page_url):
     return [{"url": u, "match": title, "referer": page_url} for u in sorted(urls)]
 
 
-async def _scan_match(browser, link, sem, wait_ms=20000):
+def pick_name(link, meta):
+    def is_match(t):
+        return bool(t) and len(t) < 120 and re.search(r"\bvs\b|\bv\b| - ", t, re.I)
+    h1, title = meta.get("h1", ""), meta.get("title", "")
+    if is_match(h1):
+        return h1
+    if is_match(title):
+        return title
+    slug = _slug(link)
+    if not slug.isdigit():  # slug có chữ -> dùng được
+        return slug_to_name(link)
+    return (h1 or title or slug)[:80]
+
+
+async def _scan_match(browser, link, sem, wait_ms=15000):
     """Mở 1 trang trận, bắt m3u8 + ảnh/tiêu đề. Chạy song song nhiều trang."""
     async with sem:
         urls = set()
@@ -166,7 +194,7 @@ async def _scan_match(browser, link, sem, wait_ms=20000):
         await ctx.close()
 
     h1 = meta.get("h1", "")
-    match = h1 if re.search(r"\bvs\b", h1, re.I) and len(h1) < 120 else slug_to_name(link)
+    match = pick_name(link, meta)
     print(f"    {match}: {len(urls)} link")
     return [{"url": u, "referer": link, "match": match,
              "when": slug_to_time(link), "start": slug_to_start(link),
@@ -174,35 +202,53 @@ async def _scan_match(browser, link, sem, wait_ms=20000):
             for u in sorted(urls)]
 
 
-async def _follow_async(home_url, pattern, max_pages, workers):
+async def _follow_async(home_url, pattern, max_pages, workers, budget=200, ahead_h=3):
     from playwright.async_api import async_playwright
 
     async with async_playwright() as p:
         browser = await p.chromium.launch()
-        page = await browser.new_page(user_agent=UA)
         try:
-            await page.goto(home_url, wait_until="domcontentloaded", timeout=30000)
-            await page.wait_for_timeout(4000)
-            for _ in range(5):  # cuộn để trang nạp thêm trận
-                await page.mouse.wheel(0, 3000)
-                await page.wait_for_timeout(800)
-            hrefs = await page.eval_on_selector_all("a[href]", "els => els.map(e => e.href)")
-        except Exception as e:
-            print(f"[!] Lỗi trang chủ {home_url}: {e}", file=sys.stderr)
-            hrefs = []
-        await page.close()
+            page = await browser.new_page(user_agent=UA)
+            title, hrefs = "", []
+            try:
+                await page.goto(home_url, wait_until="domcontentloaded", timeout=30000)
+                await page.wait_for_timeout(4000)
+                for _ in range(5):  # cuộn để trang nạp thêm trận
+                    await page.mouse.wheel(0, 3000)
+                    await page.wait_for_timeout(800)
+                title = await page.title()
+                hrefs = await page.eval_on_selector_all("a[href]", "els => els.map(e => e.href)")
+            except Exception as e:
+                print(f"[!] Lỗi trang chủ {home_url}: {e}", file=sys.stderr)
+            await page.close()
 
-        links = list(dict.fromkeys(h for h in hrefs if pattern in h))[:max_pages]
-        print(f"    Tìm thấy {len(links)} trang trận")
-        sem = asyncio.Semaphore(workers)
-        results = await asyncio.gather(*[_scan_match(browser, l, sem) for l in links])
-        await browser.close()
+            links = list(dict.fromkeys(h for h in hrefs if pattern in h))
+            print(f"    Trang chủ: title={title!r} | {len(hrefs)} thẻ <a> | {len(links)} khớp '{pattern}'")
+            if not links:
+                print("    -> 0 trang trận: pattern sai? trang chặn bot (title kiểu 'Just a moment')? "
+                      "hay link nạp bằng JS chứ không phải thẻ <a>?")
+                return []
+            near = [l for l in links if not too_far(l, ahead_h)]
+            print(f"    Bỏ {len(links) - len(near)} trận bắt đầu sau >{ahead_h}h nữa")
+            links = near[:max_pages]
+
+            sem = asyncio.Semaphore(workers)
+            tasks = [asyncio.ensure_future(_scan_match(browser, l, sem)) for l in links]
+            done, pending = await asyncio.wait(tasks, timeout=budget)
+            if pending:
+                print(f"    [!] Hết {budget}s, bỏ {len(pending)} trang chưa quét", file=sys.stderr)
+                for t in pending:
+                    t.cancel()
+                await asyncio.gather(*pending, return_exceptions=True)
+            results = [t.result() for t in done if not t.cancelled() and t.exception() is None]
+        finally:
+            await browser.close()
     return [it for r in results for it in r]
 
 
 def extract_follow_js(home_url, pattern, max_pages=40, workers=5):
     """Mở trang chủ, lấy mọi link chứa `pattern` (vd /truc-tiep/),
-    rồi quét song song `workers` trang trận cùng lúc."""
+    rồi quét song song `workers` trang trận cùng lúc (tối đa ~200s mỗi nguồn)."""
     return asyncio.run(_follow_async(home_url, pattern, max_pages, workers))
 
 
@@ -282,10 +328,15 @@ def main():
         print(f"[+] Quét {url}")
         if ">>" in url:
             home, pattern = [s.strip() for s in url.split(">>", 1)]
-            found = extract_follow_js(home, pattern)
+            try:
+                found = extract_follow_js(home, pattern)
+            except Exception as e:  # 1 nguồn lỗi không làm hỏng cả lượt
+                print(f"[!] Nguồn {home} lỗi: {e}", file=sys.stderr)
+                found = []
         else:
             home = url
             found = extract_js(url) if args.js else extract_static(url)
+        print(f"    => {len(found)} link thô từ {home}")
         host = urlparse(home).netloc
         stem = opts.get("id") or host.removeprefix("www.").split(".")[0]
         for it in found:
@@ -303,6 +354,12 @@ def main():
     if not args.no_check and items:
         with ThreadPoolExecutor(max_workers=10) as ex:
             alive = list(ex.map(is_alive, items))
+        stats = {}
+        for it, ok in zip(items, alive):
+            a, b = stats.get(it["source"], (0, 0))
+            stats[it["source"]] = (a + ok, b + 1)
+        for k, (a, b) in stats.items():
+            print(f"    {k}: {a}/{b} link còn sống")
         items = [it for it, ok in zip(items, alive) if ok]
         print(f"[=] Còn sống: {len(items)}")
 
