@@ -4,3 +4,4 @@
 # - name, logo : x-source-name, x-source-logo (không bắt buộc)
 https://colatv98.live/ >> /truc-tiep/ ;; name=Cola TV ;; logo=https://raw.githubusercontent.com/USER/REPO/main/colatv.png
 https://biaomtv.fun/ >> /live/ ;; name=BiaOm TV ;; logo=https://raw.githubusercontent.com/USER/REPO/main/biaomtv.png
+https://sutbongtv.com/ >> /room/ ;; name=SutBong TV ;; logo=https://raw.githubusercontent.com/USER/REPO/main/sutbongtv.png
