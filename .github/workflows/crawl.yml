@@ -22,7 +22,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install requests playwright && playwright install --with-deps chromium
-      - run: python crawler.py
+      - run: python -u crawler.py
       - name: Commit playlist
         run: |
           git config user.name "github-actions"
