@@ -7,3 +7,5 @@ https://biaomtv.fun/ >> /live/ ;; name=BiaOm TV ;; logo=https://raw.githubuserco
 https://sutbongtv.com/ >> /room/ ;; name=SutBong TV ;; logo=https://raw.githubusercontent.com/USER/REPO/main/sutbongtv.png
 https://live11.chuoichientv.me/ >> /live/ ;; name=ChuoiChien TV ;; logo=https://raw.githubusercontent.com/USER/REPO/main/chuoichientv.png
 https://gavangtv33.pro/ >> /truc-tiep/ ;; name=GaVang TV ;; logo=https://raw.githubusercontent.com/USER/REPO/main/gavangtv.png
+https://sv1.phalang.net/ >> /truc-tiep/ ;; name=PhaLang TV ;; logo=https://raw.githubusercontent.com/USER/REPO/main/phalangtv.png
+https://socolive377.co/ >> /truc-tiep/ ;; name=Socolive TV ;; logo=https://raw.githubusercontent.com/USER/REPO/main/socolivetv.png
