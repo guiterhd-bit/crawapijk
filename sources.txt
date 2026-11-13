@@ -10,3 +10,5 @@ https://gavangtv33.pro/ >> /truc-tiep/ ;; name=Ga Vang TV ;; logo=https://raw.gi
 https://sv1.phalang.net/ >> /truc-tiep/ ;; name=Pha Lang TV ;; logo=https://raw.githubusercontent.com/USER/REPO/main/phalangtv.png
 https://socolivex.in/ >> /truc-tiep/ ;; name=Socolive TV ;; logo=https://raw.githubusercontent.com/USER/REPO/main/socolivetv.png
 https://nembientv.com/ >> /truc-tiep/ ;; name=Nem Bien TV ;;
+https://90phutzao.tv/ >> /truc-tiep/ ;; name=90 Phút TV ;;
+https://vaoroizss.cc/ >> /truc-tiep/ ;; name=Vao Roi TV ;;
