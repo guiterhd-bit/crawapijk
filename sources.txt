@@ -12,3 +12,4 @@ https://socolivex.in/ >> /truc-tiep/ ;; name=Socolive TV ;; logo=https://raw.git
 https://nembientv.com/ >> /truc-tiep/ ;; name=Nem Bien TV ;;
 https://90phutzao.tv/ >> /truc-tiep/ ;; name=90 Phút TV ;;
 https://vaoroizss.cc/ >> /truc-tiep/ ;; name=Vao Roi TV ;;
+https://xoilaczzw.mobi/ >> /truc-tiep/ ;; name=Xoi Lac TV ;;
