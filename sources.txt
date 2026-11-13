@@ -1,15 +1,15 @@
-# Mỗi dòng: URL trang chủ >> mẫu URL trận ;; name=Tên nguồn ;; id=ma_nguon
+# Mỗi dòng: URL trang chủ >> mẫu URL trận ;;
 # Crawl trang trận ở mọi trạng thái (sắp diễn ra/đang diễn ra/đã kết thúc).
 # Playlist group-title luôn lấy theo name của nguồn; không lấy tên giải đấu.
 # Không khai báo logo giả/placeholder. Có thể thêm logo=https://... khi có URL ảnh thật.
-https://colatv98.live/ >> /truc-tiep/ ;; name=Cola TV ;; id=colatv
-https://biaomtv.fun/ >> /live/ ;; name=Bia Om TV ;; id=biaomtv
-https://sutbongtv.com/ >> /room/ ;; name=Sut Bong TV ;; id=sutbongtv
-https://live11.chuoichientv.me/ >> /live/ ;; name=ChuoiChien TV ;; id=chuoichientv
-https://gavangtv33.pro/ >> /truc-tiep/ ;; name=Ga Vang TV ;; id=gavangtv
-https://sv1.phalang.net/ >> /truc-tiep/ ;; name=Pha Lang TV ;; id=phalangtv
-https://socolivex.in/ >> /truc-tiep/ ;; name=Socolive TV ;; id=socolive
-https://nembientv.com/ >> /truc-tiep/ ;; name=Nem Bien TV ;; id=nembientv
-https://90phutzao.tv/ >> /truc-tiep/ ;; name=90 Phut TV ;; id=90phut
-https://vaoroizss.cc/ >> /truc-tiep/ ;; name=Vao Roi TV ;; id=vaoroitv
-https://xoilaczzw.mobi/ >> /truc-tiep/ ;; name=Xoi Lac TV ;; id=xoilac
+Cola TV | https://colatv98.live/ >> /truc-tiep/ ;;
+Bia Ôm TV | https://biaomtv.fun/ >> /live/ ;;
+Sút Bóng TV | https://sutbongtv.com/ >> /room/ ;;
+Chuối Chiên TV | https://live11.chuoichientv.me/ >> /live/ ;;
+Gà Vàng 33 | https://gavangtv33.pro/ >> /truc-tiep/ ;;
+Phá Làng TV | https://sv1.phalang.net/ >> /truc-tiep/ ;;
+Socolive TV | https://socolivex.in/ >> /truc-tiep/ ;;
+Ném Biên TV | https://nembientv.com/ >> /truc-tiep/ ;;
+90 Phút TV | https://90phutzao.tv/ >> /truc-tiep/ ;;
+Vào Rồi TV | https://vaoroizss.cc/ >> /truc-tiep/ ;;
+Xôi Lạc TV| https://xoilaczzw.mobi/ >> /truc-tiep/ ;;
