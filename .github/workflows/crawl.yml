@@ -1,35 +1,58 @@
-name: Crawl m3u8
+name: Crawl HLS and FLV
 
 on:
   schedule:
-    - cron: "*/15 * * * *"   # chạy mỗi 15 phút (GitHub cho phép tối thiểu 5 phút)
+    - cron: "*/15 * * * *"
   workflow_dispatch:
 
 permissions:
   contents: write
 
-concurrency:               # không chạy chồng 2 lượt cùng lúc
+concurrency:
   group: crawl
   cancel-in-progress: false
 
 jobs:
   crawl:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      - run: pip install requests playwright && playwright install --with-deps chromium
-      - run: python -u crawler.py
-      - name: Commit playlist
+      - name: Install crawler dependencies
         run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-          git add playlist.m3u
-          git diff --staged --quiet || {
-            git commit -m "Update playlist"
-            git pull --rebase --autostash
-            git push
-          }
+          pip install requests playwright
+          playwright install --with-deps chromium
+      - name: Crawl all configured sources
+        run: python -u crawler.py --max-pages 0 --workers 16
+      - name: Commit playlist safely
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Keep the newly generated playlist while refreshing all other files from origin.
+          cp playlist.m3u /tmp/playlist.m3u
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/playlist.m3u playlist.m3u
+            git add playlist.m3u
+            if git diff --cached --quiet; then
+              echo "Playlist không thay đổi; không cần commit."
+              exit 0
+            fi
+            git commit -m "Update crawled HLS and FLV playlist"
+            if git push origin HEAD:main; then
+              echo "Push playlist thành công."
+              exit 0
+            fi
+            echo "Push lần $attempt thất bại; sẽ fetch lại và thử lần nữa."
+          done
+          echo "Không thể push playlist sau 3 lần thử."
+          exit 1
