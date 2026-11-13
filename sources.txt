@@ -1,15 +1,15 @@
-# Cú pháp mỗi dòng:
-#   [Nhóm |] trang-chủ >> mẫu-link-trận ;; name=Tên nguồn ;; logo=link-logo-nguồn
-# - Nhóm       : group-title mặc định (nếu chưa lấy được tên giải)
-# - name, logo : x-source-name, x-source-logo (không bắt buộc)
-https://colatv98.live/ >> /truc-tiep/ ;; name=Cola TV ;; logo=https://raw.githubusercontent.com/USER/REPO/main/colatv.png
-https://biaomtv.fun/ >> /live/ ;; name=Bia Om TV ;; logo=https://raw.githubusercontent.com/USER/REPO/main/biaomtv.png
-https://sutbongtv.com/ >> /room/ ;; name=Sut Bong TV ;; logo=https://raw.githubusercontent.com/USER/REPO/main/sutbongtv.png
-https://live11.chuoichientv.me/ >> /live/ ;; name=ChuoiChien TV ;; logo=https://raw.githubusercontent.com/USER/REPO/main/c huoichientv.png
-https://gavangtv33.pro/ >> /truc-tiep/ ;; name=Ga Vang TV ;; logo=https://raw.githubusercontent.com/USER/REPO/main/gavangtv.png
-https://sv1.phalang.net/ >> /truc-tiep/ ;; name=Pha Lang TV ;; logo=https://raw.githubusercontent.com/USER/REPO/main/phalangtv.png
-https://socolivex.in/ >> /truc-tiep/ ;; name=Socolive TV ;; logo=https://raw.githubusercontent.com/USER/REPO/main/socolivetv.png
-https://nembientv.com/ >> /truc-tiep/ ;; name=Nem Bien TV ;;
-https://90phutzao.tv/ >> /truc-tiep/ ;; name=90 Phút TV ;;
-https://vaoroizss.cc/ >> /truc-tiep/ ;; name=Vao Roi TV ;;
-https://xoilaczzw.mobi/ >> /truc-tiep/ ;; name=Xoi Lac TV ;;
+# Mỗi dòng: URL trang chủ >> mẫu URL trận ;; name=Tên nguồn ;; id=ma_nguon
+# Crawl trang trận ở mọi trạng thái (sắp diễn ra/đang diễn ra/đã kết thúc).
+# Playlist group-title luôn lấy theo name của nguồn; không lấy tên giải đấu.
+# Không khai báo logo giả/placeholder. Có thể thêm logo=https://... khi có URL ảnh thật.
+https://colatv98.live/ >> /truc-tiep/ ;; name=Cola TV ;; id=colatv
+https://biaomtv.fun/ >> /live/ ;; name=Bia Om TV ;; id=biaomtv
+https://sutbongtv.com/ >> /room/ ;; name=Sut Bong TV ;; id=sutbongtv
+https://live11.chuoichientv.me/ >> /live/ ;; name=ChuoiChien TV ;; id=chuoichientv
+https://gavangtv33.pro/ >> /truc-tiep/ ;; name=Ga Vang TV ;; id=gavangtv
+https://sv1.phalang.net/ >> /truc-tiep/ ;; name=Pha Lang TV ;; id=phalangtv
+https://socolivex.in/ >> /truc-tiep/ ;; name=Socolive TV ;; id=socolive
+https://nembientv.com/ >> /truc-tiep/ ;; name=Nem Bien TV ;; id=nembientv
+https://90phutzao.tv/ >> /truc-tiep/ ;; name=90 Phut TV ;; id=90phut
+https://vaoroizss.cc/ >> /truc-tiep/ ;; name=Vao Roi TV ;; id=vaoroitv
+https://xoilaczzw.mobi/ >> /truc-tiep/ ;; name=Xoi Lac TV ;; id=xoilac

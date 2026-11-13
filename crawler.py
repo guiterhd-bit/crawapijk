@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
-"""Crawl link m3u8 từ nhiều trang web -> playlist.m3u
+"""Crawl HLS/FLV links from configured match pages into an M3U playlist.
 
-Dùng:
-    pip install requests playwright && playwright install chromium
-    python crawler.py                # đọc sources.txt, ghi playlist.m3u
-    python crawler.py --js           # ép dùng trình duyệt cho dòng không có '>>'
-    python crawler.py --no-check     # bỏ qua bước kiểm tra link sống
+Only collects stream URLs actually exposed by the configured pages/browser requests.
+No match-status filter is applied: scheduled, live and finished match pages are scanned.
 """
 import argparse
 import asyncio
@@ -14,7 +11,7 @@ import json
 import os
 import re
 import sys
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone, timedelta
 from concurrent.futures import ThreadPoolExecutor
 from urllib.parse import parse_qs, urljoin, urlparse
 
@@ -22,97 +19,188 @@ import requests
 
 UA = ("Mozilla/5.0 (Linux; Android 11) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/120.0 Mobile Safari/537.36")
+VN = timezone(timedelta(hours=7))
 
-ABS_RE = re.compile(r'https?://[^\s"\'<>\\]+?\.m3u8(?:\?[^\s"\'<>\\]*)?', re.I)
-REL_RE = re.compile(r'["\']([^"\'\s<>]+?\.m3u8(?:\?[^"\'\s<>]*)?)["\']', re.I)
+STREAM_RE = re.compile(
+    r'https?://[^\s"\'<>\\]+?\.(?:m3u8|flv)(?:\?[^\s"\'<>\\]*)?',
+    re.I
+)
+REL_STREAM_RE = re.compile(
+    r'["\']([^"\'\s<>]+?\.(?:m3u8|flv)(?:\?[^"\'\s<>]*)?)["\']',
+    re.I
+)
 IFRAME_RE = re.compile(r'<iframe[^>]+src=["\']([^"\']+)["\']', re.I)
 TITLE_RE = re.compile(r"<title[^>]*>(.*?)</title>", re.I | re.S)
-
-# Lấy ảnh og:image và h1 của trang trận (chỉnh selector ở đây nếu cần)
+TIME_RE = re.compile(r"luc-(\d{2})(\d{2})-ngay-(\d{2})-(\d{2})-(\d{4})", re.I)
+BLV_RE = re.compile(r"\bBLV\b\s*[:\-]?\s*([^\n|,;]{2,60})", re.I)
 PAGE_META_JS = """() => {
   const q = s => document.querySelector(s) || {};
+  const a = [...document.querySelectorAll('a[href]')];
+  const cards = {};
+  for (const el of a) {
+    let p = el;
+    for (let i=0; i<5 && p; i++, p=p.parentElement) {
+      const t = (p.innerText || '').trim();
+      if (t.length >= 12 && t.length <= 1800) { cards[el.href] = t; break; }
+    }
+  }
   return {
     img: q('meta[property="og:image"]').content || '',
     h1: (q('h1').innerText || '').trim(),
-    title: (q('meta[property="og:title"]').content || document.title || '').trim()
+    title: (q('meta[property="og:title"]').content || document.title || '').trim(),
+    description: q('meta[name="description"]').content || '',
+    body: (document.body && document.body.innerText || '').slice(0, 30000),
+    scripts: [...document.scripts].map(s => s.textContent || '').join('\\n').slice(0, 150000),
+    cards
   };
 }"""
 
 
-# ---------------------------------------------------------------- tải trang tĩnh
 def fetch(url, referer=None):
     headers = {"User-Agent": UA}
     if referer:
         headers["Referer"] = referer
-    r = requests.get(url, headers=headers, timeout=15)
+    r = requests.get(url, headers=headers, timeout=20)
     r.raise_for_status()
     return r.text
 
 
 def normalize(text):
-    """Giải mã &amp; và \\/ để regex bắt được link trong JSON/JS."""
     text = html.unescape(text)
-    return text.replace("\\/", "/").replace("\\u0026", "&")
+    return text.replace("\\/", "/").replace("\\u0026", "&").replace("\\u003A", ":")
+
+
+def _is_stream_url(url):
+    return bool(re.search(r"\.(?:m3u8|flv)(?:$|[?#])", url, re.I))
 
 
 def extract_static(page_url, depth=1, seen=None):
-    """Lấy m3u8 trong HTML + các iframe (tối đa `depth` cấp)."""
+    """Extract direct HLS/FLV references and follow a limited number of iframes."""
     seen = seen if seen is not None else set()
     if page_url in seen:
         return []
     seen.add(page_url)
     try:
-        raw = fetch(page_url)
+        raw = normalize(fetch(page_url))
     except Exception as e:
         print(f"[!] Lỗi tải {page_url}: {e}", file=sys.stderr)
         return []
-
-    text = normalize(raw)
-    m = TITLE_RE.search(text)
-    title = re.sub(r"\s+", " ", m.group(1)).strip() if m else urlparse(page_url).netloc
-
-    found = set(ABS_RE.findall(text))
-    for rel in REL_RE.findall(text):
+    title_m = TITLE_RE.search(raw)
+    title = re.sub(r"\s+", " ", title_m.group(1)).strip() if title_m else urlparse(page_url).netloc
+    found = set(STREAM_RE.findall(raw))
+    for rel in REL_STREAM_RE.findall(raw):
         found.add(urljoin(page_url, rel))
-
     items = [{"url": u, "match": title, "referer": page_url} for u in sorted(found)]
-
     if depth > 0:
-        for src in IFRAME_RE.findall(text):
+        for src in IFRAME_RE.findall(raw):
             items += extract_static(urljoin(page_url, src), depth - 1, seen)
     return items
 
 
-# ---------------------------------------------------------------- thông tin từ link trận
 def _slug(link):
     return urlparse(link).path.rstrip("/").split("/")[-1]
 
 
 def slug_to_name(link):
-    """.../doi-a-vs-doi-b-luc-1630-ngay-11-11-2026-xxxx -> 'Doi A Vs Doi B'."""
     slug = re.sub(r"-[a-z0-9]{12,}$", "", _slug(link))
-    slug = re.sub(r"-luc-\d{4}-ngay-.*$", "", slug)
+    slug = re.sub(r"-luc-\d{4}-ngay-.*$", "", slug, flags=re.I)
     return slug.replace("-", " ").title()
 
 
 def slug_to_time(link):
-    """.../luc-1630-ngay-11-11-2026-... -> '11/11 16:30'."""
-    m = re.search(r"luc-(\d{2})(\d{2})-ngay-(\d{2})-(\d{2})-\d{4}", link)
+    m = TIME_RE.search(link)
     return f"{m.group(3)}/{m.group(4)} {m.group(1)}:{m.group(2)}" if m else ""
 
 
 def slug_to_start(link):
-    """.../luc-1630-ngay-11-11-2026-... -> '2026-11-11T16:30:00+07:00' (giờ Việt Nam)."""
-    m = re.search(r"luc-(\d{2})(\d{2})-ngay-(\d{2})-(\d{2})-(\d{4})", link)
-    return f"{m.group(5)}-{m.group(4)}-{m.group(3)}T{m.group(1)}:{m.group(2)}:00+07:00" if m else ""
+    m = TIME_RE.search(link)
+    return (f"{m.group(5)}-{m.group(4)}-{m.group(3)}T"
+            f"{m.group(1)}:{m.group(2)}:00+07:00") if m else ""
 
 
-def too_far(link, hours):
-    """True nếu trận bắt đầu sau hơn `hours` giờ nữa (chưa có luồng, khỏi mất 20s chờ)."""
-    start = slug_to_start(link)
-    if not start:
-        return False
-    return datetime.fromisoformat(start) - datetime.now(timezone.utc) > timedelta(hours=hours)
+def timestamp_to_vn(value):
+    try:
+        n = int(float(value))
+        if n > 10**12:
+            n /= 1000
+        return datetime.fromtimestamp(n, tz=timezone.utc).astimezone(VN)
+    except (TypeError, ValueError, OverflowError, OSError):
+        return None
+
+
+def extract_time(link, text):
+    """Extract match kick-off from source JSON/page text, then fall back to URL slug."""
+    text = text or ""
+    timestamp_patterns = (
+        r"""["'](?:matchTime|startTime|start_time|kickoff)["']\s*:\s*["']?(\d{10,13})""",
+    )
+    for pattern in timestamp_patterns:
+        m = re.search(pattern, text, re.I)
+        if m:
+            dt = timestamp_to_vn(m.group(1))
+            if dt:
+                return dt.strftime("%d/%m %H:%M"), dt.isoformat()
+
+    # ISO date/time fields embedded in JSON or data attributes.
+    m = re.search(r"(20\d{2}-\d{2}-\d{2}[T ]\d{2}:\d{2}(?::\d{2})?(?:\.\d+)?(?:Z|[+-]\d{2}:?\d{2})?)", text)
+    if m:
+        raw = m.group(1).replace("Z", "+00:00")
+        try:
+            dt = datetime.fromisoformat(raw)
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=VN)
+            dt = dt.astimezone(VN)
+            return dt.strftime("%d/%m %H:%M"), dt.isoformat()
+        except ValueError:
+            pass
+
+    # Common Vietnamese match-card date formats.
+    patterns = (
+        (r"\b(\d{2})[/.](\d{2})[/.](20\d{2})\s+(\d{2}):(\d{2})\b", "full"),
+        (r"\b(\d{2})/(\d{2})\s+(\d{2}):(\d{2})\b", "day-first"),
+        (r"\b(\d{2}):(\d{2})\s+(\d{2})/(\d{2})\b", "time-first"),
+    )
+    for pattern, kind in patterns:
+        m = re.search(pattern, text)
+        if not m:
+            continue
+        if kind == "full":
+            d, mo, year, h, mi = m.groups()
+            dt = datetime(int(year), int(mo), int(d), int(h), int(mi), tzinfo=VN)
+            return dt.strftime("%d/%m %H:%M"), dt.isoformat()
+        if kind == "day-first":
+            d, mo, h, mi = m.groups()
+        else:
+            h, mi, d, mo = m.groups()
+        return f"{d}/{mo} {h}:{mi}", ""
+
+    return slug_to_time(link), slug_to_start(link)
+
+
+def extract_commentator(text):
+    m = BLV_RE.search(text or "")
+    if m:
+        value = re.split(r"\b(?:HT|FT|LIVE|TRỰC TIẾP|SẮP DIỄN RA)\b", m.group(1), flags=re.I)[0]
+        return re.sub(r"\s+", " ", value).strip(" :-|")
+    return ""
+
+
+def extract_score(text):
+    """Extract current score first, then explicit score or HT/FT fallback."""
+    if not text:
+        return ""
+    patterns = [
+        r"\b(\d{1,2})\s*:\s*(\d{1,2})(?=\s*(?:Hiệp|Xem ngay|LIVE|Trực tiếp))",
+        r"(?:tỉ số|ty so|score|kết quả)\s*[:\-]?\s*(\d{1,2}\s*[-:]\s*\d{1,2})",
+        r"\b(?:HT|FT)\s*(\d{1,2})\s*[-:]\s*(\d{1,2})\b",
+    ]
+    for p in patterns:
+        m = re.search(p, text, re.I)
+        if m:
+            if m.lastindex == 1:
+                return re.sub(r"\s+", "", m.group(1))
+            return f"{m.group(1)}-{m.group(2)}"
+    return ""
 
 
 def match_id(link):
@@ -120,167 +208,169 @@ def match_id(link):
     for key in ("houseId", "scheduleId", "id"):
         if qs.get(key) and qs[key][0]:
             return qs[key][0]
-    for seg in urlparse(link).path.split("/"):  # vd /live/994936/ten-tran, /room/356042
+    for seg in urlparse(link).path.split("/"):
         if re.fullmatch(r"\d{4,}", seg):
             return seg
     m = re.search(r"-([a-z0-9]{12,})$", _slug(link))
     return m.group(1) if m else ""
 
 
-# ---------------------------------------------------------------- trình duyệt (Playwright)
-def sniff(page, urls, timeout=25000):
-    """Chờ tới khi bắt được request m3u8 (hoặc hết giờ), không đợi 'networkidle'."""
-    waited = 0
-    while waited < timeout and not urls:
-        page.wait_for_timeout(500)
-        waited += 500
-    if urls:
-        page.wait_for_timeout(2000)  # chờ thêm các link phụ (chất lượng khác)
+def _is_stream_response(response):
+    if _is_stream_url(response.url):
+        return True
+    try:
+        content_type = (response.headers.get("content-type") or "").lower()
+        return any(x in content_type for x in (
+            "mpegurl", "x-flv", "video/flv", "application/flv"
+        ))
+    except Exception:
+        return False
 
 
-def extract_js(page_url):
-    """Mở 1 trang bằng trình duyệt thật, bắt request .m3u8."""
-    from playwright.sync_api import sync_playwright
-
-    urls = set()
-    title = urlparse(page_url).netloc
-    with sync_playwright() as p:
-        browser = p.chromium.launch()
-        page = browser.new_page(user_agent=UA)
-        page.on("request", lambda req: urls.add(req.url) if ".m3u8" in req.url else None)
-        try:
-            page.goto(page_url, wait_until="domcontentloaded", timeout=30000)
-            sniff(page, urls)
-            title = page.title() or title
-        except Exception as e:
-            print(f"[!] Lỗi {page_url}: {e}", file=sys.stderr)
-        browser.close()
-    return [{"url": u, "match": title, "referer": page_url} for u in sorted(urls)]
+async def _record_async_response(response, urls):
+    if _is_stream_url(response.url):
+        urls.add(response.url)
+        return
+    try:
+        headers = await response.all_headers()
+        content_type = (headers.get("content-type") or "").lower()
+        if any(x in content_type for x in (
+            "mpegurl", "x-flv", "video/flv", "application/flv"
+        )):
+            urls.add(response.url)
+    except Exception:
+        pass
 
 
-def pick_name(link, meta):
-    def is_match(t):
-        return bool(t) and len(t) < 120 and re.search(r"\bvs\b|\bv\b| - ", t, re.I)
-    h1, title = meta.get("h1", ""), meta.get("title", "")
-    if is_match(h1):
-        return h1
-    if is_match(title):
-        return title
-    slug = _slug(link)
-    if not slug.isdigit():  # slug có chữ -> dùng được
-        return slug_to_name(link)
-    return (h1 or title or slug)[:80]
-
-
-async def _scan_match(browser, link, sem, wait_ms=15000):
-    """Mở 1 trang trận, bắt m3u8 + ảnh/tiêu đề. Chạy song song nhiều trang."""
+async def _scan_match(browser, link, sem, card_text="", wait_ms=6000):
+    """Scan one match page for every HLS/FLV request and extract visible match metadata."""
     async with sem:
         urls = set()
         ctx = await browser.new_context(user_agent=UA)
         pg = await ctx.new_page()
-        pg.on("request", lambda r: urls.add(r.url) if ".m3u8" in r.url else None)
+        pg.on("request", lambda req: urls.add(req.url) if _is_stream_url(req.url) else None)
+        pg.on("response", lambda res: asyncio.create_task(_record_async_response(res, urls)))
         try:
             await pg.goto(link, wait_until="domcontentloaded", timeout=30000)
+            # Give player scripts time to request primary and backup qualities/servers.
+            waited = 0
+            while waited < wait_ms:
+                await pg.wait_for_timeout(500)
+                waited += 500
         except Exception as e:
-            print(f"[!] Lỗi tải {link}: {e}", file=sys.stderr)
-        waited = 0
-        while waited < wait_ms and not urls:
-            await pg.wait_for_timeout(500)
-            waited += 500
-        if urls:
-            await pg.wait_for_timeout(2000)  # chờ thêm link phụ
+            print(f"[!] Lỗi tải trận {link}: {e}", file=sys.stderr)
         try:
             meta = await pg.evaluate(PAGE_META_JS)
         except Exception:
             meta = {}
         await ctx.close()
 
-    h1 = meta.get("h1", "")
-    match = pick_name(link, meta)
-    print(f"    {match}: {len(urls)} link")
-    return [{"url": u, "referer": link, "match": match,
-             "when": slug_to_time(link), "start": slug_to_start(link),
-             "mid": match_id(link), "logo": meta.get("img", "")}
-            for u in sorted(urls)]
+    h1, title = meta.get("h1", ""), meta.get("title", "")
+    match = h1 if is_match_title(h1) else title if is_match_title(title) else slug_to_name(link)
+    combined = "\n".join([card_text, meta.get("body", ""), meta.get("description", ""), meta.get("scripts", "")])
+    when, start = extract_time(link, combined)
+    score = extract_score(card_text + "\n" + meta.get("body", ""))
+    commentator = extract_commentator(card_text + "\n" + meta.get("body", ""))
+    print(f"    {match}: {len(urls)} link HLS/FLV")
+    return [{
+        "url": u, "referer": link, "match": match, "when": when, "start": start,
+        "mid": match_id(link), "logo": meta.get("img", ""), "score": score,
+        "commentator": commentator, "format": "FLV" if re.search(r"\.flv(?:$|[?#])", u, re.I) else "HLS"
+    } for u in sorted(urls)]
 
 
-async def _follow_async(home_url, pattern, max_pages, workers, budget=200, ahead_h=3):
+def extract_js(page_url):
+    """Fallback: use a browser to collect HLS/FLV requests from a single page."""
+    from playwright.sync_api import sync_playwright
+    urls = set()
+    title = urlparse(page_url).netloc
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page(user_agent=UA)
+        page.on("request", lambda req: urls.add(req.url) if _is_stream_url(req.url) else None)
+        page.on("response", lambda res: urls.add(res.url) if _is_stream_response(res) else None)
+        try:
+            page.goto(page_url, wait_until="domcontentloaded", timeout=30000)
+            page.wait_for_timeout(7000)
+            title = page.title() or title
+        except Exception as exc:
+            print(f"[!] Lỗi {page_url}: {exc}", file=sys.stderr)
+        browser.close()
+    return [{"url": u, "match": title, "referer": page_url} for u in sorted(urls)]
+
+
+def is_match_title(value):
+    return bool(value and len(value) < 140 and re.search(r"\bvs\b|\bv\b| - ", value, re.I))
+
+
+async def _follow_async(home_url, pattern, max_pages, workers, budget=660):
     from playwright.async_api import async_playwright
 
     async with async_playwright() as p:
         browser = await p.chromium.launch()
         try:
             page = await browser.new_page(user_agent=UA)
-            title, hrefs = "", []
+            title, hrefs, card_map = "", [], {}
             try:
                 await page.goto(home_url, wait_until="domcontentloaded", timeout=30000)
-                await page.wait_for_timeout(4000)
-                for _ in range(5):  # cuộn để trang nạp thêm trận
-                    await page.mouse.wheel(0, 3000)
-                    await page.wait_for_timeout(800)
-                title = await page.title()
+                await page.wait_for_timeout(3500)
+                for _ in range(8):
+                    await page.mouse.wheel(0, 2800)
+                    await page.wait_for_timeout(650)
+                data = await page.evaluate(PAGE_META_JS)
+                title = data.get("title", "")
+                card_map = data.get("cards", {})
                 hrefs = await page.eval_on_selector_all("a[href]", "els => els.map(e => e.href)")
             except Exception as e:
                 print(f"[!] Lỗi trang chủ {home_url}: {e}", file=sys.stderr)
             await page.close()
 
-            links = list(dict.fromkeys(h for h in hrefs if pattern in h))
-            print(f"    Trang chủ: title={title!r} | {len(hrefs)} thẻ <a> | {len(links)} khớp '{pattern}'")
+            links = list(dict.fromkeys(h for h in hrefs if pattern in h and h.startswith(("http://", "https://"))))
+            print(f"    Trang chủ: {len(hrefs)} thẻ <a> | {len(links)} trang trận khớp '{pattern}'")
             if not links:
-                print("    -> 0 trang trận: pattern sai? trang chặn bot (title kiểu 'Just a moment')? "
-                      "hay link nạp bằng JS chứ không phải thẻ <a>?")
+                print("    -> Không tìm thấy link trận; cần kiểm tra lại mẫu URL hoặc cơ chế tải JS.")
                 return []
-            near = [l for l in links if not too_far(l, ahead_h)]
-            print(f"    Bỏ {len(links) - len(near)} trận bắt đầu sau >{ahead_h}h nữa")
-            links = near[:max_pages]
-
+            # Do not filter by live/scheduled status or kick-off distance.
+            if max_pages > 0:
+                links = links[:max_pages]
             sem = asyncio.Semaphore(workers)
-            tasks = [asyncio.ensure_future(_scan_match(browser, l, sem)) for l in links]
+            tasks = [asyncio.create_task(_scan_match(browser, l, sem, card_map.get(l, ""))) for l in links]
             done, pending = await asyncio.wait(tasks, timeout=budget)
             if pending:
-                print(f"    [!] Hết {budget}s, bỏ {len(pending)} trang chưa quét", file=sys.stderr)
+                print(f"    [!] Hết {budget}s, còn {len(pending)} trang chưa quét", file=sys.stderr)
                 for t in pending:
                     t.cancel()
                 await asyncio.gather(*pending, return_exceptions=True)
             results = [t.result() for t in done if not t.cancelled() and t.exception() is None]
         finally:
             await browser.close()
-    return [it for r in results for it in r]
+    return [it for result in results for it in result]
 
 
-def extract_follow_js(home_url, pattern, max_pages=40, workers=5):
-    """Mở trang chủ, lấy mọi link chứa `pattern` (vd /truc-tiep/),
-    rồi quét song song `workers` trang trận cùng lúc (tối đa ~200s mỗi nguồn)."""
+def extract_follow_js(home_url, pattern, max_pages=0, workers=16):
     return asyncio.run(_follow_async(home_url, pattern, max_pages, workers))
 
 
-# ---------------------------------------------------------------- kiểm tra + ghi file
-def is_alive(item):
-    try:
-        r = requests.get(item["url"], headers={"User-Agent": UA, "Referer": item["referer"]},
-                         timeout=10, stream=True)
-        head = next(r.iter_content(64), b"")
-        r.close()
-        return r.status_code == 200 and head.lstrip().startswith(b"#EXTM3U")
-    except Exception:
-        return False
-
-
 def check_stream(item):
-    """(sống?, referer cần thiết). Thử KHÔNG Referer trước; chỉ khi 401/403 mới thử có Referer
-    (giống cách scripts/update.py của sport-api quyết định có gắn Referer hay không)."""
+    """Probe HLS as an M3U8 manifest and FLV as a byte stream; retry with page Referer."""
     def probe(ref):
-        headers = {"User-Agent": UA}
+        headers = {"User-Agent": UA, "Range": "bytes=0-1023"}
         if ref:
             headers["Referer"] = ref
         try:
-            r = requests.get(item["url"], headers=headers, timeout=10, stream=True)
-            head = next(r.iter_content(64), b"")
+            r = requests.get(item["url"], headers=headers, timeout=12, stream=True)
+            status = r.status_code
+            content_type = (r.headers.get("Content-Type") or "").lower()
+            head = next(r.iter_content(256), b"")
             r.close()
-            return r.status_code == 200 and head.lstrip().startswith(b"#EXTM3U")
+            if status not in (200, 206):
+                return False
+            if item.get("format") == "FLV" or re.search(r"\.flv(?:$|[?#])", item["url"], re.I):
+                return (head.startswith(b"FLV") or "video" in content_type or
+                        "octet-stream" in content_type or status == 206)
+            return head.lstrip().startswith(b"#EXTM3U") or "mpegurl" in content_type
         except Exception:
             return False
-
     if probe(None):
         return True, ""
     if item.get("referer") and probe(item["referer"]):
@@ -289,20 +379,15 @@ def check_stream(item):
 
 
 def write_staging(items, path):
-    """Ghi file trung gian mà sport-api/scripts/update.py đọc (data/crawler_tmp/m3u8_found.json)."""
     streams = [{
-        "url": i["url"],
-        "verified": True,
-        "is_hls": True,
-        "site": i["source_name"],
-        "site_id": i["source"],
-        "match": i.get("match", ""),
-        "league": i.get("league", ""),
-        "logo": i.get("logo", ""),
-        "page": i.get("referer", ""),
-        "match_time": i.get("start", ""),
-        "referer": i.get("needs_referer", ""),
-        "source_logo": i.get("source_logo", ""),
+        "url": i["url"], "verified": bool(i.get("verified", False)),
+        "is_hls": i.get("format") == "HLS", "format": i.get("format", ""),
+        "site": i["source_name"], "site_id": i["source"],
+        "match": i.get("match", ""), "league": "",
+        "logo": i.get("logo", ""), "page": i.get("referer", ""),
+        "match_time": i.get("start", ""), "time_label": i.get("when", ""),
+        "score": i.get("score", ""), "commentator": i.get("commentator", ""),
+        "referer": i.get("needs_referer", ""), "source_logo": i.get("source_logo", "")
     } for i in items]
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
@@ -310,23 +395,25 @@ def write_staging(items, path):
 
 
 def read_sources(path):
-    """Mỗi dòng: [Nhóm |] url [>> mẫu-link-trận] [;; name=... ;; logo=... ;; id=...]"""
     out = []
     with open(path, encoding="utf-8") as f:
-        for line in f:
+        for line_no, line in enumerate(f, 1):
             line = line.strip()
             if not line or line.startswith("#"):
                 continue
             spec, *rest = [s.strip() for s in line.split(";;")]
             opts = dict(r.split("=", 1) for r in rest if "=" in r)
             opts = {k.strip(): v.strip() for k, v in opts.items()}
-            group, _, url = spec.rpartition("|")
+            group, sep, url = spec.rpartition("|")
+            if not sep:
+                url = spec
+                group = ""
             out.append((group.strip(), url.strip(), opts))
     return out
 
 
 def attr(key, value):
-    return f' {key}="{str(value).replace(chr(34), chr(39))}"' if value else ""
+    return f' {key}="{str(value).replace(chr(34), chr(39))}"' if value not in (None, "") else ""
 
 
 def write_m3u(items, path):
@@ -342,81 +429,89 @@ def write_m3u(items, path):
                     + attr("x-source", i["source"])
                     + attr("x-source-name", i["source_name"])
                     + attr("x-source-logo", i.get("source_logo"))
+                    + attr("x-score", i.get("score"))
+                    + attr("x-commentator", i.get("commentator"))
                     + f',{i["name"]}\n')
-            f.write(f'#EXTVLCOPT:http-referrer={i["referer"]}\n')
+            if i.get("referer"):
+                f.write(f'#EXTVLCOPT:http-referrer={i["referer"]}\n')
             f.write(f'{i["url"]}\n')
 
 
 def finalize(items):
-    """Đặt tên hiển thị, tvg-id, tvg-name cho từng link."""
-    count = {}
+    counts = {}
     for n, it in enumerate(items, 1):
-        match = (it.get("match") or "")[:80]
-        k = count[match] = count.get(match, 0) + 1
-        label = f"HLS{k}"  # app nhận HLS/HD/FLV ở cuối tên để gộp luồng
-        it["name"] = " | ".join(x for x in (match, it.get("when"), label) if x)
-        it["tvg_name"] = f"{match} - {label}"
+        match = (it.get("match") or "")[:100]
+        key = (it.get("source", ""), it.get("mid") or match)
+        counts[key] = counts.get(key, 0) + 1
+        fmt = it.get("format") or ("FLV" if re.search(r"\.flv(?:$|[?#])", it["url"], re.I) else "HLS")
+        it["format"] = fmt
+        parts = [match, it.get("when", ""), it.get("score", ""), it.get("commentator", ""), fmt]
+        it["name"] = " | ".join(x for x in parts if x)
+        it["tvg_name"] = f"{match} - {fmt}"
         base = f'{it["source"]}-match-{it["mid"]}' if it.get("mid") else f'{it["source"]}-{n}'
-        it["tvg_id"] = base if k == 1 else f"{base}-{k}"
+        it["tvg_id"] = base if counts[key] == 1 else f"{base}-{counts[key]}"
+        # User requested source name as the only group title; no competition/league grouping.
+        it["group"] = it.get("source_name") or it.get("source") or "Unknown source"
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--sources", default="sources.txt")
     ap.add_argument("--out", default="playlist.m3u")
-    ap.add_argument("--js", action="store_true", help="dùng Playwright cho dòng không có '>>'")
-    ap.add_argument("--no-check", action="store_true", help="không kiểm tra link sống")
-    ap.add_argument("--staging", default="",
-                    help="ghi thêm file JSON cho sport-api, vd data/crawler_tmp/m3u8_found.json")
-    ap.add_argument("--no-playlist", action="store_true", help="không ghi playlist.m3u")
+    ap.add_argument("--js", action="store_true")
+    ap.add_argument("--no-check", action="store_true")
+    ap.add_argument("--staging", default="")
+    ap.add_argument("--no-playlist", action="store_true")
+    ap.add_argument("--max-pages", type=int, default=0, help="maximum match pages per source; 0 = unlimited")
+    ap.add_argument("--workers", type=int, default=16)
     args = ap.parse_args()
 
     items = []
-    for group, url, opts in read_sources(args.sources):
-        print(f"[+] Quét {url}")
-        if ">>" in url:
-            home, pattern = [s.strip() for s in url.split(">>", 1)]
+    for _, spec, opts in read_sources(args.sources):
+        if ">>" in spec:
+            home, pattern = [s.strip() for s in spec.split(">>", 1)]
+            print(f"[+] Quét nguồn {opts.get('name', urlparse(home).netloc)}: {home}")
             try:
-                found = extract_follow_js(home, pattern)
-            except Exception as e:  # 1 nguồn lỗi không làm hỏng cả lượt
+                found = extract_follow_js(home, pattern, args.max_pages, args.workers)
+            except Exception as e:
                 print(f"[!] Nguồn {home} lỗi: {e}", file=sys.stderr)
                 found = []
         else:
-            home = url
-            found = extract_js(url) if args.js else extract_static(url)
-        print(f"    => {len(found)} link thô từ {home}")
+            home = spec
+            print(f"[+] Quét trang {home}")
+            found = extract_js(home) if args.js else extract_static(home)
+        print(f"    => {len(found)} link HLS/FLV thô")
         host = urlparse(home).netloc
         stem = opts.get("id") or host.removeprefix("www.").split(".")[0]
         for it in found:
-            it.update(group=group or host, source=stem,
-                      source_name=opts.get("name", host),
-                      source_logo=opts.get("logo", ""))
-        items += found
+            it.update(source=stem, source_name=opts.get("name", host),
+                      source_logo=opts.get("logo", ""), group=opts.get("name", host))
+        items.extend(found)
 
-    uniq = {}  # bỏ trùng theo URL
-    for it in items:
-        uniq.setdefault(it["url"], it)
-    items = list(uniq.values())
-    print(f"[=] Tìm thấy {len(items)} link")
+    unique = {}
+    for item in items:
+        unique.setdefault(item["url"], item)
+    items = list(unique.values())
+    print(f"[=] Tìm thấy {len(items)} link HLS/FLV")
 
     if not args.no_check and items:
-        with ThreadPoolExecutor(max_workers=10) as ex:
-            checks = list(ex.map(check_stream, items))
-        alive = [c[0] for c in checks]
-        for it, c in zip(items, checks):
-            it["needs_referer"] = c[1]
+        with ThreadPoolExecutor(max_workers=16) as pool:
+            checks = list(pool.map(check_stream, items))
+        for item, (ok, ref) in zip(items, checks):
+            item["verified"] = ok
+            item["needs_referer"] = ref
         stats = {}
-        for it, ok in zip(items, alive):
-            a, b = stats.get(it["source"], (0, 0))
-            stats[it["source"]] = (a + ok, b + 1)
-        for k, (a, b) in stats.items():
-            print(f"    {k}: {a}/{b} link còn sống")
-        items = [it for it, ok in zip(items, alive) if ok]
-        print(f"[=] Còn sống: {len(items)}")
+        for item in items:
+            ok, total = stats.get(item["source"], (0, 0))
+            stats[item["source"]] = (ok + bool(item["verified"]), total + 1)
+        for source, (ok, total) in stats.items():
+            print(f"    {source}: {ok}/{total} link xác minh được")
+        items = [item for item in items if item["verified"]]
+        print(f"[=] Còn {len(items)} link đã xác minh")
 
     if not items:
-        print("[!] Không lấy được link nào -> giữ nguyên playlist cũ", file=sys.stderr)
-        return
+        print("[!] Không lấy được link hợp lệ -> giữ nguyên playlist cũ", file=sys.stderr)
+        return 1
     finalize(items)
     if not args.no_playlist:
         write_m3u(items, args.out)
@@ -424,7 +519,8 @@ def main():
     if args.staging:
         write_staging(items, args.staging)
         print(f"[✓] Đã ghi {args.staging} ({len(items)} link)")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
