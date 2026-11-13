@@ -1,127 +1,100 @@
 #EXTM3U
-#EXTINF:-1 tvg-id="colatv-match-ndqmliw96lrfrkv" tvg-name="Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD - HLS" group-title="Cola TV" x-source="colatv" x-source-name="Cola TV" x-commentator="TEPPY",Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD | 13/11 19:45 | TEPPY | HLS
-#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/andorra-vs-gibraltar-luc-0245-ngay-14-11-2026-ndqmliw96lrfrkv
+#EXTINF:-1 tvg-id="colatv98-match-07428422" tvg-name="Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD - HLS" group-title="colatv98.live" start="2026-11-14T02:45:00+07:00" x-source="colatv98" x-source-name="colatv98.live" x-commentator="Lịch thi đấu",Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD | 14/11 02:45 | Lịch thi đấu | HLS
+#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/dtqg-ha-lan-vs-clb-greece-luc-0245-ngay-14-11-2026-wv78xiv19lvuokr?houseId=07428422
 https://colatv88xi.cc/video2/output.m3u8
-#EXTINF:-1 tvg-id="colatv-match-33860426" tvg-name="Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD - HLS" group-title="Cola TV" start="2026-11-13T23:00:00+07:00" x-source="colatv" x-source-name="Cola TV" x-commentator="Lịch thi đấu",Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD | 13/11 23:00 | Lịch thi đấu | HLS
-#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/gabon-vs-lesotho-luc-2300-ngay-13-11-2026-8lk2direz9mfz73?houseId=33860426
-https://live05.wecile.app/live/33860426.m3u8
-#EXTINF:-1 tvg-id="colatv-match-75748097" tvg-name="Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD - HLS" group-title="Cola TV" start="2026-11-13T23:00:00+07:00" x-source="colatv" x-source-name="Cola TV" x-commentator="Lịch thi đấu",Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD | 13/11 23:00 | Lịch thi đấu | HLS
-#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/nam-phi-vs-doi-tuyen-bong-da-quoc-gia-kenya-luc-2300-ngay-13-11-2026-ndqmliw1e54urkv?houseId=75748097
-https://live05.wecile.app/live/75748097.m3u8
-#EXTINF:-1 tvg-id="colatv-match-9gklzi1gx94fm7x" tvg-name="Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD - HLS" group-title="Cola TV" x-source="colatv" x-source-name="Cola TV" x-commentator="SODA",Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD | 13/11 16:00 | SODA | HLS
-#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/cape-verde-vs-cong-hoa-liberia-luc-2300-ngay-13-11-2026-9gklzi1gx94fm7x
+#EXTINF:-1 tvg-id="colatv98-match-07808742" tvg-name="Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD - HLS" group-title="colatv98.live" start="2026-11-14T01:00:00+07:00" x-source="colatv98" x-source-name="colatv98.live" x-commentator="Lịch thi đấu",Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD | 14/11 01:00 | Lịch thi đấu | HLS
+#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/tay-ban-nha-u21-vs-japan-u21-luc-0100-ngay-14-11-2026-o07dnindnp3bmkn?houseId=07808742
+https://live05.wecile.app/live/07808742.m3u8
+#EXTINF:-1 tvg-id="colatv98-match-02456966" tvg-name="Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD - HLS" group-title="colatv98.live" start="2026-11-14T02:00:00+07:00" x-source="colatv98" x-source-name="colatv98.live" x-commentator="Lịch thi đấu",Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD | 14/11 02:00 | Lịch thi đấu | HLS
+#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/ai-cap-vs-malawi-luc-0200-ngay-14-11-2026-jek33i8l4yzt9ko?houseId=02456966
 https://live05.wecile.app/live/02456966.m3u8
-#EXTINF:-1 tvg-id="colatv-match-87547578" tvg-name="Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD - HLS" group-title="Cola TV" start="2026-11-13T23:00:00+07:00" x-source="colatv" x-source-name="Cola TV" x-commentator="MOUNTAIN DEW",Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD | 13/11 23:00 | MOUNTAIN DEW | HLS
-#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/burkina-faso-vs-mauritania-luc-2300-ngay-13-11-2026-vrqwni4wd6wc4qn?houseId=87547578
-https://live05.wecile.app/live/87547578.m3u8
-#EXTINF:-1 tvg-id="colatv-match-63kv9igdp0pcx7e" tvg-name="Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD - HLS" group-title="Cola TV" x-source="colatv" x-source-name="Cola TV" x-commentator="C2",Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD | 13/11 16:00 | C2 | HLS
-#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/nigeria-vs-tanzania-luc-2300-ngay-13-11-2026-63kv9igdp0pcx7e
-https://live05.wecile.app/live/08552895.m3u8
-#EXTINF:-1 tvg-id="colatv-match-07428422" tvg-name="Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD - HLS" group-title="Cola TV" start="2026-11-13T23:00:00+07:00" x-source="colatv" x-source-name="Cola TV" x-commentator="Lịch thi đấu",Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD | 13/11 23:00 | Lịch thi đấu | HLS
-#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/tho-nhi-ky-u21-vs-cong-hoa-sec-u21-luc-2300-ngay-13-11-2026-o07dnindn95fmkn?houseId=07428422
-https://live05.wecile.app/live/07428422.m3u8
-#EXTINF:-1 tvg-id="colatv-match-18812304" tvg-name="Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD - HLS" group-title="Cola TV" start="2026-11-13T23:00:00+07:00" x-source="colatv" x-source-name="Cola TV" x-commentator="Lịch thi đấu",Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD | 13/11 23:00 | Lịch thi đấu | HLS
-#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/tunisia-vs-dtqg-libya-luc-2300-ngay-13-11-2026-jr7owipegn3ugq0?houseId=18812304
-https://live05.wecile.app/live/18812304.m3u8
-#EXTINF:-1 tvg-id="colatv-match-33982309" tvg-name="Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD - HLS" group-title="Cola TV" start="2026-11-13T21:30:00+07:00" x-source="colatv" x-source-name="Cola TV" x-commentator="Lịch thi đấu",Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD | 13/11 21:30 | Lịch thi đấu | HLS
-#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/a-rap-saudi-vs-han-quoc-luc-2130-ngay-13-11-2026-vmqy9iyjdvrfgk9?houseId=33982309
+#EXTINF:-1 tvg-id="colatv98-match-97885009" tvg-name="Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD - HLS" group-title="colatv98.live" start="2026-11-14T00:30:00+07:00" x-source="colatv98" x-source-name="colatv98.live" x-commentator="Lịch thi đấu",Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD | 14/11 00:30 | Lịch thi đấu | HLS
+#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/doi-tuyen-u21-phap-vs-y-u21-luc-0030-ngay-14-11-2026-o17pji403o3iy7j?houseId=97885009
+https://live05.wecile.app/live/97885009.m3u8
+#EXTINF:-1 tvg-id="colatv98-match-19919577" tvg-name="Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD - HLS" group-title="colatv98.live" start="2026-11-14T00:30:00+07:00" x-source="colatv98" x-source-name="colatv98.live" x-commentator="Lịch thi đấu",Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD | 14/11 00:30 | Lịch thi đấu | HLS
+#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/anadolu-efes-sk-vs-virtus-pallacanestro-bologna-luc-0030-ngay-14-11-2026-527rjswd02ei4ke?houseId=19919577
+https://live05.wecile.app/live/19919577.m3u8
+#EXTINF:-1 tvg-id="colatv98-match-l6kegirzmr2cv75" tvg-name="Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD - HLS" group-title="colatv98.live" x-source="colatv98" x-source-name="colatv98.live" x-score="1-1" x-commentator="REVIVE",Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD | 13/11 17:00 | 1-1 | REVIVE | HLS
+#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/duc-u21-vs-bi-u21-luc-0000-ngay-14-11-2026-l6kegirzmr2cv75
 https://live05.wecile.app/live/33982309.m3u8
-#EXTINF:-1 tvg-id="biaomtv-match-965mkyhkd6kor1g" tvg-name="Hamburger SV Women vs 1.FSV Mainz 05Women Women 00:30 ngày 14/11/2026 link xem bóng đá - HLS" tvg-logo="https://biaomtv.fun/logo.png" group-title="Bia Om TV" start="2026-11-14T00:30:00+07:00" x-source="biaomtv" x-source-name="Bia Om TV" x-score="1-0" x-commentator="ơi",Hamburger SV Women vs 1.FSV Mainz 05Women Women 00:30 ngày 14/11/2026 link xem bóng đá | 14/11 00:30 | 1-0 | ơi | HLS
-#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/hamburger-sv-women-vs-1fsv-mainz-05women-women-965mkyhkd6kor1g
-https://lilive1.eu.cc/live/01c44005e31c7bc22ff71795f84186dc/playlist.m3u8
-#EXTINF:-1 tvg-id="biaomtv-match-965mkyhkd6kor1g-2" tvg-name="Hamburger SV Women vs 1.FSV Mainz 05Women Women 00:30 ngày 14/11/2026 link xem bóng đá - HLS" tvg-logo="https://biaomtv.fun/logo.png" group-title="Bia Om TV" start="2026-11-14T00:30:00+07:00" x-source="biaomtv" x-source-name="Bia Om TV" x-score="1-0" x-commentator="ơi",Hamburger SV Women vs 1.FSV Mainz 05Women Women 00:30 ngày 14/11/2026 link xem bóng đá | 14/11 00:30 | 1-0 | ơi | HLS
-#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/hamburger-sv-women-vs-1fsv-mainz-05women-women-965mkyhkd6kor1g
-https://lilive1.eu.cc/live/2a41eb86e624d25460c32c76317bb4b1/playlist.m3u8
-#EXTINF:-1 tvg-id="biaomtv-match-965mkyhkd6kor1g-3" tvg-name="Hamburger SV Women vs 1.FSV Mainz 05Women Women 00:30 ngày 14/11/2026 link xem bóng đá - HLS" tvg-logo="https://biaomtv.fun/logo.png" group-title="Bia Om TV" start="2026-11-14T00:30:00+07:00" x-source="biaomtv" x-source-name="Bia Om TV" x-score="1-0" x-commentator="ơi",Hamburger SV Women vs 1.FSV Mainz 05Women Women 00:30 ngày 14/11/2026 link xem bóng đá | 14/11 00:30 | 1-0 | ơi | HLS
-#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/hamburger-sv-women-vs-1fsv-mainz-05women-women-965mkyhkd6kor1g
-https://lilive1.eu.cc/live/40451266a8e4de8bc43dc7c9fa84e144/playlist.m3u8
-#EXTINF:-1 tvg-id="biaomtv-match-965mkyhkd6kor1g-4" tvg-name="Hamburger SV Women vs 1.FSV Mainz 05Women Women 00:30 ngày 14/11/2026 link xem bóng đá - HLS" tvg-logo="https://biaomtv.fun/logo.png" group-title="Bia Om TV" start="2026-11-14T00:30:00+07:00" x-source="biaomtv" x-source-name="Bia Om TV" x-score="1-0" x-commentator="ơi",Hamburger SV Women vs 1.FSV Mainz 05Women Women 00:30 ngày 14/11/2026 link xem bóng đá | 14/11 00:30 | 1-0 | ơi | HLS
-#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/hamburger-sv-women-vs-1fsv-mainz-05women-women-965mkyhkd6kor1g
-https://lilive1.eu.cc/live/458f9679d9e67d873d5d84a290572051/playlist.m3u8
-#EXTINF:-1 tvg-id="biaomtv-match-965mkyhkd6kor1g-5" tvg-name="Hamburger SV Women vs 1.FSV Mainz 05Women Women 00:30 ngày 14/11/2026 link xem bóng đá - HLS" tvg-logo="https://biaomtv.fun/logo.png" group-title="Bia Om TV" start="2026-11-14T00:30:00+07:00" x-source="biaomtv" x-source-name="Bia Om TV" x-score="1-0" x-commentator="ơi",Hamburger SV Women vs 1.FSV Mainz 05Women Women 00:30 ngày 14/11/2026 link xem bóng đá | 14/11 00:30 | 1-0 | ơi | HLS
-#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/hamburger-sv-women-vs-1fsv-mainz-05women-women-965mkyhkd6kor1g
-https://lilive1.eu.cc/live/4e518fb90771c681b774e3e235dfb991/playlist.m3u8
-#EXTINF:-1 tvg-id="biaomtv-match-965mkyhkd6kor1g-6" tvg-name="Hamburger SV Women vs 1.FSV Mainz 05Women Women 00:30 ngày 14/11/2026 link xem bóng đá - HLS" tvg-logo="https://biaomtv.fun/logo.png" group-title="Bia Om TV" start="2026-11-14T00:30:00+07:00" x-source="biaomtv" x-source-name="Bia Om TV" x-score="1-0" x-commentator="ơi",Hamburger SV Women vs 1.FSV Mainz 05Women Women 00:30 ngày 14/11/2026 link xem bóng đá | 14/11 00:30 | 1-0 | ơi | HLS
-#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/hamburger-sv-women-vs-1fsv-mainz-05women-women-965mkyhkd6kor1g
-https://lilive1.eu.cc/live/813cc134d0f6a2429c70a63ed207607e/playlist.m3u8
-#EXTINF:-1 tvg-id="biaomtv-match-965mkyhkd6kor1g-7" tvg-name="Hamburger SV Women vs 1.FSV Mainz 05Women Women 00:30 ngày 14/11/2026 link xem bóng đá - HLS" tvg-logo="https://biaomtv.fun/logo.png" group-title="Bia Om TV" start="2026-11-14T00:30:00+07:00" x-source="biaomtv" x-source-name="Bia Om TV" x-score="1-0" x-commentator="ơi",Hamburger SV Women vs 1.FSV Mainz 05Women Women 00:30 ngày 14/11/2026 link xem bóng đá | 14/11 00:30 | 1-0 | ơi | HLS
-#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/hamburger-sv-women-vs-1fsv-mainz-05women-women-965mkyhkd6kor1g
-https://lilive1.eu.cc/live/bff265982ac84252e9553d463f7c3930/playlist.m3u8
-#EXTINF:-1 tvg-id="biaomtv-match-965mkyhkd6kor1g-8" tvg-name="Hamburger SV Women vs 1.FSV Mainz 05Women Women 00:30 ngày 14/11/2026 link xem bóng đá - HLS" tvg-logo="https://biaomtv.fun/logo.png" group-title="Bia Om TV" start="2026-11-14T00:30:00+07:00" x-source="biaomtv" x-source-name="Bia Om TV" x-score="1-0" x-commentator="ơi",Hamburger SV Women vs 1.FSV Mainz 05Women Women 00:30 ngày 14/11/2026 link xem bóng đá | 14/11 00:30 | 1-0 | ơi | HLS
-#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/hamburger-sv-women-vs-1fsv-mainz-05women-women-965mkyhkd6kor1g
-https://lilive1.eu.cc/live/de703b6fc317b7ef50ca1258b8b10e32/playlist.m3u8
-#EXTINF:-1 tvg-id="gavangtv-match-4jwq2ghnl212m0v" tvg-name="Trực tiếp Nigeria vs Tanzania hôm nay – CAF Africa Cup of Nations - HLS" tvg-logo="https://gavangtv33.pro/images/gavangtv-logo.png" group-title="Ga Vang TV" x-source="gavangtv" x-source-name="Ga Vang TV" x-score="0-0" x-commentator="Gà Siêu Mõm",Trực tiếp Nigeria vs Tanzania hôm nay – CAF Africa Cup of Nations | 13/11 23:00 | 0-0 | Gà Siêu Mõm | HLS
-#EXTVLCOPT:http-referrer=https://gavangtv33.pro/truc-tiep/nigeria-vs-tanzania-luc-2300-ngay-13-11-2026-4jwq2ghnl212m0v?blv=6ac6623d35fd50989491e855
-https://live2.zktsva.app/live/300523.m3u8
-#EXTINF:-1 tvg-id="gavangtv-match-dn1m1ghlynylmoe" tvg-name="Trực tiếp CD Tondela vs SC Farense hôm nay – Liga Portugal 2 - HLS" tvg-logo="https://gavangtv33.pro/images/gavangtv-logo.png" group-title="Ga Vang TV" x-source="gavangtv" x-source-name="Ga Vang TV" x-score="0-0" x-commentator="Gà Siêu Nhí",Trực tiếp CD Tondela vs SC Farense hôm nay – Liga Portugal 2 | 15/11 18:00 | 0-0 | Gà Siêu Nhí | HLS
-#EXTVLCOPT:http-referrer=https://gavangtv33.pro/truc-tiep/cd-tondela-vs-sc-farense-luc-1800-ngay-15-11-2026-dn1m1ghlynylmoe
+#EXTINF:-1 tvg-id="colatv98-match-99121525" tvg-name="Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD - HLS" group-title="colatv98.live" start="2026-11-13T23:15:00+07:00" x-source="colatv98" x-source-name="colatv98.live" x-commentator="Lịch thi đấu",Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD | 13/11 23:15 | Lịch thi đấu | HLS
+#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/phan-lan-u21-vs-ireland-u21-luc-2315-ngay-13-11-2026-vrqwni0o0p0u4qn?houseId=99121525
+https://live05.wecile.app/live/99121525.m3u8
+#EXTINF:-1 tvg-id="colatv98-match-14830711" tvg-name="Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD - HLS" group-title="colatv98.live" start="2026-11-14T00:00:00+07:00" x-source="colatv98" x-source-name="colatv98.live" x-commentator="GIÀ LÀNG",Cola TV - Trực Tiếp Bóng đá Miễn Phí, Xem ColaTV TTBD HD | 14/11 00:00 | GIÀ LÀNG | HLS
+#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/dtqg-moldova-vs-dtqg-kazakhstan-luc-0000-ngay-14-11-2026-jek33i8m0z0a9ko?houseId=14830711
+https://live05.wecile.app/live/14830711.m3u8
+#EXTINF:-1 tvg-id="biaomtv-match-ednm9whwj2ozryo" tvg-name="Hasselt U21 vs FC Liege Reserves 02:30 ngày 14/11/2026 link xem bóng đá - HLS" tvg-logo="https://biaomtv.fun/logo.png" group-title="biaomtv.fun" start="2026-11-14T02:30:00+07:00" x-source="biaomtv" x-source-name="biaomtv.fun" x-score="1-0" x-commentator="NEM NƯỚNG",Hasselt U21 vs FC Liege Reserves 02:30 ngày 14/11/2026 link xem bóng đá | 14/11 02:30 | 1-0 | NEM NƯỚNG | HLS
+#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/hasselt-u21-vs-fc-liege-reserves-ednm9whwj2ozryo
+https://lilive1.eu.cc/live/39e61e248c6f76f25e41ae34e318f85b/playlist.m3u8
+#EXTINF:-1 tvg-id="biaomtv-match-ednm9whwj2ozryo-2" tvg-name="Hasselt U21 vs FC Liege Reserves 02:30 ngày 14/11/2026 link xem bóng đá - HLS" tvg-logo="https://biaomtv.fun/logo.png" group-title="biaomtv.fun" start="2026-11-14T02:30:00+07:00" x-source="biaomtv" x-source-name="biaomtv.fun" x-score="1-0" x-commentator="NEM NƯỚNG",Hasselt U21 vs FC Liege Reserves 02:30 ngày 14/11/2026 link xem bóng đá | 14/11 02:30 | 1-0 | NEM NƯỚNG | HLS
+#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/hasselt-u21-vs-fc-liege-reserves-ednm9whwj2ozryo
+https://lilive1.eu.cc/live/69f3d55e7b602d317bde813f633da12f/playlist.m3u8
+#EXTINF:-1 tvg-id="biaomtv-match-ednm9whwj2ozryo-3" tvg-name="Hasselt U21 vs FC Liege Reserves 02:30 ngày 14/11/2026 link xem bóng đá - HLS" tvg-logo="https://biaomtv.fun/logo.png" group-title="biaomtv.fun" start="2026-11-14T02:30:00+07:00" x-source="biaomtv" x-source-name="biaomtv.fun" x-score="1-0" x-commentator="NEM NƯỚNG",Hasselt U21 vs FC Liege Reserves 02:30 ngày 14/11/2026 link xem bóng đá | 14/11 02:30 | 1-0 | NEM NƯỚNG | HLS
+#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/hasselt-u21-vs-fc-liege-reserves-ednm9whwj2ozryo
+https://lilive1.eu.cc/live/9484ec52f0fcb5dcd1f5491f4c64c6fa/playlist.m3u8
+#EXTINF:-1 tvg-id="biaomtv-match-ednm9whwj2ozryo-4" tvg-name="Hasselt U21 vs FC Liege Reserves 02:30 ngày 14/11/2026 link xem bóng đá - HLS" tvg-logo="https://biaomtv.fun/logo.png" group-title="biaomtv.fun" start="2026-11-14T02:30:00+07:00" x-source="biaomtv" x-source-name="biaomtv.fun" x-score="1-0" x-commentator="NEM NƯỚNG",Hasselt U21 vs FC Liege Reserves 02:30 ngày 14/11/2026 link xem bóng đá | 14/11 02:30 | 1-0 | NEM NƯỚNG | HLS
+#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/hasselt-u21-vs-fc-liege-reserves-ednm9whwj2ozryo
+https://lilive1.eu.cc/live/97abffc297454c1cf9199780ddb54fcc/playlist.m3u8
+#EXTINF:-1 tvg-id="biaomtv-match-ednm9whwj2ozryo-5" tvg-name="Hasselt U21 vs FC Liege Reserves 02:30 ngày 14/11/2026 link xem bóng đá - HLS" tvg-logo="https://biaomtv.fun/logo.png" group-title="biaomtv.fun" start="2026-11-14T02:30:00+07:00" x-source="biaomtv" x-source-name="biaomtv.fun" x-score="1-0" x-commentator="NEM NƯỚNG",Hasselt U21 vs FC Liege Reserves 02:30 ngày 14/11/2026 link xem bóng đá | 14/11 02:30 | 1-0 | NEM NƯỚNG | HLS
+#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/hasselt-u21-vs-fc-liege-reserves-ednm9whwj2ozryo
+https://lilive1.eu.cc/live/e22a5fce1951aa66b7f48d9abcfbe625/playlist.m3u8
+#EXTINF:-1 tvg-id="biaomtv-match-3glrw7hn5eooqdy" tvg-name="Annagh United vs Ballinamallard United 02:45 ngày 14/11/2026 trực tiếp bóng đá - HLS" tvg-logo="https://biaomtv.fun/logo.png" group-title="biaomtv.fun" start="2026-11-14T02:45:00+07:00" x-source="biaomtv" x-source-name="biaomtv.fun" x-score="1-0" x-commentator="NEM NƯỚNG",Annagh United vs Ballinamallard United 02:45 ngày 14/11/2026 trực tiếp bóng đá | 14/11 02:45 | 1-0 | NEM NƯỚNG | HLS
+#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/annagh-united-vs-ballinamallard-united-3glrw7hn5eooqdy
+https://lilive1.eu.cc/live/3e1090e48cb27d6090443128598f5da3/playlist.m3u8
+#EXTINF:-1 tvg-id="biaomtv-match-3glrw7hn5eooqdy-2" tvg-name="Annagh United vs Ballinamallard United 02:45 ngày 14/11/2026 trực tiếp bóng đá - HLS" tvg-logo="https://biaomtv.fun/logo.png" group-title="biaomtv.fun" start="2026-11-14T02:45:00+07:00" x-source="biaomtv" x-source-name="biaomtv.fun" x-score="1-0" x-commentator="NEM NƯỚNG",Annagh United vs Ballinamallard United 02:45 ngày 14/11/2026 trực tiếp bóng đá | 14/11 02:45 | 1-0 | NEM NƯỚNG | HLS
+#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/annagh-united-vs-ballinamallard-united-3glrw7hn5eooqdy
+https://lilive1.eu.cc/live/ae9a67239a1a7c170fae5f9a3d0c68fc/playlist.m3u8
+#EXTINF:-1 tvg-id="biaomtv-match-3glrw7hn5eooqdy-3" tvg-name="Annagh United vs Ballinamallard United 02:45 ngày 14/11/2026 trực tiếp bóng đá - HLS" tvg-logo="https://biaomtv.fun/logo.png" group-title="biaomtv.fun" start="2026-11-14T02:45:00+07:00" x-source="biaomtv" x-source-name="biaomtv.fun" x-score="1-0" x-commentator="NEM NƯỚNG",Annagh United vs Ballinamallard United 02:45 ngày 14/11/2026 trực tiếp bóng đá | 14/11 02:45 | 1-0 | NEM NƯỚNG | HLS
+#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/annagh-united-vs-ballinamallard-united-3glrw7hn5eooqdy
+https://lilive1.eu.cc/live/b52a4ce400ce7c9dbed8b4eee511b25e/playlist.m3u8
+#EXTINF:-1 tvg-id="biaomtv-match-3glrw7hn5eooqdy-4" tvg-name="Annagh United vs Ballinamallard United 02:45 ngày 14/11/2026 trực tiếp bóng đá - HLS" tvg-logo="https://biaomtv.fun/logo.png" group-title="biaomtv.fun" start="2026-11-14T02:45:00+07:00" x-source="biaomtv" x-source-name="biaomtv.fun" x-score="1-0" x-commentator="NEM NƯỚNG",Annagh United vs Ballinamallard United 02:45 ngày 14/11/2026 trực tiếp bóng đá | 14/11 02:45 | 1-0 | NEM NƯỚNG | HLS
+#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/annagh-united-vs-ballinamallard-united-3glrw7hn5eooqdy
+https://lilive1.eu.cc/live/c00a8f7ede67796ad7564c731c7ec05c/playlist.m3u8
+#EXTINF:-1 tvg-id="gavangtv33-match-1l4rjnh9wyn5m7v" tvg-name="Trực tiếp Arsenal Women vs London City Lionesses Women hôm nay – English FA Women's Super League - HLS" tvg-logo="https://gavangtv33.pro/images/gavangtv-logo.png" group-title="gavangtv33.pro" x-source="gavangtv33" x-source-name="gavangtv33.pro" x-score="0-0" x-commentator="Gà Siêu Nhí",Trực tiếp Arsenal Women vs London City Lionesses Women hôm nay – English FA Women's Super League | 15/11 23:30 | 0-0 | Gà Siêu Nhí | HLS
+#EXTVLCOPT:http-referrer=https://gavangtv33.pro/truc-tiep/arsenal-women-vs-london-city-lionesses-women-luc-2330-ngay-15-11-2026-1l4rjnh9wyn5m7v
 https://live2.zktsva.app/live/301263.m3u8
-#EXTINF:-1 tvg-id="gavangtv-match-dn1m1gh94ep5moe" tvg-name="Trực tiếp China U19 vs Tajikistan U19 hôm nay – Panda Cup - HLS" tvg-logo="https://gavangtv33.pro/images/gavangtv-logo.png" group-title="Ga Vang TV" x-source="gavangtv" x-source-name="Ga Vang TV" x-score="0-0" x-commentator="Gà Siêu Bệu",Trực tiếp China U19 vs Tajikistan U19 hôm nay – Panda Cup | 14/11 18:35 | 0-0 | Gà Siêu Bệu | HLS
-#EXTVLCOPT:http-referrer=https://gavangtv33.pro/truc-tiep/china-u19-vs-tajikistan-u19-luc-1835-ngay-14-11-2026-dn1m1gh94ep5moe?blv=69fc585e696b57b6f1dae26b
-https://live2.zktsva.app/live/289650.m3u8
-#EXTINF:-1 tvg-id="gavangtv-match-n54qllhn4go4qvy" tvg-name="Trực tiếp Serbia vs Germany hôm nay – UEFA Nations League - HLS" tvg-logo="https://gavangtv33.pro/images/gavangtv-logo.png" group-title="Ga Vang TV" x-source="gavangtv" x-source-name="Ga Vang TV" x-score="0-0" x-commentator="Gà Siêu Quỷ",Trực tiếp Serbia vs Germany hôm nay – UEFA Nations League | 14/11 02:45 | 0-0 | Gà Siêu Quỷ | HLS
-#EXTVLCOPT:http-referrer=https://gavangtv33.pro/truc-tiep/serbia-vs-germany-luc-0245-ngay-14-11-2026-n54qllhn4go4qvy
-https://live2.zktsva.app/live/304565.m3u8
-#EXTINF:-1 tvg-id="gavangtv-match-23xmvkh6y1n2qg8" tvg-name="Trực tiếp Scotland vs North Macedonia hôm nay – UEFA Nations League - HLS" tvg-logo="https://gavangtv33.pro/images/gavangtv-logo.png" group-title="Ga Vang TV" x-source="gavangtv" x-source-name="Ga Vang TV" x-score="0-0" x-commentator="Gà Siêu Ngố",Trực tiếp Scotland vs North Macedonia hôm nay – UEFA Nations League | 14/11 02:45 | 0-0 | Gà Siêu Ngố | HLS
-#EXTVLCOPT:http-referrer=https://gavangtv33.pro/truc-tiep/scotland-vs-north-macedonia-luc-0245-ngay-14-11-2026-23xmvkh6y1n2qg8
-https://live2.zktsva.app/live/301238.m3u8
-#EXTINF:-1 tvg-id="gavangtv-match-dj2ryoh7v4j1q1z" tvg-name="Trực tiếp Colombia vs Chile hôm nay – International Friendly - HLS" tvg-logo="https://gavangtv33.pro/images/gavangtv-logo.png" group-title="Ga Vang TV" x-source="gavangtv" x-source-name="Ga Vang TV" x-score="0-0" x-commentator="Gà Siêu Son",Trực tiếp Colombia vs Chile hôm nay – International Friendly | 14/11 07:00 | 0-0 | Gà Siêu Son | HLS
-#EXTVLCOPT:http-referrer=https://gavangtv33.pro/truc-tiep/colombia-vs-chile-luc-0700-ngay-14-11-2026-dj2ryoh7v4j1q1z?blv=69fc581d696b57b6f1dae269
-https://live2.zktsva.app/live/306290.m3u8
-#EXTINF:-1 tvg-id="gavangtv-match-dn1m1ghlz70gmoe" tvg-name="Trực tiếp Granada CF vs UD Las Palmas hôm nay – Spanish Segunda Division - HLS" tvg-logo="https://gavangtv33.pro/images/gavangtv-logo.png" group-title="Ga Vang TV" x-source="gavangtv" x-source-name="Ga Vang TV" x-score="0-0" x-commentator="Gà Siêu Péo",Trực tiếp Granada CF vs UD Las Palmas hôm nay – Spanish Segunda Division | 15/11 22:15 | 0-0 | Gà Siêu Péo | HLS
-#EXTVLCOPT:http-referrer=https://gavangtv33.pro/truc-tiep/granada-cf-vs-ud-las-palmas-luc-2215-ngay-15-11-2026-dn1m1ghlz70gmoe
-https://live2.zktsva.app/live/303098.m3u8
-#EXTINF:-1 tvg-id="gavangtv-match-l7oqdehjn90dr51" tvg-name="Trực tiếp Bangladesh vs Pakistan hôm nay – SAFF Championship - HLS" tvg-logo="https://gavangtv33.pro/images/gavangtv-logo.png" group-title="Ga Vang TV" x-source="gavangtv" x-source-name="Ga Vang TV" x-score="0-0" x-commentator="Gà Siêu Tồ",Trực tiếp Bangladesh vs Pakistan hôm nay – SAFF Championship | 14/11 21:30 | 0-0 | Gà Siêu Tồ | HLS
-#EXTVLCOPT:http-referrer=https://gavangtv33.pro/truc-tiep/bangladesh-vs-pakistan-luc-2130-ngay-14-11-2026-l7oqdehjn90dr51
-https://live2.zktsva.app/live/796315.m3u8
-#EXTINF:-1 tvg-id="nembientv-26" tvg-name="Volleyball_208330 - HLS" group-title="Nem Bien TV" x-source="nembientv" x-source-name="Nem Bien TV" x-commentator="LAVIE",Volleyball_208330 | LAVIE | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/volleyball_208330
-https://live.nembientv.com/nembien_tv_wait_hls/index.m3u8
-#EXTINF:-1 tvg-id="nembientv-27-2" tvg-name="Volleyball_208330 - HLS" group-title="Nem Bien TV" x-source="nembientv" x-source-name="Nem Bien TV" x-commentator="LAVIE",Volleyball_208330 | LAVIE | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/volleyball_208330
+#EXTINF:-1 tvg-id="gavangtv33-match-ednm9whw5y3yryo" tvg-name="Trực tiếp Moldova vs Kazakhstan hôm nay – UEFA Nations League - HLS" tvg-logo="https://gavangtv33.pro/images/gavangtv-logo.png" group-title="gavangtv33.pro" x-source="gavangtv33" x-source-name="gavangtv33.pro" x-score="1-0" x-commentator="Gà Siêu Kiêu",Trực tiếp Moldova vs Kazakhstan hôm nay – UEFA Nations League | 14/11 00:00 | 1-0 | Gà Siêu Kiêu | HLS
+#EXTVLCOPT:http-referrer=https://gavangtv33.pro/truc-tiep/moldova-vs-kazakhstan-luc-0000-ngay-14-11-2026-ednm9whw5y3yryo
+https://live2.zktsva.app/live/741294.m3u8
+#EXTINF:-1 tvg-id="nembientv-20" tvg-name="C00A13E9B1D334 - HLS" group-title="nembientv.com" x-source="nembientv" x-source-name="nembientv.com" x-commentator="Nắng",C00A13E9B1D334 | Nắng | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/c00a13e9b1d334
+https://gn-live.saigon999.live/123che/123che@hnstream.m3u8
+#EXTINF:-1 tvg-id="nembientv-21-2" tvg-name="C00A13E9B1D334 - HLS" group-title="nembientv.com" x-source="nembientv" x-source-name="nembientv.com" x-commentator="Nắng",C00A13E9B1D334 | Nắng | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/c00a13e9b1d334
 https://nembientv.com/assets/hls-decoy-v13b/channel-01.m3u8
-#EXTINF:-1 tvg-id="nembientv-28-3" tvg-name="Volleyball_208330 - HLS" group-title="Nem Bien TV" x-source="nembientv" x-source-name="Nem Bien TV" x-commentator="LAVIE",Volleyball_208330 | LAVIE | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/volleyball_208330
+#EXTINF:-1 tvg-id="nembientv-22-3" tvg-name="C00A13E9B1D334 - HLS" group-title="nembientv.com" x-source="nembientv" x-source-name="nembientv.com" x-commentator="Nắng",C00A13E9B1D334 | Nắng | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/c00a13e9b1d334
 https://nembientv.com/assets/hls-decoy-v13b/channel-02.m3u8
-#EXTINF:-1 tvg-id="nembientv-29-4" tvg-name="Volleyball_208330 - HLS" group-title="Nem Bien TV" x-source="nembientv" x-source-name="Nem Bien TV" x-commentator="LAVIE",Volleyball_208330 | LAVIE | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/volleyball_208330
+#EXTINF:-1 tvg-id="nembientv-23-4" tvg-name="C00A13E9B1D334 - HLS" group-title="nembientv.com" x-source="nembientv" x-source-name="nembientv.com" x-commentator="Nắng",C00A13E9B1D334 | Nắng | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/c00a13e9b1d334
 https://nembientv.com/assets/hls-decoy-v13b/channel-03.m3u8
-#EXTINF:-1 tvg-id="nembientv-30-5" tvg-name="Volleyball_208330 - HLS" group-title="Nem Bien TV" x-source="nembientv" x-source-name="Nem Bien TV" x-commentator="LAVIE",Volleyball_208330 | LAVIE | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/volleyball_208330
+#EXTINF:-1 tvg-id="nembientv-24-5" tvg-name="C00A13E9B1D334 - HLS" group-title="nembientv.com" x-source="nembientv" x-source-name="nembientv.com" x-commentator="Nắng",C00A13E9B1D334 | Nắng | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/c00a13e9b1d334
 https://nembientv.com/assets/hls-decoy-v13b/channel-04.m3u8
-#EXTINF:-1 tvg-id="nembientv-31-6" tvg-name="Volleyball_208330 - HLS" group-title="Nem Bien TV" x-source="nembientv" x-source-name="Nem Bien TV" x-commentator="LAVIE",Volleyball_208330 | LAVIE | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/volleyball_208330
+#EXTINF:-1 tvg-id="nembientv-25-6" tvg-name="C00A13E9B1D334 - HLS" group-title="nembientv.com" x-source="nembientv" x-source-name="nembientv.com" x-commentator="Nắng",C00A13E9B1D334 | Nắng | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/c00a13e9b1d334
 https://nembientv.com/assets/hls-decoy-v13b/channel-05.m3u8
-#EXTINF:-1 tvg-id="nembientv-32-7" tvg-name="Volleyball_208330 - HLS" group-title="Nem Bien TV" x-source="nembientv" x-source-name="Nem Bien TV" x-commentator="LAVIE",Volleyball_208330 | LAVIE | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/volleyball_208330
+#EXTINF:-1 tvg-id="nembientv-26-7" tvg-name="C00A13E9B1D334 - HLS" group-title="nembientv.com" x-source="nembientv" x-source-name="nembientv.com" x-commentator="Nắng",C00A13E9B1D334 | Nắng | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/c00a13e9b1d334
 https://nembientv.com/assets/hls-decoy-v13b/channel-06.m3u8
-#EXTINF:-1 tvg-id="nembientv-33-8" tvg-name="Volleyball_208330 - HLS" group-title="Nem Bien TV" x-source="nembientv" x-source-name="Nem Bien TV" x-commentator="LAVIE",Volleyball_208330 | LAVIE | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/volleyball_208330
+#EXTINF:-1 tvg-id="nembientv-27-8" tvg-name="C00A13E9B1D334 - HLS" group-title="nembientv.com" x-source="nembientv" x-source-name="nembientv.com" x-commentator="Nắng",C00A13E9B1D334 | Nắng | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/c00a13e9b1d334
 https://nembientv.com/assets/hls-decoy-v13b/channel-07.m3u8
-#EXTINF:-1 tvg-id="nembientv-34-9" tvg-name="Volleyball_208330 - HLS" group-title="Nem Bien TV" x-source="nembientv" x-source-name="Nem Bien TV" x-commentator="LAVIE",Volleyball_208330 | LAVIE | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/volleyball_208330
+#EXTINF:-1 tvg-id="nembientv-28-9" tvg-name="C00A13E9B1D334 - HLS" group-title="nembientv.com" x-source="nembientv" x-source-name="nembientv.com" x-commentator="Nắng",C00A13E9B1D334 | Nắng | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/c00a13e9b1d334
 https://nembientv.com/assets/hls-decoy-v13b/channel-08.m3u8
-#EXTINF:-1 tvg-id="nembientv-35-10" tvg-name="Volleyball_208330 - HLS" group-title="Nem Bien TV" x-source="nembientv" x-source-name="Nem Bien TV" x-commentator="LAVIE",Volleyball_208330 | LAVIE | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/volleyball_208330
+#EXTINF:-1 tvg-id="nembientv-29-10" tvg-name="C00A13E9B1D334 - HLS" group-title="nembientv.com" x-source="nembientv" x-source-name="nembientv.com" x-commentator="Nắng",C00A13E9B1D334 | Nắng | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/c00a13e9b1d334
 https://nembientv.com/assets/hls-decoy-v13b/channel-09.m3u8
-#EXTINF:-1 tvg-id="nembientv-36-11" tvg-name="Volleyball_208330 - HLS" group-title="Nem Bien TV" x-source="nembientv" x-source-name="Nem Bien TV" x-commentator="LAVIE",Volleyball_208330 | LAVIE | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/volleyball_208330
+#EXTINF:-1 tvg-id="nembientv-30-11" tvg-name="C00A13E9B1D334 - HLS" group-title="nembientv.com" x-source="nembientv" x-source-name="nembientv.com" x-commentator="Nắng",C00A13E9B1D334 | Nắng | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/c00a13e9b1d334
 https://nembientv.com/assets/hls-decoy-v13b/channel-10.m3u8
-#EXTINF:-1 tvg-id="nembientv-37" tvg-name="23D24Cc271278B - HLS" group-title="Nem Bien TV" x-source="nembientv" x-source-name="Nem Bien TV" x-commentator="LAVIE",23D24Cc271278B | LAVIE | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/23d24cc271278b
+#EXTINF:-1 tvg-id="nembientv-31" tvg-name="757B6Cd5Ee5356 - HLS" group-title="nembientv.com" x-source="nembientv" x-source-name="nembientv.com" x-commentator="LAVIE",757B6Cd5Ee5356 | LAVIE | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/757b6cd5ee5356
 https://ivsplay.saigon999.live/live/live05.m3u8
-#EXTINF:-1 tvg-id="nembientv-38-2" tvg-name="23D24Cc271278B - HLS" group-title="Nem Bien TV" x-source="nembientv" x-source-name="Nem Bien TV" x-commentator="LAVIE",23D24Cc271278B | LAVIE | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/23d24cc271278b
-https://ivsplay.saigon999.live/live/live05.m3u8?hls_ctx=2762g060
-#EXTINF:-1 tvg-id="nembientv-39" tvg-name="B2938236B83E42 - HLS" group-title="Nem Bien TV" x-source="nembientv" x-source-name="Nem Bien TV" x-commentator="THÉP",B2938236B83E42 | THÉP | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/b2938236b83e42
-https://ivsplay.saigon999.live/live/live07.m3u8
-#EXTINF:-1 tvg-id="nembientv-40-2" tvg-name="B2938236B83E42 - HLS" group-title="Nem Bien TV" x-source="nembientv" x-source-name="Nem Bien TV" x-commentator="THÉP",B2938236B83E42 | THÉP | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/b2938236b83e42
-https://ivsplay.saigon999.live/live/live07.m3u8?hls_ctx=c3846mqw
-#EXTINF:-1 tvg-id="nembientv-41" tvg-name="361D1C8E1Ec212 - HLS" group-title="Nem Bien TV" x-source="nembientv" x-source-name="Nem Bien TV" x-commentator="KAKA",361D1C8E1Ec212 | KAKA | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/361d1c8e1ec212
-https://play.saigon8386.live/live_5afc467f34a4a65b/index.m3u8
-#EXTINF:-1 tvg-id="nembientv-42-2" tvg-name="361D1C8E1Ec212 - HLS" group-title="Nem Bien TV" x-source="nembientv" x-source-name="Nem Bien TV" x-commentator="KAKA",361D1C8E1Ec212 | KAKA | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/361d1c8e1ec212
-https://play.saigon8386.live/live_5afc467f34a4a65b/live_5afc467f34a4a65b@saigon8386.m3u8
+#EXTINF:-1 tvg-id="nembientv-32-2" tvg-name="757B6Cd5Ee5356 - HLS" group-title="nembientv.com" x-source="nembientv" x-source-name="nembientv.com" x-commentator="LAVIE",757B6Cd5Ee5356 | LAVIE | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/757b6cd5ee5356
+https://ivsplay.saigon999.live/live/live05.m3u8?hls_ctx=31t3k2lh
+#EXTINF:-1 tvg-id="nembientv-33" tvg-name="E39197E401D729 - HLS" group-title="nembientv.com" x-source="nembientv" x-source-name="nembientv.com" x-commentator="THÉP",E39197E401D729 | THÉP | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/e39197e401d729
+https://live.nembientv.com/nembien_tv_wait_hls/index.m3u8
