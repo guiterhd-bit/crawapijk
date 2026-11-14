@@ -1,4 +1,4 @@
-# Mỗi dòng: URL trang chủ >> mẫu URL trận ;;
+# Tên nhà đài | https://example.com/ >> /truc-tiep/ ;; id=example
 # Crawl trang trận ở mọi trạng thái (sắp diễn ra/đang diễn ra/đã kết thúc).
 # Playlist group-title luôn lấy theo name của nguồn; không lấy tên giải đấu.
 # Không khai báo logo giả/placeholder. Có thể thêm logo=https://... khi có URL ảnh thật.
