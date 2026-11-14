@@ -57,3 +57,13 @@ Khi quét trang trận, crawler không chỉ bắt request mạng `.m3u8`/`.flv`
 ### Cửa sổ ưu tiên quét trận
 
 Workflow dùng `--scan-lookback-hours 3`: các thẻ trận có giờ bắt đầu cũ hơn 3 giờ so với thời điểm chạy (múi giờ Việt Nam) sẽ bị bỏ qua khi mở trang trận. Trận được nhận diện đang trực tiếp và thẻ không có thời gian phân tích được vẫn được giữ lại. Có thể điều chỉnh bằng tham số `--scan-lookback-hours`, ví dụ `6` để giữ lại các trận trong 6 giờ gần nhất.
+
+### TVG logo trong playlist
+
+Crawler ưu tiên URL logo khai báo bằng `logo=` trong `sources.txt`. Nếu chưa khai báo, crawler tự đọc trang chủ nguồn để tìm ảnh có tên/class/id chứa `logo`, sau đó mới dùng metadata ảnh hoặc favicon làm phương án dự phòng. URL được ghi vào thuộc tính `tvg-logo` của từng mục `#EXTINF` (đồng thời giữ `x-source-logo` để tương thích). Nếu website không công khai URL ảnh logo hợp lệ, trường `tvg-logo` được để trống thay vì tự tạo logo giả.
+
+Ví dụ khai báo logo thủ công:
+
+```text
+Chuối Chiên TV | https://live11.chuoichientv.me/ >> /live/ ;; logo=https://example.com/logo.png
+```

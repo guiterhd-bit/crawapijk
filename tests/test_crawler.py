@@ -4,7 +4,7 @@ from crawler import (read_sources, clean_match_title, stream_format, finalize,
                      match_in_playlist_window, extract_status, parse_match_datetime,
                      extract_time, extract_card_matchup, extract_card_score, extract_card_time,
                      merge_match_metadata, prioritize_discovered_links,
-                     extract_stream_candidates)
+                     extract_stream_candidates, discover_source_logo, write_m3u)
 
 
 class CrawlerConfigTests(unittest.TestCase):
@@ -166,6 +166,32 @@ class CrawlerConfigTests(unittest.TestCase):
         now = datetime.fromisoformat("2026-11-14T08:00:00+07:00")
         link = "https://site.test/match/no-time"
         self.assertEqual(prioritize_discovered_links([link], {}, now, 3), [link])
+
+
+    def test_discovers_real_logo_image_from_homepage(self):
+        from unittest.mock import patch
+        markup = '<img class="site-logo" src="/assets/brand-logo.svg" alt="Station logo">'
+        with patch("crawler.fetch", return_value=markup):
+            self.assertEqual(
+                discover_source_logo("https://station.example/"),
+                "https://station.example/assets/brand-logo.svg"
+            )
+
+    def test_write_m3u_uses_source_logo_as_tvg_logo_fallback(self):
+        import tempfile
+        from pathlib import Path
+        row = {
+            "url": "https://cdn.example/live.m3u8", "source": "station",
+            "source_name": "Station TV", "match": "Team A vs Team B",
+            "source_logo": "https://station.example/logo.png"
+        }
+        finalize([row])
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "playlist.m3u"
+            write_m3u([row], path)
+            content = path.read_text(encoding="utf-8")
+        self.assertIn('tvg-logo="https://station.example/logo.png"', content)
+        self.assertNotIn('tvg-logo=""', content)
 
     def test_stream_ids_are_stable_and_unique_per_url(self):
         rows = [

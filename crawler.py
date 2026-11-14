@@ -75,6 +75,50 @@ def fetch(url, referer=None):
     return r.text
 
 
+def discover_source_logo(home_url):
+    """Find a real station logo URL from the source homepage for M3U tvg-logo."""
+    try:
+        raw = fetch(home_url)
+    except Exception as exc:
+        print(f"    [i] Không đọc được logo tự động từ {home_url}: {exc}", file=sys.stderr)
+        return ""
+
+    image_candidates = []
+    for tag in re.findall(r"<img\b[^>]*>", raw, re.I):
+        attrs = {}
+        for key, double_value, single_value in re.findall(
+                r'([\w:-]+)\s*=\s*(?:"([^"]*)"|\'([^\']*)\')', tag, re.I):
+            attrs[key.lower()] = html.unescape((double_value or single_value).strip())
+        src = (attrs.get("src") or attrs.get("data-src") or attrs.get("data-lazy-src")
+               or attrs.get("data-original") or "").strip()
+        if not src or src.startswith("data:"):
+            continue
+        absolute = urljoin(home_url, src)
+        hint = " ".join(attrs.get(k, "") for k in ("alt", "title", "class", "id", "src")).lower()
+        score = (100 if "logo" in hint else 0) + (35 if "brand" in hint else 0)
+        if any(word in hint for word in ("avatar", "banner", "slider")):
+            score -= 50
+        image_candidates.append((score, absolute))
+
+    if image_candidates:
+        image_candidates.sort(key=lambda item: item[0], reverse=True)
+        if image_candidates[0][0] > 0:
+            return image_candidates[0][1]
+
+    # Metadata and site icon are fallbacks when no logo-named image exists.
+    for pattern in (
+        r"<meta[^>]+(?:property|name)=\"(?:og:logo|twitter:image)\"[^>]+content=\"([^\"]+)",
+        r"<meta[^>]+property=\"og:image\"[^>]+content=\"([^\"]+)",
+        r"<link[^>]+rel=\"[^\"]*(?:icon|shortcut icon)[^\"]*\"[^>]+href=\"([^\"]+)",
+    ):
+        match = re.search(pattern, raw, re.I)
+        if match:
+            candidate = urljoin(home_url, html.unescape(match.group(1).strip()))
+            if candidate.startswith(("http://", "https://")):
+                return candidate
+    return ""
+
+
 def normalize(text):
     text = html.unescape(text)
     return text.replace("\\/", "/").replace("\\u0026", "&").replace("\\u003A", ":")
@@ -753,7 +797,7 @@ def write_m3u(items, path):
             f.write("#EXTINF:-1"
                     + attr("tvg-id", i["tvg_id"])
                     + attr("tvg-name", i["tvg_name"])
-                    + attr("tvg-logo", i.get("logo"))
+                    + attr("tvg-logo", i.get("logo") or i.get("source_logo"))
                     + attr("group-title", i["group"])
                     + attr("start", i.get("start"))
                     + attr("x-source", i["source"])
@@ -809,6 +853,11 @@ def main():
         display_name = source["name"] or opts.get("name") or host
         stem = opts.get("id") or re.sub(r"[^a-z0-9]+", "-", host.lower()).strip("-")
         print(f"[+] Quét nguồn {display_name}: {home}")
+        source_logo = opts.get("logo", "").strip() or discover_source_logo(home)
+        if source_logo:
+            print(f"    [i] TVG logo: {source_logo}")
+        else:
+            print("    [i] Không tìm thấy URL logo thật; tvg-logo sẽ để trống")
         try:
             if pattern:
                 found = extract_follow_js(home, pattern, args.max_pages, args.workers,
@@ -821,7 +870,8 @@ def main():
         print(f"    => {len(found)} link HLS/FLV/DASH thô")
         for it in found:
             it.update(source=stem, source_name=display_name,
-                      source_logo=opts.get("logo", ""), group=display_name)
+                      logo=it.get("logo") or source_logo,
+                      source_logo=source_logo, group=display_name)
         items.extend(found)
 
     # Keep all detected live matches, plus scheduled kick-offs from now through tomorrow.
