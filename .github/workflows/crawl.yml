@@ -40,12 +40,14 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           # Keep the newly generated playlist while refreshing all other files from origin.
+          cp thethao.m3u /tmp/thethao.m3u
           cp playlist.m3u /tmp/playlist.m3u
           for attempt in 1 2 3; do
             git fetch origin main
             git reset --hard origin/main
+            cp /tmp/thethao.m3u thethao.m3u
             cp /tmp/playlist.m3u playlist.m3u
-            git add playlist.m3u
+            git add thethao.m3u playlist.m3u
             if git diff --cached --quiet; then
               echo "Playlist không thay đổi; không cần commit."
               exit 0
