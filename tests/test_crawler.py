@@ -4,7 +4,8 @@ from crawler import (read_sources, clean_match_title, stream_format, finalize,
                      match_in_playlist_window, extract_status, parse_match_datetime,
                      extract_time, extract_card_matchup, extract_card_score, extract_card_time,
                      merge_match_metadata, prioritize_discovered_links,
-                     extract_stream_candidates, discover_source_logo, write_m3u)
+                     extract_stream_candidates, discover_source_logo, extract_team_names,
+                     extract_team_logos, write_m3u)
 
 
 class CrawlerConfigTests(unittest.TestCase):
@@ -177,12 +178,28 @@ class CrawlerConfigTests(unittest.TestCase):
                 "https://station.example/assets/brand-logo.svg"
             )
 
-    def test_write_m3u_uses_source_logo_as_tvg_logo_fallback(self):
+    def test_team_name_parser_splits_home_and_away(self):
+        self.assertEqual(extract_team_names("Guatemala vs Canada"), ("Guatemala", "Canada"))
+
+    def test_team_logo_matcher_uses_team_images_not_station_branding(self):
+        images = [
+            {"src": "https://site.test/assets/guatemala.png", "alt": "Guatemala team logo"},
+            {"src": "https://site.test/assets/canada.png", "alt": "Canada crest"},
+            {"src": "https://site.test/assets/station-logo.png", "alt": "Chuoi Chien TV logo"},
+        ]
+        self.assertEqual(
+            extract_team_logos(images, "Guatemala vs Canada"),
+            ("https://site.test/assets/guatemala.png", "https://site.test/assets/canada.png")
+        )
+
+    def test_write_m3u_uses_team_logo_in_tvg_and_keeps_away_logo_separate(self):
         import tempfile
         from pathlib import Path
         row = {
             "url": "https://cdn.example/live.m3u8", "source": "station",
             "source_name": "Station TV", "match": "Team A vs Team B",
+            "home_logo": "https://teams.example/team-a.png",
+            "away_logo": "https://teams.example/team-b.png",
             "source_logo": "https://station.example/logo.png"
         }
         finalize([row])
@@ -190,8 +207,9 @@ class CrawlerConfigTests(unittest.TestCase):
             path = Path(folder) / "playlist.m3u"
             write_m3u([row], path)
             content = path.read_text(encoding="utf-8")
-        self.assertIn('tvg-logo="https://station.example/logo.png"', content)
-        self.assertNotIn('tvg-logo=""', content)
+        self.assertIn('tvg-logo="https://teams.example/team-a.png"', content)
+        self.assertIn('x-away-logo="https://teams.example/team-b.png"', content)
+        self.assertNotIn('tvg-logo="https://station.example/logo.png"', content)
 
     def test_stream_ids_are_stable_and_unique_per_url(self):
         rows = [
