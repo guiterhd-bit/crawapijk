@@ -1,7 +1,9 @@
 import unittest
 from datetime import datetime
 from crawler import (read_sources, clean_match_title, stream_format, finalize,
-                     match_in_playlist_window, extract_status, parse_match_datetime)
+                     match_in_playlist_window, extract_status, parse_match_datetime,
+                     extract_time, extract_card_matchup, extract_card_score, extract_card_time,
+                     merge_match_metadata)
 
 
 class CrawlerConfigTests(unittest.TestCase):
@@ -60,6 +62,61 @@ class CrawlerConfigTests(unittest.TestCase):
         now = datetime.fromisoformat("2026-11-14T08:00:00+07:00")
         parsed = parse_match_datetime({"when": "15/11 20:30"}, now)
         self.assertEqual(parsed.isoformat(), "2026-11-15T20:30:00+07:00")
+
+
+    def test_nembien_time_format_with_full_date(self):
+        when, start = extract_time(
+            "https://nembientv.com/truc-tiep/277eab011ff50b",
+            "SV.League Women - Hisamitsu Springs W VS PFU Blue Cats W -11:05-14/11/2026"
+        )
+        self.assertEqual(when, "14/11 11:05")
+        self.assertEqual(start, "2026-11-14T11:05:00+07:00")
+
+    def test_nembien_parsed_match_enters_today_tomorrow_playlist(self):
+        when, start = extract_time(
+            "https://nembientv.com/truc-tiep/277eab011ff50b",
+            "Hisamitsu Springs W VS PFU Blue Cats W -11:05-14/11/2026"
+        )
+        item = {"status": "scheduled", "when": when, "start": start}
+        now = datetime.fromisoformat("2026-11-14T09:00:00+07:00")
+        self.assertTrue(match_in_playlist_window(item, now))
+
+    def test_card_matchup_parser_supports_league_prefix_and_v_s(self):
+        raw = "SV.League Women - Hisamitsu Springs W VS PFU Blue Cats W -11:05-14/11/2026"
+        self.assertEqual(
+            extract_card_matchup(raw),
+            "Hisamitsu Springs W vs PFU Blue Cats W"
+        )
+
+    def test_card_time_parser_supports_nembien_format(self):
+        when, start = extract_card_time(
+            "SV.League Women - Hisamitsu Springs W VS PFU Blue Cats W -11:05-14/11/2026"
+        )
+        self.assertEqual(when, "14/11 11:05")
+        self.assertEqual(start, "2026-11-14T11:05:00+07:00")
+
+    def test_card_score_parser_supports_set_and_full_time_labels(self):
+        self.assertEqual(extract_card_score("SET 2 25-21"), "25-21")
+        self.assertEqual(extract_card_score("FT 2-1"), "2-1")
+
+    def test_supplemental_metadata_does_not_overwrite_existing_fields(self):
+        current = {"match": "Existing A vs Existing B", "score": "1-0", "when": "14/11 10:00"}
+        supplemental = {"match": "Card A vs Card B", "score": "2-0", "when": "14/11 11:05"}
+        merged = merge_match_metadata(current, supplemental)
+        self.assertEqual(merged["match"], "Existing A vs Existing B")
+        self.assertEqual(merged["score"], "1-0")
+        self.assertEqual(merged["when"], "14/11 10:00")
+
+    def test_card_matchup_fills_weak_page_title(self):
+        current = {"match": "Nembientv Truc Tiep"}
+        supplemental = {"match": "Hisamitsu Springs W vs PFU Blue Cats W"}
+        merged = merge_match_metadata(current, supplemental)
+        self.assertEqual(merged["match"], supplemental["match"])
+
+    def test_invalid_full_date_is_ignored(self):
+        when, start = extract_time("https://nembientv.com/truc-tiep/test", "11:05-32/11/2026")
+        self.assertEqual(when, "")
+        self.assertEqual(start, "")
 
     def test_stream_ids_are_stable_and_unique_per_url(self):
         rows = [

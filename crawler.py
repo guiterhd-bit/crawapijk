@@ -32,16 +32,25 @@ IFRAME_RE = re.compile(r'<iframe[^>]+src=["\']([^"\']+)["\']', re.I)
 TITLE_RE = re.compile(r"<title[^>]*>(.*?)</title>", re.I | re.S)
 TIME_RE = re.compile(r"luc-(\d{2})(\d{2})-ngay-(\d{2})-(\d{2})-(\d{4})", re.I)
 BLV_RE = re.compile(r"\bBLV\b\s*[:\-]?\s*([^\n|,;]{2,60})", re.I)
-PAGE_META_JS = """() => {
+PAGE_META_JS = r"""() => {
   const q = s => document.querySelector(s) || {};
   const a = [...document.querySelectorAll('a[href]')];
   const cards = {};
   for (const el of a) {
-    let p = el;
-    for (let i=0; i<5 && p; i++, p=p.parentElement) {
-      const t = (p.innerText || '').trim();
-      if (t.length >= 12 && t.length <= 1800) { cards[el.href] = t; break; }
+    let p = el, candidates = [];
+    for (let i=0; i<7 && p; i++, p=p.parentElement) {
+      const t = (p.innerText || '').replace(/\s+/g, ' ').trim();
+      if (t.length >= 12 && t.length <= 1800) candidates.push(t);
     }
+    // Prefer the smallest ancestor containing matchup + date/time, rather than
+    // the anchor's short label (often only "Xem ngay" or "Trực tiếp").
+    const ranked = candidates.map(t => ({t, score:
+      (/\b(vs|v)\b/i.test(t) ? 8 : 0) +
+      (/(?:\d{1,2}:\d{2}\s*[-–/]\s*\d{1,2}[/-]\d{1,2}|\d{1,2}[/-]\d{1,2}[/-]20\d{2})/.test(t) ? 6 : 0) +
+      (/(\d{1,2}:\d{2})/.test(t) ? 2 : 0) - Math.max(0, t.length-350)/350
+    }));
+    ranked.sort((x,y) => y.score-x.score || x.t.length-y.t.length);
+    if (ranked.length) cards[el.href] = ranked[0].t;
   }
   return {
     img: q('meta[property="og:image"]').content || '',
@@ -49,7 +58,7 @@ PAGE_META_JS = """() => {
     title: (q('meta[property="og:title"]').content || document.title || '').trim(),
     description: q('meta[name="description"]').content || '',
     body: (document.body && document.body.innerText || '').slice(0, 30000),
-    scripts: [...document.scripts].map(s => s.textContent || '').join('\\n').slice(0, 150000),
+    scripts: [...document.scripts].map(s => s.textContent || '').join('\n').slice(0, 150000),
     cards
   };
 }"""
@@ -167,25 +176,126 @@ def extract_time(link, text):
 
     # Common Vietnamese match-card date formats.
     patterns = (
-        (r"\b(\d{2})[/.](\d{2})[/.](20\d{2})\s+(\d{2}):(\d{2})\b", "full"),
-        (r"\b(\d{2})/(\d{2})\s+(\d{2}):(\d{2})\b", "day-first"),
-        (r"\b(\d{2}):(\d{2})\s+(\d{2})/(\d{2})\b", "time-first"),
+        # Ném Biên TV match pages/cards commonly render: 11:05-14/11/2026
+        (r"\b(\d{1,2}):(\d{2})\s*[-–—]\s*(\d{1,2})/(\d{1,2})/(20\d{2})\b", "time-date-full"),
+        (r"\b(\d{1,2})[/.](\d{1,2})[/.](20\d{2})\s+(\d{1,2}):(\d{2})\b", "full"),
+        (r"\b(\d{1,2})/(\d{1,2})\s+(\d{1,2}):(\d{2})\b", "day-first"),
+        (r"\b(\d{1,2}):(\d{2})\s*[-–— ]\s*(\d{1,2})/(\d{1,2})\b", "time-first"),
     )
     for pattern, kind in patterns:
         m = re.search(pattern, text)
         if not m:
             continue
+        if kind == "time-date-full":
+            h, mi, d, mo, year = m.groups()
+            try:
+                dt = datetime(int(year), int(mo), int(d), int(h), int(mi), tzinfo=VN)
+            except ValueError:
+                continue
+            return dt.strftime("%d/%m %H:%M"), dt.isoformat()
         if kind == "full":
             d, mo, year, h, mi = m.groups()
-            dt = datetime(int(year), int(mo), int(d), int(h), int(mi), tzinfo=VN)
+            try:
+                dt = datetime(int(year), int(mo), int(d), int(h), int(mi), tzinfo=VN)
+            except ValueError:
+                continue
             return dt.strftime("%d/%m %H:%M"), dt.isoformat()
         if kind == "day-first":
             d, mo, h, mi = m.groups()
         else:
             h, mi, d, mo = m.groups()
-        return f"{d}/{mo} {h}:{mi}", ""
+        try:
+            datetime(datetime.now(VN).year, int(mo), int(d), int(h), int(mi), tzinfo=VN)
+        except ValueError:
+            continue
+        return f"{int(d):02d}/{int(mo):02d} {int(h):02d}:{mi}", ""
 
     return slug_to_time(link), slug_to_start(link)
+
+
+def extract_card_matchup(text):
+    """Supplementary parser for match-card text; supports league + teams + time layouts.
+
+    Example: 'SV.League Women - Hisamitsu Springs W VS PFU Blue Cats W -11:05-14/11/2026'.
+    It deliberately returns only the matchup and does not replace already valid metadata.
+    """
+    if not text:
+        return ""
+    value = html.unescape(text).replace("\xa0", " ")
+    value = re.sub(r"\s+", " ", value).strip()
+    # Remove trailing kickoff/date and common live/status annotations before parsing teams.
+    value = re.sub(
+        r"\s*[-–—]?\s*\d{1,2}:\d{2}\s*[-–—/]\s*\d{1,2}[/.]\d{1,2}(?:[/.]20\d{2})?.*$",
+        "", value, flags=re.I
+    )
+    value = re.sub(r"\s+(?:LIVE|HT|FT|TRỰC TIẾP|SẮP DIỄN RA|ĐÃ KẾT THÚC)\b.*$", "", value, flags=re.I)
+    # Pick the smallest segment that actually contains the two sides, discarding league prefix.
+    segments = re.split(r"\s*[|;\n]+\s*|\s+[-–—]\s+", value)
+    candidates = [seg.strip(" :-–—") for seg in segments if re.search(r"\b(?:vs\.?|v\.?|versus)\b", seg, re.I)]
+    if not candidates:
+        candidates = [value]
+    for candidate in candidates:
+        m = re.search(r"(.{2,100}?)\s+\b(?:vs\.?|v\.?|versus)\b\s+(.{2,100})", candidate, re.I)
+        if not m:
+            continue
+        left, right = (re.sub(r"\s+", " ", x).strip(" -:|") for x in m.groups())
+        # Avoid accepting labels/status fragments as team names.
+        if len(left) >= 2 and len(right) >= 2:
+            return f"{left} vs {right}"[:140]
+    return ""
+
+
+def extract_card_time(text):
+    """Supplementary card-time parser for ' -11:05-14/11/2026' and variants."""
+    if not text:
+        return "", ""
+    patterns = (
+        r"(?:^|\s)[-–—]?\s*(\d{1,2}):(\d{2})\s*[-–—/]\s*(\d{1,2})/(\d{1,2})/(20\d{2})\b",
+        r"\b(\d{1,2})/(\d{1,2})/(20\d{2})\s+(\d{1,2}):(\d{2})\b",
+    )
+    value = html.unescape(text).replace("\\u0026", "&")
+    for index, pattern in enumerate(patterns):
+        m = re.search(pattern, value)
+        if not m:
+            continue
+        try:
+            if index == 0:
+                hour, minute, day, month, year = map(int, m.groups())
+            else:
+                day, month, year, hour, minute = map(int, m.groups())
+            dt = datetime(year, month, day, hour, minute, tzinfo=VN)
+        except ValueError:
+            continue
+        return dt.strftime("%d/%m %H:%M"), dt.isoformat()
+    return "", ""
+
+
+def extract_card_score(text):
+    """Supplementary score parser for scoreboard labels not covered by extract_score."""
+    if not text:
+        return ""
+    value = html.unescape(text).replace("\xa0", " ")
+    patterns = (
+        r"(?:tỉ\s*số|ty\s*so|score|kết\s*quả|result)\s*[:：]?\s*(\d{1,2})\s*[-:：]\s*(\d{1,2})",
+        r"\b(?:HT|FT|LIVE|SET\s*\d+|HIỆP\s*\d+)\s*[:：-]?\s*(\d{1,2})\s*[-:：]\s*(\d{1,2})\b",
+    )
+    for pattern in patterns:
+        m = re.search(pattern, value, re.I)
+        if m:
+            return f"{m.group(1)}-{m.group(2)}"
+    return ""
+
+
+def merge_match_metadata(existing, supplemental):
+    """Fill absent/weak fields from card parsing while preserving valid extracted values."""
+    result = dict(existing or {})
+    for key, value in (supplemental or {}).items():
+        if value and not result.get(key):
+            result[key] = value
+    # A page title can be a league/site label; use the card matchup only when no matchup exists.
+    if supplemental and supplemental.get("match") and not is_match_title(result.get("match", "")):
+        result["match"] = supplemental["match"]
+    return result
 
 
 def extract_commentator(text):
@@ -339,10 +449,25 @@ async def _scan_match(browser, link, sem, card_text="", wait_ms=6000):
         await ctx.close()
 
     h1, title = meta.get("h1", ""), meta.get("title", "")
-    match = clean_match_title(h1 if is_match_title(h1) else title, link)
+    page_title = h1 if is_match_title(h1) else title
+    if not is_match_title(page_title) and is_match_title(card_text):
+        page_title = card_text
+    match = clean_match_title(page_title, link)
     combined = "\n".join([card_text, meta.get("body", ""), meta.get("description", ""), meta.get("scripts", "")])
+    # Keep the existing page/JSON/slug extractors as primary; card parsing is additive fallback.
     when, start = extract_time(link, combined)
+    card_text_all = card_text + "\n" + meta.get("body", "") + "\n" + meta.get("h1", "") + "\n" + meta.get("title", "")
+    card_when, card_start = extract_card_time(card_text_all)
+    # Existing time extractor remains authoritative; use card parser only for empty fields.
+    when = when or card_when
+    start = start or card_start
     score = extract_score(card_text + "\n" + meta.get("body", ""))
+    card_match = extract_card_matchup(card_text + "\n" + meta.get("h1", "") + "\n" + meta.get("title", ""))
+    card_score = extract_card_score(card_text + "\n" + meta.get("body", ""))
+    if card_match and not is_match_title(match):
+        match = card_match
+    if not score:
+        score = card_score
     commentator = extract_commentator(card_text + "\n" + meta.get("body", ""))
     # Prefer the match card; avoid treating generic site-wide "trực tiếp" labels as live status.
     status = extract_status(card_text)

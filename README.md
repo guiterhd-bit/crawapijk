@@ -24,6 +24,8 @@ Tên hiển thị | https://ten-mien.example/ ;; id=tennguon
 
 Dòng bắt đầu bằng `#` được xem là chú thích. Crawler quét trang trận được tìm thấy, sau đó chỉ đưa vào playlist các trận đang trực tiếp và các trận sắp diễn ra có giờ khai cuộc từ hiện tại đến hết ngày mai (theo giờ Việt Nam). Trận đã kết thúc và trận ở các ngày xa hơn không được đưa vào playlist. Các trận sắp diễn ra chỉ được thêm khi trang nguồn cung cấp được giờ thi đấu có thể phân tích và có luồng phát hợp lệ.
 
+Bộ phân tích ngày giờ hỗ trợ cả định dạng `HH:MM-DD/MM/YYYY` (ví dụ `11:05-14/11/2026`) thường gặp trên thẻ/trang trận Ném Biên TV. Khi lấy thông tin thẻ trận từ trang chủ, crawler so sánh các phần tử cha để ưu tiên khối có tên hai đội và ngày giờ thay vì chỉ lấy nhãn nút xem trận.
+
 ## Chạy cục bộ
 
 ```bash
@@ -34,3 +36,10 @@ python crawler.py --max-pages 0 --workers 12
 ```
 
 Mặc định crawler kiểm tra khả năng truy cập của từng luồng trước khi ghi playlist. Nếu không tìm được luồng hợp lệ, playlist hiện tại được giữ nguyên.
+
+
+### Bổ sung trích xuất metadata từ thẻ trận
+
+Crawler giữ nguyên bộ trích xuất metadata hiện có (JSON, tiêu đề trang, nội dung trang và slug URL).
+Nếu các trường đội bóng hoặc tỉ số còn thiếu/tiêu đề trang không phải tên trận, crawler mới dùng bộ phân tích bổ sung từ nội dung thẻ trận. Bộ phân tích hỗ trợ dạng có tên giải đứng trước, ví dụ `SV.League Women - Hisamitsu Springs W VS PFU Blue Cats W -11:05-14/11/2026`.
+Các giá trị đã trích xuất hợp lệ không bị ghi đè; parser bổ sung chỉ điền trường còn thiếu hoặc thay tiêu đề trang yếu không có cặp đội bóng.
