@@ -517,7 +517,41 @@ def is_match_title(value):
     return bool(value and len(value) < 180 and re.search(r"\bvs\b|\bv\b|\s-\s", value, re.I))
 
 
-async def _follow_async(home_url, pattern, max_pages, workers, budget=45):
+def prioritize_discovered_links(links, card_map, now=None, lookback_days=1):
+    """Drop clearly stale cards and scan live/near-future matches first.
+
+    Cards without a parseable date are retained to avoid missing sources whose
+    homepage does not expose kickoff metadata.
+    """
+    now = now or datetime.now(VN)
+    cutoff = now - timedelta(days=max(0, lookback_days))
+    ranked = []
+    for index, link in enumerate(links):
+        card = card_map.get(link, "") or ""
+        status = extract_status(card)
+        _, start = extract_card_time(card)
+        kickoff = None
+        if start:
+            try:
+                kickoff = datetime.fromisoformat(start).astimezone(VN)
+            except ValueError:
+                kickoff = None
+        if kickoff and kickoff < cutoff and status != "live":
+            continue
+        if status == "live":
+            rank = (0, kickoff.timestamp() if kickoff else 0, index)
+        elif kickoff and kickoff >= now:
+            rank = (1, kickoff.timestamp(), index)
+        elif kickoff:
+            rank = (2, -kickoff.timestamp(), index)
+        else:
+            rank = (3, index, index)
+        ranked.append((rank, link))
+    ranked.sort(key=lambda pair: pair[0])
+    return [link for _, link in ranked]
+
+
+async def _follow_async(home_url, pattern, max_pages, workers, budget=90, lookback_days=1):
     from playwright.async_api import async_playwright
 
     async with async_playwright() as p:
@@ -549,7 +583,9 @@ async def _follow_async(home_url, pattern, max_pages, workers, budget=45):
                         and pattern in parsed.path and href != home_url):
                     links.append(href)
             links = list(dict.fromkeys(links))
-            print(f"    Trang chủ: {len(hrefs)} thẻ <a> | {len(links)} trang trận khớp '{pattern}'")
+            discovered_count = len(links)
+            links = prioritize_discovered_links(links, card_map, lookback_days=lookback_days)
+            print(f"    Trang chủ: {len(hrefs)} thẻ <a> | {discovered_count} trang trận khớp; còn {len(links)} sau lọc trận cũ hơn {lookback_days} ngày")
             if not links:
                 print("    -> Không tìm thấy link trận; cần kiểm tra lại mẫu URL hoặc cơ chế tải JS.")
                 return []
@@ -570,8 +606,8 @@ async def _follow_async(home_url, pattern, max_pages, workers, budget=45):
     return [it for result in results for it in result]
 
 
-def extract_follow_js(home_url, pattern, max_pages=0, workers=16):
-    return asyncio.run(_follow_async(home_url, pattern, max_pages, workers))
+def extract_follow_js(home_url, pattern, max_pages=0, workers=16, budget=90, lookback_days=1):
+    return asyncio.run(_follow_async(home_url, pattern, max_pages, workers, budget, lookback_days))
 
 
 def check_stream(item):
@@ -715,6 +751,8 @@ def main():
     ap.add_argument("--no-playlist", action="store_true")
     ap.add_argument("--max-pages", type=int, default=0, help="maximum match pages per source; 0 = unlimited")
     ap.add_argument("--workers", type=int, default=16)
+    ap.add_argument("--scan-budget", type=int, default=90, help="maximum seconds to scan match pages per source")
+    ap.add_argument("--scan-lookback-days", type=int, default=1, help="skip dated non-live cards older than this many days; 0 = today only")
     args = ap.parse_args()
 
     items = []
@@ -728,7 +766,8 @@ def main():
         print(f"[+] Quét nguồn {display_name}: {home}")
         try:
             if pattern:
-                found = extract_follow_js(home, pattern, args.max_pages, args.workers)
+                found = extract_follow_js(home, pattern, args.max_pages, args.workers,
+                                          args.scan_budget, args.scan_lookback_days)
             else:
                 found = extract_js(home) if args.js else extract_static(home)
         except Exception as e:

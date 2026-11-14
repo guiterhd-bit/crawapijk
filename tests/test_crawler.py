@@ -3,7 +3,7 @@ from datetime import datetime
 from crawler import (read_sources, clean_match_title, stream_format, finalize,
                      match_in_playlist_window, extract_status, parse_match_datetime,
                      extract_time, extract_card_matchup, extract_card_score, extract_card_time,
-                     merge_match_metadata)
+                     merge_match_metadata, prioritize_discovered_links)
 
 
 class CrawlerConfigTests(unittest.TestCase):
@@ -117,6 +117,24 @@ class CrawlerConfigTests(unittest.TestCase):
         when, start = extract_time("https://nembientv.com/truc-tiep/test", "11:05-32/11/2026")
         self.assertEqual(when, "")
         self.assertEqual(start, "")
+
+    def test_discovery_prioritizes_live_and_upcoming_and_skips_stale_cards(self):
+        now = datetime.fromisoformat("2026-11-14T08:00:00+07:00")
+        links = ["https://site.test/match/old", "https://site.test/match/tomorrow",
+                 "https://site.test/match/live", "https://site.test/match/unknown"]
+        cards = {
+            links[0]: "Team A vs Team B - 20:00-11/11/2026",
+            links[1]: "Team C vs Team D - 20:00-15/11/2026",
+            links[2]: "LIVE Team E vs Team F",
+        }
+        ordered = prioritize_discovered_links(links, cards, now, lookback_days=1)
+        self.assertEqual(ordered, [links[2], links[1], links[3]])
+
+    def test_discovery_retains_recent_past_cards_within_lookback(self):
+        now = datetime.fromisoformat("2026-11-14T08:00:00+07:00")
+        links = ["https://site.test/match/yesterday"]
+        cards = {links[0]: "Team A vs Team B - 20:00-13/11/2026"}
+        self.assertEqual(prioritize_discovered_links(links, cards, now, 1), links)
 
     def test_stream_ids_are_stable_and_unique_per_url(self):
         rows = [

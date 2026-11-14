@@ -43,3 +43,8 @@ Mặc định crawler kiểm tra khả năng truy cập của từng luồng tr�
 Crawler giữ nguyên bộ trích xuất metadata hiện có (JSON, tiêu đề trang, nội dung trang và slug URL).
 Nếu các trường đội bóng hoặc tỉ số còn thiếu/tiêu đề trang không phải tên trận, crawler mới dùng bộ phân tích bổ sung từ nội dung thẻ trận. Bộ phân tích hỗ trợ dạng có tên giải đứng trước, ví dụ `SV.League Women - Hisamitsu Springs W VS PFU Blue Cats W -11:05-14/11/2026`.
 Các giá trị đã trích xuất hợp lệ không bị ghi đè; parser bổ sung chỉ điền trường còn thiếu hoặc thay tiêu đề trang yếu không có cặp đội bóng.
+
+
+### Tối ưu thời gian quét trang trận
+
+Workflow dành tối đa 90 giây cho mỗi nguồn để quét trang trận (trước đây là 45 giây), với giới hạn job 30 phút. Trước khi mở từng trang trận, crawler ưu tiên trận đang trực tiếp, sau đó đến trận sắp diễn ra; các thẻ có ngày rõ ràng cũ hơn 1 ngày sẽ được bỏ qua. Thẻ không có ngày hoặc không đọc được ngày vẫn được giữ lại để hạn chế bỏ sót nguồn. Có thể điều chỉnh bằng `--scan-budget` và `--scan-lookback-days`.
