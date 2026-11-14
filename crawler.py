@@ -661,7 +661,7 @@ async def _follow_async(home_url, pattern, max_pages, workers, budget=90, lookba
         browser = await p.chromium.launch()
         try:
             page = await browser.new_page(user_agent=UA)
-            title, hrefs, card_map = "", [], {}
+            title, hrefs, card_map, card_images_map = "", [], {}
             try:
                 await page.goto(home_url, wait_until="domcontentloaded", timeout=30000)
                 await page.wait_for_timeout(3500)
@@ -671,6 +671,8 @@ async def _follow_async(home_url, pattern, max_pages, workers, budget=90, lookba
                 data = await page.evaluate(PAGE_META_JS)
                 title = data.get("title", "")
                 card_map = data.get("cards", {})
+                # Lấy danh sách hình ảnh của từng thẻ trận đấu
+                card_images_map = data.get("cardImages", {}) or {}
                 hrefs = await page.eval_on_selector_all("a[href]", "els => els.map(e => e.href)")
             except Exception as e:
                 print(f"[!] Lỗi trang chủ {home_url}: {e}", file=sys.stderr)
