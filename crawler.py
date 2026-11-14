@@ -11,6 +11,7 @@ import json
 import os
 import re
 import sys
+import unicodedata
 from datetime import datetime, timezone, timedelta
 from concurrent.futures import ThreadPoolExecutor
 from urllib.parse import parse_qs, urljoin, urlparse
@@ -61,6 +62,17 @@ PAGE_META_JS = r"""() => {
     scripts: [...document.scripts].map(s => s.textContent || '').join('\n').slice(0, 150000),
     media: [...document.querySelectorAll('iframe[src], video[src], video source[src], source[src]')]
       .map(el => el.src || el.getAttribute('src') || '').filter(Boolean),
+    teamImages: [...document.querySelectorAll('img, [style*="background-image"]')].map(el => {
+      const parent = el.closest('a, li, article, [class*="team"], [class*="club"], [class*="match"]') || el.parentElement;
+      const style = el.getAttribute('style') || '';
+      const bg = style.match(/url\(["']?([^"')]+)["']?\)/i);
+      return {
+        src: el.currentSrc || el.src || el.getAttribute('data-src') || el.getAttribute('data-lazy-src') || (bg && bg[1]) || '',
+        alt: el.getAttribute('alt') || '', title: el.getAttribute('title') || '',
+        cls: typeof el.className === 'string' ? el.className : '',
+        parentText: (parent && parent.innerText || '').slice(0, 240)
+      };
+    }).filter(x => x.src),
     cards
   };
 }"""
@@ -355,6 +367,52 @@ def merge_match_metadata(existing, supplemental):
     return result
 
 
+def _team_key(value):
+    value = unicodedata.normalize("NFKD", html.unescape(str(value or "")))
+    value = "".join(ch for ch in value if not unicodedata.combining(ch))
+    return re.sub(r"[^a-z0-9]+", " ", value.lower()).strip()
+
+
+def extract_team_names(match):
+    """Return home/away team names from a normalized 'A vs B' match title."""
+    value = clean_match_title(match or "")
+    parts = re.split(r"\s+(?:vs\.?|v\.?|versus)\s+", value, maxsplit=1, flags=re.I)
+    return (parts[0].strip(), parts[1].strip()) if len(parts) == 2 else ("", "")
+
+
+def extract_team_logos(images, match):
+    """Match actual page image URLs to home/away team names; never use broadcaster logos."""
+    home, away = extract_team_names(match)
+    if not home or not away:
+        return "", ""
+
+    def score_image(image, team):
+        fields = [image.get(k, "") for k in ("alt", "title", "cls", "parentText", "src")]
+        haystack = _team_key(" ".join(map(str, fields)))
+        needle = _team_key(team)
+        if not haystack or not needle:
+            return 0
+        if needle in haystack:
+            return 100
+        tokens = [t for t in needle.split() if len(t) >= 3]
+        if not tokens:
+            return 0
+        hits = sum(1 for token in tokens if token in haystack.split())
+        return int(70 * hits / len(tokens)) if hits else 0
+
+    selected = []
+    for team in (home, away):
+        ranked = sorted(
+            ((score_image(image, team), image.get("src", "")) for image in (images or [])),
+            key=lambda pair: pair[0], reverse=True
+        )
+        best_score, best_url = ranked[0] if ranked else (0, "")
+        if best_score < 50 or not str(best_url).startswith(("http://", "https://")):
+            selected.append("")
+        else:
+            selected.append(str(best_url))
+    return tuple(selected)
+
 def extract_commentator(text):
     m = BLV_RE.search(text or "")
     if m:
@@ -542,6 +600,10 @@ async def _scan_match(browser, link, sem, card_text="", wait_ms=6000):
     if not is_match_title(page_title) and is_match_title(card_text):
         page_title = card_text
     match = clean_match_title(page_title, link)
+    card_match = extract_card_matchup(card_text + "\n" + meta.get("h1", "") + "\n" + meta.get("title", ""))
+    if card_match and not is_match_title(match):
+        match = card_match
+    home_logo, away_logo = extract_team_logos(meta.get("teamImages", []), match)
     combined = "\n".join([card_text, meta.get("body", ""), meta.get("description", ""), meta.get("scripts", "")])
     # Keep the existing page/JSON/slug extractors as primary; card parsing is additive fallback.
     when, start = extract_time(link, combined)
@@ -551,10 +613,7 @@ async def _scan_match(browser, link, sem, card_text="", wait_ms=6000):
     when = when or card_when
     start = start or card_start
     score = extract_score(card_text + "\n" + meta.get("body", ""))
-    card_match = extract_card_matchup(card_text + "\n" + meta.get("h1", "") + "\n" + meta.get("title", ""))
     card_score = extract_card_score(card_text + "\n" + meta.get("body", ""))
-    if card_match and not is_match_title(match):
-        match = card_match
     if not score:
         score = card_score
     commentator = extract_commentator(card_text + "\n" + meta.get("body", ""))
@@ -565,7 +624,8 @@ async def _scan_match(browser, link, sem, card_text="", wait_ms=6000):
     print(f"    {match}: {len(urls)} link HLS/FLV | trạng thái={status} | giờ={when or 'không rõ'}")
     return [{
         "url": u, "referer": url_refs.get(u, link), "match": match, "when": when, "start": start,
-        "mid": match_id(link), "logo": "", "score": score,
+        "mid": match_id(link), "logo": home_logo, "home_logo": home_logo,
+        "away_logo": away_logo, "score": score,
         "commentator": commentator, "status": status,
         "format": stream_format(u) or "HLS"
     } for u in sorted(urls)]
@@ -797,7 +857,9 @@ def write_m3u(items, path):
             f.write("#EXTINF:-1"
                     + attr("tvg-id", i["tvg_id"])
                     + attr("tvg-name", i["tvg_name"])
-                    + attr("tvg-logo", i.get("logo") or i.get("source_logo"))
+                    + attr("tvg-logo", i.get("home_logo") or i.get("logo"))
+                    + attr("x-home-logo", i.get("home_logo") or i.get("logo"))
+                    + attr("x-away-logo", i.get("away_logo"))
                     + attr("group-title", i["group"])
                     + attr("start", i.get("start"))
                     + attr("x-source", i["source"])
@@ -870,7 +932,9 @@ def main():
         print(f"    => {len(found)} link HLS/FLV/DASH thô")
         for it in found:
             it.update(source=stem, source_name=display_name,
-                      logo=it.get("logo") or source_logo,
+                      logo=it.get("home_logo") or it.get("logo") or "",
+                      home_logo=it.get("home_logo") or it.get("logo") or "",
+                      away_logo=it.get("away_logo") or "",
                       source_logo=source_logo, group=display_name)
         items.extend(found)
 

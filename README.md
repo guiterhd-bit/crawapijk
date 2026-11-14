@@ -58,12 +58,13 @@ Khi quét trang trận, crawler không chỉ bắt request mạng `.m3u8`/`.flv`
 
 Workflow dùng `--scan-lookback-hours 3`: các thẻ trận có giờ bắt đầu cũ hơn 3 giờ so với thời điểm chạy (múi giờ Việt Nam) sẽ bị bỏ qua khi mở trang trận. Trận được nhận diện đang trực tiếp và thẻ không có thời gian phân tích được vẫn được giữ lại. Có thể điều chỉnh bằng tham số `--scan-lookback-hours`, ví dụ `6` để giữ lại các trận trong 6 giờ gần nhất.
 
-### TVG logo trong playlist
+### Logo đội bóng trong TVG
 
-Crawler ưu tiên URL logo khai báo bằng `logo=` trong `sources.txt`. Nếu chưa khai báo, crawler tự đọc trang chủ nguồn để tìm ảnh có tên/class/id chứa `logo`, sau đó mới dùng metadata ảnh hoặc favicon làm phương án dự phòng. URL được ghi vào thuộc tính `tvg-logo` của từng mục `#EXTINF` (đồng thời giữ `x-source-logo` để tương thích). Nếu website không công khai URL ảnh logo hợp lệ, trường `tvg-logo` được để trống thay vì tự tạo logo giả.
+`tvg-logo` được lấy từ logo đội chủ nhà tìm thấy trên trang trận, không dùng logo nhà đài thay thế. Crawler đọc ảnh trong DOM và đối chiếu `alt`, `title`, class, tên file ảnh và nội dung vùng chứa với tên hai đội.
 
-Ví dụ khai báo logo thủ công:
+- `tvg-logo` và `x-home-logo`: logo đội chủ nhà.
+- `x-away-logo`: logo đội khách (thuộc tính mở rộng, giữ riêng vì chuẩn M3U chỉ có một trường `tvg-logo`).
+- `x-source-logo`: logo nhà đài, chỉ lưu làm metadata nhận diện nguồn, không đưa vào `tvg-logo`.
+- Nếu trang trận không cung cấp ảnh logo đội bóng phù hợp, `tvg-logo` để trống; crawler không tự gán logo nhà đài hoặc logo giả.
 
-```text
-Chuối Chiên TV | https://live11.chuoichientv.me/ >> /live/ ;; logo=https://example.com/logo.png
-```
+Logo đội bóng được lấy từ ảnh thực tế trên trang trận; không phải mọi website đều công khai logo đội bóng trong HTML.
