@@ -214,6 +214,68 @@ def extract_score(text):
     return ""
 
 
+def extract_status(text, include_generic_live=True):
+    """Classify a match from visible card/page text; live markers take precedence."""
+    value = (text or "").lower()
+    live_pattern = r"\b(live|đang diễn ra|hiệp 1|hiệp 2|halftime|hiệp phụ|penalty)\b"
+    if include_generic_live:
+        live_pattern = r"\b(live|đang diễn ra|trực tiếp|hiệp 1|hiệp 2|halftime|hiệp phụ|penalty)\b"
+    if re.search(live_pattern, value):
+        return "live"
+    if re.search(r"\b(ft|full.?time|đã kết thúc|kết thúc|finished|full time)\b", value):
+        return "finished"
+    if re.search(r"\b(sắp diễn ra|chưa bắt đầu|upcoming|scheduled|kick.?off|khởi tranh)\b", value):
+        return "scheduled"
+    return "unknown"
+
+
+def parse_match_datetime(item, now=None):
+    """Return a timezone-aware kick-off datetime from the crawler's normalized fields."""
+    now = now or datetime.now(VN)
+    raw = item.get("start") or ""
+    if raw:
+        try:
+            dt = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=VN)
+            return dt.astimezone(VN)
+        except ValueError:
+            pass
+    label = item.get("when") or ""
+    m = re.search(r"\b(\d{1,2})/(\d{1,2})(?:/(20\d{2}))?\s+(\d{1,2}):(\d{2})\b", label)
+    if not m:
+        return None
+    day, month, year, hour, minute = m.groups()
+    year = int(year) if year else now.year
+    try:
+        dt = datetime(year, int(month), int(day), int(hour), int(minute), tzinfo=VN)
+    except ValueError:
+        return None
+    if not m.group(3) and dt < now - timedelta(days=180):
+        try:
+            dt = dt.replace(year=year + 1)
+        except ValueError:
+            return None
+    return dt
+
+
+def match_in_playlist_window(item, now=None):
+    """Keep live matches plus scheduled matches kicking off today or tomorrow (VN time)."""
+    now = now or datetime.now(VN)
+    status = item.get("status", "unknown")
+    if status == "live":
+        return True
+    if status == "finished":
+        return False
+    kickoff = parse_match_datetime(item, now)
+    if kickoff is None:
+        # Explicitly scheduled cards without a parseable time cannot be safely date-filtered.
+        return False
+    today = now.date()
+    tomorrow = today + timedelta(days=1)
+    return now <= kickoff <= datetime.combine(tomorrow, datetime.max.time(), tzinfo=VN)
+
+
 def match_id(link):
     qs = parse_qs(urlparse(link).query)
     for key in ("houseId", "scheduleId", "id"):
@@ -282,11 +344,16 @@ async def _scan_match(browser, link, sem, card_text="", wait_ms=6000):
     when, start = extract_time(link, combined)
     score = extract_score(card_text + "\n" + meta.get("body", ""))
     commentator = extract_commentator(card_text + "\n" + meta.get("body", ""))
-    print(f"    {match}: {len(urls)} link HLS/FLV")
+    # Prefer the match card; avoid treating generic site-wide "trực tiếp" labels as live status.
+    status = extract_status(card_text)
+    if status == "unknown":
+        status = extract_status(meta.get("body", ""), include_generic_live=False)
+    print(f"    {match}: {len(urls)} link HLS/FLV | trạng thái={status} | giờ={when or 'không rõ'}")
     return [{
         "url": u, "referer": link, "match": match, "when": when, "start": start,
         "mid": match_id(link), "logo": "", "score": score,
-        "commentator": commentator, "format": stream_format(u) or "HLS"
+        "commentator": commentator, "status": status,
+        "format": stream_format(u) or "HLS"
     } for u in sorted(urls)]
 
 
@@ -420,6 +487,7 @@ def write_staging(items, path):
         "logo": i.get("logo", ""), "page": i.get("referer", ""),
         "match_time": i.get("start", ""), "time_label": i.get("when", ""),
         "score": i.get("score", ""), "commentator": i.get("commentator", ""),
+        "status": i.get("status", "unknown"),
         "referer": i.get("needs_referer", ""), "source_logo": i.get("source_logo", "")
     } for i in items]
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
@@ -547,12 +615,18 @@ def main():
                       source_logo=opts.get("logo", ""), group=display_name)
         items.extend(found)
 
+    # Keep all detected live matches, plus scheduled kick-offs from now through tomorrow.
+    now = datetime.now(VN)
+    before_window = len(items)
+    items = [item for item in items if match_in_playlist_window(item, now)]
+    print(f"[=] Lọc theo lịch (trực tiếp + sắp diễn ra hôm nay/ngày mai): {len(items)}/{before_window} link")
+
     unique = {}
     for item in items:
         # The same URL may legitimately be listed by two different source groups.
         unique.setdefault((item.get("source", ""), item["url"]), item)
     items = list(unique.values())
-    print(f"[=] Tìm thấy {len(items)} link HLS/FLV")
+    print(f"[=] Tìm thấy {len(items)} link HLS/FLV trong phạm vi thời gian")
 
     if not args.no_check and items:
         with ThreadPoolExecutor(max_workers=16) as pool:

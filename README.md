@@ -22,7 +22,7 @@ Nếu website phát luồng trực tiếp ngay tại trang chủ, có thể ch�
 Tên hiển thị | https://ten-mien.example/ ;; id=tennguon
 ```
 
-Dòng bắt đầu bằng `#` được xem là chú thích. Các trận ở trạng thái sắp diễn ra, đang diễn ra và đã kết thúc đều được quét; crawler không lọc theo trạng thái trận.
+Dòng bắt đầu bằng `#` được xem là chú thích. Crawler quét trang trận được tìm thấy, sau đó chỉ đưa vào playlist các trận đang trực tiếp và các trận sắp diễn ra có giờ khai cuộc từ hiện tại đến hết ngày mai (theo giờ Việt Nam). Trận đã kết thúc và trận ở các ngày xa hơn không được đưa vào playlist. Các trận sắp diễn ra chỉ được thêm khi trang nguồn cung cấp được giờ thi đấu có thể phân tích và có luồng phát hợp lệ.
 
 ## Chạy cục bộ
 

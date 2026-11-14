@@ -1,5 +1,7 @@
 import unittest
-from crawler import read_sources, clean_match_title, stream_format, finalize
+from datetime import datetime
+from crawler import (read_sources, clean_match_title, stream_format, finalize,
+                     match_in_playlist_window, extract_status, parse_match_datetime)
 
 
 class CrawlerConfigTests(unittest.TestCase):
@@ -30,6 +32,34 @@ class CrawlerConfigTests(unittest.TestCase):
         self.assertEqual(stream_format("https://cdn.test/a.flv"), "FLV")
         self.assertEqual(stream_format("https://cdn.test/a.mpd"), "DASH")
         self.assertEqual(stream_format("https://cdn.test/live", "application/dash+xml"), "DASH")
+
+    def test_live_match_is_kept_even_without_kickoff(self):
+        now = datetime.fromisoformat("2026-11-14T08:00:00+07:00")
+        self.assertTrue(match_in_playlist_window({"status": "live"}, now))
+
+    def test_today_and_tomorrow_scheduled_matches_are_kept(self):
+        now = datetime.fromisoformat("2026-11-14T08:00:00+07:00")
+        today = {"status": "scheduled", "start": "2026-11-14T20:00:00+07:00"}
+        tomorrow = {"status": "scheduled", "start": "2026-11-15T21:00:00+07:00"}
+        self.assertTrue(match_in_playlist_window(today, now))
+        self.assertTrue(match_in_playlist_window(tomorrow, now))
+
+    def test_finished_and_beyond_tomorrow_are_excluded(self):
+        now = datetime.fromisoformat("2026-11-14T08:00:00+07:00")
+        finished = {"status": "finished", "start": "2026-11-14T07:00:00+07:00"}
+        later = {"status": "scheduled", "start": "2026-11-16T20:00:00+07:00"}
+        self.assertFalse(match_in_playlist_window(finished, now))
+        self.assertFalse(match_in_playlist_window(later, now))
+
+    def test_status_detection(self):
+        self.assertEqual(extract_status("ĐANG DIỄN RA - LIVE"), "live")
+        self.assertEqual(extract_status("Sắp diễn ra 20:00"), "scheduled")
+        self.assertEqual(extract_status("FT 2-1 Đã kết thúc"), "finished")
+
+    def test_day_month_time_parses_to_current_year(self):
+        now = datetime.fromisoformat("2026-11-14T08:00:00+07:00")
+        parsed = parse_match_datetime({"when": "15/11 20:30"}, now)
+        self.assertEqual(parsed.isoformat(), "2026-11-15T20:30:00+07:00")
 
     def test_stream_ids_are_stable_and_unique_per_url(self):
         rows = [
