@@ -46,15 +46,7 @@ PAGE_META_JS = r"""() => {
   for (const el of a) {
     let p = el, candidates = [];
     for (let i=0; i<7 && p; i++, p=p.parentElement) {
-      let t = (p.innerText || '').replace(/\s+/g, ' ').trim();
-
-      // Loại bỏ thông tin cá cược và nút xem trận
-      t = t.replace(
-        /(?:Kèo\s*châu\s*Á|Kèo\s*châu\s*Âu|Tài\s*\/?\s*Xỉu|Tài\s*Xỉu|Xem\s*ngay|Xem\s*trận|Xem\s*)/gi,
-        ' '
-      );
-      t = t.replace(/\s+/g, ' ').trim();
-
+      const t = (p.innerText || '').replace(/\s+/g, ' ').trim();
       if (t.length >= 12 && t.length <= 1800) candidates.push({t, p});
     }
     const ranked = candidates.map(x => ({...x, score:
@@ -669,7 +661,7 @@ async def _follow_async(home_url, pattern, max_pages, workers, budget=90, lookba
         browser = await p.chromium.launch()
         try:
             page = await browser.new_page(user_agent=UA)
-            title, hrefs, card_map, card_images_map = "", [], {}
+            title, hrefs, card_map, card_images_map = "", [], {}, {}
             try:
                 await page.goto(home_url, wait_until="domcontentloaded", timeout=30000)
                 await page.wait_for_timeout(3500)
@@ -679,8 +671,7 @@ async def _follow_async(home_url, pattern, max_pages, workers, budget=90, lookba
                 data = await page.evaluate(PAGE_META_JS)
                 title = data.get("title", "")
                 card_map = data.get("cards", {})
-                # Lấy danh sách hình ảnh của từng thẻ trận đấu
-                card_images_map = data.get("cardImages", {}) or {}
+                card_images_map = data.get("cardImages", {})
                 hrefs = await page.eval_on_selector_all("a[href]", "els => els.map(e => e.href)")
             except Exception as e:
                 print(f"[!] Lỗi trang chủ {home_url}: {e}", file=sys.stderr)
