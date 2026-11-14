@@ -48,3 +48,7 @@ Các giá trị đã trích xuất hợp lệ không bị ghi đè; parser bổ 
 ### Tối ưu thời gian quét trang trận
 
 Workflow dành tối đa 90 giây cho mỗi nguồn để quét trang trận (trước đây là 45 giây), với giới hạn job 30 phút. Trước khi mở từng trang trận, crawler ưu tiên trận đang trực tiếp, sau đó đến trận sắp diễn ra; các thẻ có ngày rõ ràng cũ hơn 1 ngày sẽ được bỏ qua. Thẻ không có ngày hoặc không đọc được ngày vẫn được giữ lại để hạn chế bỏ sót nguồn. Có thể điều chỉnh bằng `--scan-budget` và `--scan-lookback-days`.
+
+### Bổ sung nhận diện luồng player cho Chuối Chiên TV và các nguồn tương tự
+
+Khi quét trang trận, crawler không chỉ bắt request mạng `.m3u8`/`.flv`/`.mpd` và response có Content-Type tương ứng. Crawler còn đọc cấu hình player trong HTML/script nội tuyến, các thẻ `video`/`source` và URL iframe để lấy manifest được nhúng sẵn nhưng chưa phát request do người dùng chưa nhấn Play. Với request phát sinh trong iframe, crawler lưu URL frame làm `Referer` ứng viên để kiểm tra luồng. Đây là cơ chế bổ sung, không thay thế cách bắt request/response hiện có.

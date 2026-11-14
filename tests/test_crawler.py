@@ -3,7 +3,8 @@ from datetime import datetime
 from crawler import (read_sources, clean_match_title, stream_format, finalize,
                      match_in_playlist_window, extract_status, parse_match_datetime,
                      extract_time, extract_card_matchup, extract_card_score, extract_card_time,
-                     merge_match_metadata, prioritize_discovered_links)
+                     merge_match_metadata, prioritize_discovered_links,
+                     extract_stream_candidates)
 
 
 class CrawlerConfigTests(unittest.TestCase):
@@ -34,6 +35,22 @@ class CrawlerConfigTests(unittest.TestCase):
         self.assertEqual(stream_format("https://cdn.test/a.flv"), "FLV")
         self.assertEqual(stream_format("https://cdn.test/a.mpd"), "DASH")
         self.assertEqual(stream_format("https://cdn.test/live", "application/dash+xml"), "DASH")
+
+    def test_extract_stream_candidates_from_inline_player_config(self):
+        urls = extract_stream_candidates(
+            "https://live11.chuoichientv.me/live/1644692/guatemala-vs-canada",
+            '<script>var source="https://cdn.example/live/index.m3u8?token=abc";</script>'
+        )
+        self.assertIn("https://cdn.example/live/index.m3u8?token=abc", urls)
+
+    def test_extract_relative_stream_candidate_from_html(self):
+        urls = extract_stream_candidates(
+            "https://live11.chuoichientv.me/live/1644692/guatemala-vs-canada",
+            '<source src="/hls/guatemala-canada/playlist.m3u8">'
+        )
+        self.assertIn(
+            "https://live11.chuoichientv.me/hls/guatemala-canada/playlist.m3u8", urls
+        )
 
     def test_live_match_is_kept_even_without_kickoff(self):
         now = datetime.fromisoformat("2026-11-14T08:00:00+07:00")

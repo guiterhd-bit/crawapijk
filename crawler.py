@@ -59,6 +59,8 @@ PAGE_META_JS = r"""() => {
     description: q('meta[name="description"]').content || '',
     body: (document.body && document.body.innerText || '').slice(0, 30000),
     scripts: [...document.scripts].map(s => s.textContent || '').join('\n').slice(0, 150000),
+    media: [...document.querySelectorAll('iframe[src], video[src], video source[src], source[src]')]
+      .map(el => el.src || el.getAttribute('src') || '').filter(Boolean),
     cards
   };
 }"""
@@ -76,6 +78,17 @@ def fetch(url, referer=None):
 def normalize(text):
     text = html.unescape(text)
     return text.replace("\\/", "/").replace("\\u0026", "&").replace("\\u003A", ":")
+
+
+def extract_stream_candidates(page_url, *contents):
+    """Find stream URLs exposed in HTML/inline player configuration, even if not requested yet."""
+    found = set()
+    for content in contents:
+        raw = normalize(str(content or ""))
+        found.update(STREAM_RE.findall(raw))
+        for relative in REL_STREAM_RE.findall(raw):
+            found.add(urljoin(page_url, relative))
+    return {u for u in found if _is_stream_url(u)}
 
 
 def _is_stream_url(url):
@@ -410,29 +423,47 @@ def _is_stream_response(response):
         return False
 
 
-async def _record_async_response(response, urls):
-    if _is_stream_url(response.url):
+async def _record_async_response(response, urls, url_refs=None):
+    """Record manifest/video responses and retain the player-frame Referer when known."""
+    accepted = _is_stream_url(response.url)
+    if not accepted:
+        try:
+            headers = await response.all_headers()
+            content_type = (headers.get("content-type") or "").lower()
+            accepted = any(x in content_type for x in (
+                "mpegurl", "x-flv", "video/flv", "application/flv", "dash+xml"
+            ))
+        except Exception:
+            accepted = False
+    if accepted:
         urls.add(response.url)
-        return
-    try:
-        headers = await response.all_headers()
-        content_type = (headers.get("content-type") or "").lower()
-        if any(x in content_type for x in (
-            "mpegurl", "x-flv", "video/flv", "application/flv", "dash+xml"
-        )):
-            urls.add(response.url)
-    except Exception:
-        pass
+        if url_refs is not None:
+            try:
+                frame_url = response.request.frame.url
+                if frame_url and frame_url != "about:blank":
+                    url_refs.setdefault(response.url, frame_url)
+            except Exception:
+                pass
 
 
 async def _scan_match(browser, link, sem, card_text="", wait_ms=6000):
     """Scan one match page for every HLS/FLV request and extract visible match metadata."""
     async with sem:
         urls = set()
+        url_refs = {}
         ctx = await browser.new_context(user_agent=UA)
         pg = await ctx.new_page()
-        pg.on("request", lambda req: urls.add(req.url) if _is_stream_url(req.url) else None)
-        pg.on("response", lambda res: asyncio.create_task(_record_async_response(res, urls)))
+        def record_request(req):
+            if _is_stream_url(req.url):
+                urls.add(req.url)
+                try:
+                    frame_url = req.frame.url
+                    if frame_url and frame_url != "about:blank":
+                        url_refs.setdefault(req.url, frame_url)
+                except Exception:
+                    pass
+        pg.on("request", record_request)
+        pg.on("response", lambda res: asyncio.create_task(_record_async_response(res, urls, url_refs)))
         try:
             await pg.goto(link, wait_until="domcontentloaded", timeout=30000)
             # Give player scripts time to request primary and backup qualities/servers.
@@ -447,6 +478,20 @@ async def _scan_match(browser, link, sem, card_text="", wait_ms=6000):
         except Exception:
             meta = {}
         await ctx.close()
+
+    # Some sources publish player URLs in inline JS/HTML but do not request them
+    # until a user presses Play. Read those candidates as well as browser traffic.
+    static_candidates = extract_stream_candidates(
+        link, meta.get("scripts", ""), meta.get("body", ""),
+        meta.get("description", ""), meta.get("title", "")
+    )
+    for candidate in static_candidates:
+        urls.add(candidate)
+        url_refs.setdefault(candidate, link)
+    for media_url in meta.get("media", []) or []:
+        if _is_stream_url(media_url):
+            urls.add(media_url)
+            url_refs.setdefault(media_url, link)
 
     h1, title = meta.get("h1", ""), meta.get("title", "")
     page_title = h1 if is_match_title(h1) else title
@@ -475,7 +520,7 @@ async def _scan_match(browser, link, sem, card_text="", wait_ms=6000):
         status = extract_status(meta.get("body", ""), include_generic_live=False)
     print(f"    {match}: {len(urls)} link HLS/FLV | trạng thái={status} | giờ={when or 'không rõ'}")
     return [{
-        "url": u, "referer": link, "match": match, "when": when, "start": start,
+        "url": u, "referer": url_refs.get(u, link), "match": match, "when": when, "start": start,
         "mid": match_id(link), "logo": "", "score": score,
         "commentator": commentator, "status": status,
         "format": stream_format(u) or "HLS"
