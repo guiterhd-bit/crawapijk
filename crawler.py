@@ -21,13 +21,12 @@ UA = ("Mozilla/5.0 (Linux; Android 11) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/120.0 Mobile Safari/537.36")
 VN = timezone(timedelta(hours=7))
 
+STREAM_EXT = r'(?:m3u8|flv|mpd)'
 STREAM_RE = re.compile(
-    r'https?://[^\s"\'<>\\]+?\.(?:m3u8|flv)(?:\?[^\s"\'<>\\]*)?',
-    re.I
+    rf'https?://[^\s"\'<>\\]+?\.{STREAM_EXT}(?:[?\#][^\s"\'<>\\]*)?', re.I
 )
 REL_STREAM_RE = re.compile(
-    r'["\']([^"\'\s<>]+?\.(?:m3u8|flv)(?:\?[^"\'\s<>]*)?)["\']',
-    re.I
+    rf'["\']([^"\'\s<>]+?\.{STREAM_EXT}(?:[?\#][^"\'\s<>]*)?)["\']', re.I
 )
 IFRAME_RE = re.compile(r'<iframe[^>]+src=["\']([^"\']+)["\']', re.I)
 TITLE_RE = re.compile(r"<title[^>]*>(.*?)</title>", re.I | re.S)
@@ -71,7 +70,19 @@ def normalize(text):
 
 
 def _is_stream_url(url):
-    return bool(re.search(r"\.(?:m3u8|flv)(?:$|[?#])", url, re.I))
+    return bool(re.search(r"\.(?:m3u8|flv|mpd)(?:$|[?#])", url, re.I))
+
+
+def stream_format(url, content_type=""):
+    path = urlparse(url).path.lower()
+    ctype = (content_type or "").lower()
+    if path.endswith(".flv") or "flv" in ctype:
+        return "FLV"
+    if path.endswith(".mpd") or "dash+xml" in ctype:
+        return "DASH"
+    if path.endswith(".m3u8") or "mpegurl" in ctype:
+        return "HLS"
+    return ""
 
 
 def extract_static(page_url, depth=1, seen=None):
@@ -221,7 +232,7 @@ def _is_stream_response(response):
     try:
         content_type = (response.headers.get("content-type") or "").lower()
         return any(x in content_type for x in (
-            "mpegurl", "x-flv", "video/flv", "application/flv"
+            "mpegurl", "x-flv", "video/flv", "application/flv", "dash+xml"
         ))
     except Exception:
         return False
@@ -235,7 +246,7 @@ async def _record_async_response(response, urls):
         headers = await response.all_headers()
         content_type = (headers.get("content-type") or "").lower()
         if any(x in content_type for x in (
-            "mpegurl", "x-flv", "video/flv", "application/flv"
+            "mpegurl", "x-flv", "video/flv", "application/flv", "dash+xml"
         )):
             urls.add(response.url)
     except Exception:
@@ -266,7 +277,7 @@ async def _scan_match(browser, link, sem, card_text="", wait_ms=6000):
         await ctx.close()
 
     h1, title = meta.get("h1", ""), meta.get("title", "")
-    match = h1 if is_match_title(h1) else title if is_match_title(title) else slug_to_name(link)
+    match = clean_match_title(h1 if is_match_title(h1) else title, link)
     combined = "\n".join([card_text, meta.get("body", ""), meta.get("description", ""), meta.get("scripts", "")])
     when, start = extract_time(link, combined)
     score = extract_score(card_text + "\n" + meta.get("body", ""))
@@ -274,8 +285,8 @@ async def _scan_match(browser, link, sem, card_text="", wait_ms=6000):
     print(f"    {match}: {len(urls)} link HLS/FLV")
     return [{
         "url": u, "referer": link, "match": match, "when": when, "start": start,
-        "mid": match_id(link), "logo": meta.get("img", ""), "score": score,
-        "commentator": commentator, "format": "FLV" if re.search(r"\.flv(?:$|[?#])", u, re.I) else "HLS"
+        "mid": match_id(link), "logo": "", "score": score,
+        "commentator": commentator, "format": stream_format(u) or "HLS"
     } for u in sorted(urls)]
 
 
@@ -299,11 +310,22 @@ def extract_js(page_url):
     return [{"url": u, "match": title, "referer": page_url} for u in sorted(urls)]
 
 
+def clean_match_title(value, link=""):
+    """Remove SEO/site suffixes while retaining the two team names."""
+    value = html.unescape(re.sub(r"<[^>]+>", " ", value or ""))
+    value = re.sub(r"\s+", " ", value).strip(" |–—-:")
+    value = re.split(r"\s*[|–—]\s*", value, maxsplit=1)[0]
+    value = re.sub(r"\s+(?:trực tiếp|link xem|xem trực tuyến|bóng đá hôm nay).*?$", "", value, flags=re.I)
+    if not is_match_title(value) and link:
+        value = slug_to_name(link)
+    return value.strip(" |–—-:")[:140].strip()
+
+
 def is_match_title(value):
-    return bool(value and len(value) < 140 and re.search(r"\bvs\b|\bv\b| - ", value, re.I))
+    return bool(value and len(value) < 180 and re.search(r"\bvs\b|\bv\b|\s-\s", value, re.I))
 
 
-async def _follow_async(home_url, pattern, max_pages, workers, budget=660):
+async def _follow_async(home_url, pattern, max_pages, workers, budget=45):
     from playwright.async_api import async_playwright
 
     async with async_playwright() as p:
@@ -325,12 +347,21 @@ async def _follow_async(home_url, pattern, max_pages, workers, budget=660):
                 print(f"[!] Lỗi trang chủ {home_url}: {e}", file=sys.stderr)
             await page.close()
 
-            links = list(dict.fromkeys(h for h in hrefs if pattern in h and h.startswith(("http://", "https://"))))
+            base_host = (urlparse(home_url).hostname or "").lower()
+            pattern = pattern.strip()
+            links = []
+            for href in hrefs:
+                parsed = urlparse(href)
+                host = (parsed.hostname or "").lower()
+                if (parsed.scheme in ("http", "https") and host == base_host
+                        and pattern in parsed.path and href != home_url):
+                    links.append(href)
+            links = list(dict.fromkeys(links))
             print(f"    Trang chủ: {len(hrefs)} thẻ <a> | {len(links)} trang trận khớp '{pattern}'")
             if not links:
                 print("    -> Không tìm thấy link trận; cần kiểm tra lại mẫu URL hoặc cơ chế tải JS.")
                 return []
-            # Do not filter by live/scheduled status or kick-off distance.
+            # Keep scheduled, live and finished matches; do not filter by status/time.
             if max_pages > 0:
                 links = links[:max_pages]
             sem = asyncio.Semaphore(workers)
@@ -365,9 +396,11 @@ def check_stream(item):
             r.close()
             if status not in (200, 206):
                 return False
-            if item.get("format") == "FLV" or re.search(r"\.flv(?:$|[?#])", item["url"], re.I):
-                return (head.startswith(b"FLV") or "video" in content_type or
-                        "octet-stream" in content_type or status == 206)
+            fmt = stream_format(item["url"], content_type) or item.get("format", "HLS")
+            if fmt == "FLV":
+                return head.startswith(b"FLV") or "video" in content_type or "octet-stream" in content_type or status == 206
+            if fmt == "DASH":
+                return b"<MPD" in head or "dash+xml" in content_type
             return head.lstrip().startswith(b"#EXTM3U") or "mpegurl" in content_type
         except Exception:
             return False
@@ -395,20 +428,43 @@ def write_staging(items, path):
 
 
 def read_sources(path):
+    """Read every non-comment source line; adding a line needs no Python change.
+
+    Syntax: Display name | homepage >> match-path-fragment ;; id=stable_id ;; logo=https://...
+    Also accepts a bare homepage URL for a source that exposes streams on its homepage.
+    """
     out = []
-    with open(path, encoding="utf-8") as f:
-        for line_no, line in enumerate(f, 1):
-            line = line.strip()
+    with open(path, encoding="utf-8-sig") as f:
+        for line_no, raw in enumerate(f, 1):
+            line = raw.strip()
             if not line or line.startswith("#"):
                 continue
-            spec, *rest = [s.strip() for s in line.split(";;")]
-            opts = dict(r.split("=", 1) for r in rest if "=" in r)
-            opts = {k.strip(): v.strip() for k, v in opts.items()}
-            group, sep, url = spec.rpartition("|")
-            if not sep:
-                url = spec
-                group = ""
-            out.append((group.strip(), url.strip(), opts))
+            parts = [part.strip() for part in line.split(";;")]
+            spec = parts[0]
+            opts = {}
+            for part in parts[1:]:
+                if "=" in part:
+                    key, value = part.split("=", 1)
+                    opts[key.strip().lower()] = value.strip()
+            group, sep, target = spec.partition("|")
+            if sep:
+                source_name = group.strip()
+                target = target.strip()
+            else:
+                source_name = ""
+                target = spec
+            if not target:
+                print(f"[!] Bỏ qua dòng {line_no}: thiếu URL", file=sys.stderr)
+                continue
+            if ">>" in target:
+                home, pattern = [x.strip() for x in target.split(">>", 1)]
+            else:
+                home, pattern = target.strip(), ""
+            if not home.startswith(("http://", "https://")):
+                print(f"[!] Bỏ qua dòng {line_no}: URL không hợp lệ", file=sys.stderr)
+                continue
+            out.append({"name": source_name, "home": home, "pattern": pattern,
+                        "opts": opts, "line": line_no})
     return out
 
 
@@ -438,19 +494,21 @@ def write_m3u(items, path):
 
 
 def finalize(items):
-    counts = {}
+    """Create stable per-match/per-stream identifiers and source-only groups."""
+    import hashlib
     for n, it in enumerate(items, 1):
-        match = (it.get("match") or "")[:100]
-        key = (it.get("source", ""), it.get("mid") or match)
-        counts[key] = counts.get(key, 0) + 1
-        fmt = it.get("format") or ("FLV" if re.search(r"\.flv(?:$|[?#])", it["url"], re.I) else "HLS")
+        match = clean_match_title(it.get("match", ""), it.get("referer", ""))
+        it["match"] = match or it.get("source_name") or "Trận đấu"
+        fmt = it.get("format") or stream_format(it["url"]) or "HLS"
         it["format"] = fmt
-        parts = [match, it.get("when", ""), it.get("score", ""), it.get("commentator", ""), fmt]
+        parts = [it["match"], it.get("when", ""), it.get("score", ""),
+                 it.get("commentator", ""), fmt]
         it["name"] = " | ".join(x for x in parts if x)
-        it["tvg_name"] = f"{match} - {fmt}"
-        base = f'{it["source"]}-match-{it["mid"]}' if it.get("mid") else f'{it["source"]}-{n}'
-        it["tvg_id"] = base if counts[key] == 1 else f"{base}-{counts[key]}"
-        # User requested source name as the only group title; no competition/league grouping.
+        it["tvg_name"] = it["match"]
+        # Same match ID stays stable across runs; each distinct stream gets a stable suffix.
+        mid = it.get("mid") or hashlib.sha1(it["match"].casefold().encode("utf-8")).hexdigest()[:12]
+        stream_key = hashlib.sha1(it["url"].encode("utf-8")).hexdigest()[:8]
+        it["tvg_id"] = f'{it["source"]}-{mid}-{stream_key}'
         it["group"] = it.get("source_name") or it.get("source") or "Unknown source"
 
 
@@ -467,30 +525,32 @@ def main():
     args = ap.parse_args()
 
     items = []
-    for _, spec, opts in read_sources(args.sources):
-        if ">>" in spec:
-            home, pattern = [s.strip() for s in spec.split(">>", 1)]
-            print(f"[+] Quét nguồn {opts.get('name', urlparse(home).netloc)}: {home}")
-            try:
+    sources = read_sources(args.sources)
+    print(f"[=] Đã nạp {len(sources)} nguồn từ {args.sources}")
+    for source in sources:
+        home, pattern, opts = source["home"], source["pattern"], source["opts"]
+        host = urlparse(home).netloc.removeprefix("www.")
+        display_name = source["name"] or opts.get("name") or host
+        stem = opts.get("id") or re.sub(r"[^a-z0-9]+", "-", host.lower()).strip("-")
+        print(f"[+] Quét nguồn {display_name}: {home}")
+        try:
+            if pattern:
                 found = extract_follow_js(home, pattern, args.max_pages, args.workers)
-            except Exception as e:
-                print(f"[!] Nguồn {home} lỗi: {e}", file=sys.stderr)
-                found = []
-        else:
-            home = spec
-            print(f"[+] Quét trang {home}")
-            found = extract_js(home) if args.js else extract_static(home)
-        print(f"    => {len(found)} link HLS/FLV thô")
-        host = urlparse(home).netloc
-        stem = opts.get("id") or host.removeprefix("www.").split(".")[0]
+            else:
+                found = extract_js(home) if args.js else extract_static(home)
+        except Exception as e:
+            print(f"[!] Nguồn {home} lỗi: {e}", file=sys.stderr)
+            found = []
+        print(f"    => {len(found)} link HLS/FLV/DASH thô")
         for it in found:
-            it.update(source=stem, source_name=opts.get("name", host),
-                      source_logo=opts.get("logo", ""), group=opts.get("name", host))
+            it.update(source=stem, source_name=display_name,
+                      source_logo=opts.get("logo", ""), group=display_name)
         items.extend(found)
 
     unique = {}
     for item in items:
-        unique.setdefault(item["url"], item)
+        # The same URL may legitimately be listed by two different source groups.
+        unique.setdefault((item.get("source", ""), item["url"]), item)
     items = list(unique.values())
     print(f"[=] Tìm thấy {len(items)} link HLS/FLV")
 
@@ -506,6 +566,7 @@ def main():
             stats[item["source"]] = (ok + bool(item["verified"]), total + 1)
         for source, (ok, total) in stats.items():
             print(f"    {source}: {ok}/{total} link xác minh được")
+        # Keep only playable streams in the M3U; failed probes remain visible in logs.
         items = [item for item in items if item["verified"]]
         print(f"[=] Còn {len(items)} link đã xác minh")
 
