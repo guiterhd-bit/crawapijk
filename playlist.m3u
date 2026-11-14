@@ -1,79 +1,100 @@
 #EXTM3U
-#EXTINF:-1 tvg-id="colatv79-live-ezk96ijnm0wi1kn-fe57b64f" tvg-name="Thai Lan Vs Brunei" group-title="Cola TV" x-source="colatv79-live" x-source-name="Cola TV" x-commentator="MONSTER",Thai Lan Vs Brunei | 14/11 12:30 | MONSTER | HLS
-#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/thai-lan-vs-brunei-luc-1930-ngay-14-11-2026-ezk96ijnm0wi1kn
+#EXTINF:-1 tvg-id="colatv79-live-02456966-fe57b64f" tvg-name="Dai Bac Trung Hoa Vs Cong Hoa Kyrgyzstan" group-title="Cola TV" x-source="colatv79-live" x-source-name="Cola TV" x-commentator="SPRITE BLV SODA",Dai Bac Trung Hoa Vs Cong Hoa Kyrgyzstan | 14/11 12:00 | SPRITE BLV SODA | HLS
+#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/dai-bac-trung-hoa-vs-cong-hoa-kyrgyzstan-luc-1900-ngay-14-11-2026-zrkn6i1m24ntwql?houseId=02456966
 https://colatv88xi.cc/video2/output.m3u8
-#EXTINF:-1 tvg-id="colatv79-live-90865415-94fb9fa7" tvg-name="Los Angeles Clippers Vs Oklahoma City Thunder" group-title="Cola TV" x-source="colatv79-live" x-source-name="Cola TV" x-commentator="247",Los Angeles Clippers Vs Oklahoma City Thunder | 14/11 03:30 | 247 | HLS
-#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/los-angeles-clippers-vs-oklahoma-city-thunder-luc-1030-ngay-14-11-2026-j374ws9gw92hgko?houseId=90865415
+#EXTINF:-1 tvg-id="colatv79-live-49572724-23f992cd" tvg-name="Melbourne Victory Nu Vs Adelaide Nu" group-title="Cola TV" x-source="colatv79-live" x-source-name="Cola TV" x-commentator="REDBULL",Melbourne Victory Nu Vs Adelaide Nu | 14/11 04:00 | REDBULL | HLS
+#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/melbourne-victory-nu-vs-adelaide-nu-luc-1100-ngay-14-11-2026-zrkn6i4z1gltwql?houseId=49572724
+https://live05.wecile.app/live/49572724.m3u8
+#EXTINF:-1 tvg-id="colatv79-live-14830711-9325dcbd" tvg-name="Melbourne City Nu Vs Newcastle Nu" group-title="Cola TV" x-source="colatv79-live" x-source-name="Cola TV" x-commentator="GIÀ LÀNG",Melbourne City Nu Vs Newcastle Nu | 14/11 04:00 | GIÀ LÀNG | HLS
+#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/melbourne-city-nu-vs-newcastle-nu-luc-1100-ngay-14-11-2026-m2q15izj8x2ie76?houseId=14830711
+https://live05.wecile.app/live/14830711.m3u8
+#EXTINF:-1 tvg-id="colatv79-live-j374ws9gw92hgko-94fb9fa7" tvg-name="Los Angeles Clippers Vs Oklahoma City Thunder" group-title="Cola TV" x-source="colatv79-live" x-source-name="Cola TV" x-commentator="247",Los Angeles Clippers Vs Oklahoma City Thunder | 14/11 03:30 | 247 | HLS
+#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/los-angeles-clippers-vs-oklahoma-city-thunder-luc-1030-ngay-14-11-2026-j374ws9gw92hgko
 https://live05.wecile.app/live/90865415.m3u8
-#EXTINF:-1 tvg-id="colatv79-live-vrqw9s9dz9du47n-6e0b7b81" tvg-name="San Antonio Spurs Vs Golden State Warriors" group-title="Cola TV" x-source="colatv79-live" x-source-name="Cola TV" x-commentator="Cozy",San Antonio Spurs Vs Golden State Warriors | 14/11 02:30 | Cozy | HLS
-#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/san-antonio-spurs-vs-golden-state-warriors-luc-0930-ngay-14-11-2026-vrqw9s9dz9du47n
+#EXTINF:-1 tvg-id="colatv79-live-87379114-6e0b7b81" tvg-name="San Antonio Spurs Vs Golden State Warriors" group-title="Cola TV" x-source="colatv79-live" x-source-name="Cola TV" x-commentator="Cozy",San Antonio Spurs Vs Golden State Warriors | 14/11 02:30 | Cozy | HLS
+#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/san-antonio-spurs-vs-golden-state-warriors-luc-0930-ngay-14-11-2026-vrqw9s9dz9du47n?houseId=87379114
 https://live05.wecile.app/live/87379114.m3u8
 #EXTINF:-1 tvg-id="colatv79-live-19919577-19aab1e3" tvg-name="Houston Rockets Vs Utah Jazz" group-title="Cola TV" x-source="colatv79-live" x-source-name="Cola TV" x-commentator="POCARI",Houston Rockets Vs Utah Jazz | 14/11 01:30 | POCARI | HLS
 #EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/houston-rockets-vs-utah-jazz-luc-0830-ngay-14-11-2026-o07dzsmrgm9smkn?houseId=19919577
 https://live05.wecile.app/live/19919577.m3u8
-#EXTINF:-1 tvg-id="colatv79-live-56998120-90220b70" tvg-name="Chicago Bulls Vs Atlanta Hawks" group-title="Cola TV" x-source="colatv79-live" x-source-name="Cola TV" x-commentator="TARZAAN",Chicago Bulls Vs Atlanta Hawks | 14/11 01:00 | TARZAAN | HLS
-#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/chicago-bulls-vs-atlanta-hawks-luc-0800-ngay-14-11-2026-63kvlsop2oeux7e?houseId=56998120
-https://live05.wecile.app/live/56998120.m3u8
-#EXTINF:-1 tvg-id="colatv79-live-59444581-a47eeade" tvg-name="Guatemala Vs Canada" group-title="Cola TV" x-source="colatv79-live" x-source-name="Cola TV" x-commentator="PEPSI",Guatemala Vs Canada | 14/11 02:00 | PEPSI | HLS
-#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/guatemala-vs-canada-luc-0900-ngay-14-11-2026-g6763ipvl12uo7r?houseId=59444581
-https://live05.wecile.app/live/59444581.m3u8
-#EXTINF:-1 tvg-id="biaomtv-fun-23xmvkhy3l04qg8-c7cdf4e9" tvg-name="Kezhou Abusahiy vs Yining Juherayi 14:00 ngày 14/11/2026" group-title="Bia Ôm TV" start="2026-11-14T14:00:00+07:00" x-source="biaomtv-fun" x-source-name="Bia Ôm TV" x-score="0-0" x-commentator="HÀU NƯỚNG",Kezhou Abusahiy vs Yining Juherayi 14:00 ngày 14/11/2026 | 14/11 14:00 | 0-0 | HÀU NƯỚNG | HLS
-#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/kezhou-abusahiy-vs-yining-juherayi-23xmvkhy3l04qg8
-https://lilive1.eu.cc/live/0c0681d5a7f322c80b3bc6e2cc002729/playlist.m3u8
-#EXTINF:-1 tvg-id="biaomtv-fun-23xmvkhy3l04qg8-f0a43ad2" tvg-name="Kezhou Abusahiy vs Yining Juherayi 14:00 ngày 14/11/2026" group-title="Bia Ôm TV" start="2026-11-14T14:00:00+07:00" x-source="biaomtv-fun" x-source-name="Bia Ôm TV" x-score="0-0" x-commentator="HÀU NƯỚNG",Kezhou Abusahiy vs Yining Juherayi 14:00 ngày 14/11/2026 | 14/11 14:00 | 0-0 | HÀU NƯỚNG | HLS
-#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/kezhou-abusahiy-vs-yining-juherayi-23xmvkhy3l04qg8
+#EXTINF:-1 tvg-id="biaomtv-fun-ednm9wh5kl9gryo-f0a43ad2" tvg-name="ASU Politehnica Timișoara vs ACS Dumbravita 16:00 ngày 14/11/2026 miễn phí, full HD" group-title="Bia Ôm TV" start="2026-11-14T16:00:00+07:00" x-source="biaomtv-fun" x-source-name="Bia Ôm TV" x-score="0-0" x-commentator="HÀU NƯỚNG",ASU Politehnica Timișoara vs ACS Dumbravita 16:00 ngày 14/11/2026 miễn phí, full HD | 14/11 16:00 | 0-0 | HÀU NƯỚNG | HLS
+#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/asu-politehnica-timisoara-vs-acs-dumbravita-ednm9wh5kl9gryo
 https://lilive1.eu.cc/live/2155875076f82908103f96d61bab7fc2/playlist.m3u8
-#EXTINF:-1 tvg-id="biaomtv-fun-23xmvkhy3l04qg8-59b49c80" tvg-name="Kezhou Abusahiy vs Yining Juherayi 14:00 ngày 14/11/2026" group-title="Bia Ôm TV" start="2026-11-14T14:00:00+07:00" x-source="biaomtv-fun" x-source-name="Bia Ôm TV" x-score="0-0" x-commentator="HÀU NƯỚNG",Kezhou Abusahiy vs Yining Juherayi 14:00 ngày 14/11/2026 | 14/11 14:00 | 0-0 | HÀU NƯỚNG | HLS
-#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/kezhou-abusahiy-vs-yining-juherayi-23xmvkhy3l04qg8
-https://lilive1.eu.cc/live/c5521210c20d52abfa1600dbe8f75114/playlist.m3u8
-#EXTINF:-1 tvg-id="biaomtv-fun-23xmvkhy3l04qg8-02225525" tvg-name="Kezhou Abusahiy vs Yining Juherayi 14:00 ngày 14/11/2026" group-title="Bia Ôm TV" start="2026-11-14T14:00:00+07:00" x-source="biaomtv-fun" x-source-name="Bia Ôm TV" x-score="0-0" x-commentator="HÀU NƯỚNG",Kezhou Abusahiy vs Yining Juherayi 14:00 ngày 14/11/2026 | 14/11 14:00 | 0-0 | HÀU NƯỚNG | HLS
-#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/kezhou-abusahiy-vs-yining-juherayi-23xmvkhy3l04qg8
-https://lilive1.eu.cc/live/e0cb4d85e765f2d1fc74638df7cd6871/playlist.m3u8
-#EXTINF:-1 tvg-id="biaomtv-fun-23xmvkhy3l04qg8-b4ca1b4b" tvg-name="Kezhou Abusahiy vs Yining Juherayi 14:00 ngày 14/11/2026" group-title="Bia Ôm TV" start="2026-11-14T14:00:00+07:00" x-source="biaomtv-fun" x-source-name="Bia Ôm TV" x-score="0-0" x-commentator="HÀU NƯỚNG",Kezhou Abusahiy vs Yining Juherayi 14:00 ngày 14/11/2026 | 14/11 14:00 | 0-0 | HÀU NƯỚNG | HLS
-#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/kezhou-abusahiy-vs-yining-juherayi-23xmvkhy3l04qg8
-https://lilive1.eu.cc/live/e12ecfe7e902220d4e874bc37baafba7/playlist.m3u8
-#EXTINF:-1 tvg-id="sutbongtv-co-e1b087966359-b3b81a86" tvg-name="Internacional De Bogota Vs Independiente Santa Fe 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T08:30:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-commentator="CUỘI SẾU ĐẦU ĐỎ A PÁO TYPN",Internacional De Bogota Vs Independiente Santa Fe 14 11 2026 | 14/11 08:30 | CUỘI SẾU ĐẦU ĐỎ A PÁO TYPN | HLS
+#EXTINF:-1 tvg-id="sutbongtv-co-e1b087966359-f54508a5" tvg-name="Internacional De Bogota Vs Independiente Santa Fe 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T08:30:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-commentator="CUỘI SẾU ĐẦU ĐỎ A PÁO TYPN",Internacional De Bogota Vs Independiente Santa Fe 14 11 2026 | 14/11 08:30 | CUỘI SẾU ĐẦU ĐỎ A PÁO TYPN | HLS
 #EXTVLCOPT:http-referrer=https://sutbongtv.co/truc-tiep/internacional-de-bogota-vs-independiente-santa-fe-14-11-2026/?blv=235232
-https://pull.niues.live/live/stream-235232_lhd.m3u8?auth_key=1794630368-0-0-fb97ab362aee3bd5b0af9028a0937f29
-#EXTINF:-1 tvg-id="sutbongtv-co-3f4385fab3ff-ba3a3e12" tvg-name="Guatemala Vs Canada 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T09:00:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-score="0-0" x-commentator="COCA TẠ BIÊN GIỚI COL D1 08:30 14/11 Internacional de Bogota",Guatemala Vs Canada 14 11 2026 | 14/11 09:00 | 0-0 | COCA TẠ BIÊN GIỚI COL D1 08:30 14/11 Internacional de Bogota | HLS
-#EXTVLCOPT:http-referrer=https://sutbongtv.co/truc-tiep/guatemala-vs-canada-14-11-2026/
-https://pull.niues.live/live/stream-627718_lhd.m3u8?auth_key=1794630368-0-0-2eee45c789978f295aafc8727ee51d9f
-#EXTINF:-1 tvg-id="sutbongtv-co-3f4385fab3ff-a7d0e5b7" tvg-name="Guatemala Vs Canada 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T09:00:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-commentator="COCA TẠ BIÊN GIỚI",Guatemala Vs Canada 14 11 2026 | 14/11 09:00 | COCA TẠ BIÊN GIỚI | HLS
-#EXTVLCOPT:http-referrer=https://sutbongtv.co/truc-tiep/guatemala-vs-canada-14-11-2026/?blv=387694
-https://pull.niues.live/live/stream-387694_lhd.m3u8?auth_key=1794630368-0-0-412fbd47c6a8ce707e0cf76033788367
-#EXTINF:-1 tvg-id="sutbongtv-co-3f4385fab3ff-f12a827b" tvg-name="Guatemala Vs Canada 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T09:00:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-commentator="COCA TẠ BIÊN GIỚI",Guatemala Vs Canada 14 11 2026 | 14/11 09:00 | COCA TẠ BIÊN GIỚI | HLS
-#EXTVLCOPT:http-referrer=https://sutbongtv.co/truc-tiep/guatemala-vs-canada-14-11-2026/?blv=123226
-https://pull.niur.live/live/stream-9912122_lhd.m3u8?txSecret=bad3373a31d1060fc8b7ccf81eddd3c1&txTime=6af82930
-#EXTINF:-1 tvg-id="nembientv-com-81bdc6df8ef2-d0721a69" tvg-name="SV.LEAGUE WOMEN 12:05 14-11 Okayama Seagulls W Sắp diễn ra VS NEC Red Rockets W HT" group-title="Ném Biên TV" start="2026-11-14T12:05:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="T REX Kèo châu Á — Tài/Xỉu — Xem",SV.LEAGUE WOMEN 12:05 14-11 Okayama Seagulls W Sắp diễn ra VS NEC Red Rockets W HT | 14/11 12:05 | T REX Kèo châu Á — Tài/Xỉu — Xem | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/c69b00dd947a57
+https://pull.niues.live/live/stream-235232_lhd.m3u8?auth_key=1794632408-0-0-bdcd38e221e9d85d087a8424669a3d01
+#EXTINF:-1 tvg-id="sutbongtv-co-e1b087966359-0cdd7e22" tvg-name="Internacional De Bogota Vs Independiente Santa Fe 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T08:30:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-commentator="CUỘI SẾU ĐẦU ĐỎ A PÁO TYPN",Internacional De Bogota Vs Independiente Santa Fe 14 11 2026 | 14/11 08:30 | CUỘI SẾU ĐẦU ĐỎ A PÁO TYPN | HLS
+#EXTVLCOPT:http-referrer=https://sutbongtv.co/truc-tiep/internacional-de-bogota-vs-independiente-santa-fe-14-11-2026/?blv=627318
+https://pull.niues.live/live/stream-627318_lhd.m3u8?auth_key=1794632408-0-0-d28684152c06bb4d3aa12566c8423619
+#EXTINF:-1 tvg-id="sutbongtv-co-a0ef643e4029-6ce7f9bc" tvg-name="Sydney United 58 Fc Vs South Melbourne 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T11:00:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-commentator="HUCK SẾU ĐẦU ĐỎ BLV LION",Sydney United 58 Fc Vs South Melbourne 14 11 2026 | 14/11 11:00 | HUCK SẾU ĐẦU ĐỎ BLV LION | HLS
+#EXTVLCOPT:http-referrer=https://sutbongtv.co/truc-tiep/sydney-united-58-fc-vs-south-melbourne-14-11-2026/?blv=623653
+https://pull.niues.live/live/stream-623653_lhd.m3u8?auth_key=1794632408-0-0-d4094b95be22f5f8985d02e9b98c2497
+#EXTINF:-1 tvg-id="sutbongtv-co-c1c9fb137cfd-51b6ae8a" tvg-name="South Hobart Vs South Coast Wolves 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T11:00:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-commentator="VIP BLV CÁO KINH VÂN",South Hobart Vs South Coast Wolves 14 11 2026 | 14/11 11:00 | VIP BLV CÁO KINH VÂN | HLS
+#EXTVLCOPT:http-referrer=https://sutbongtv.co/truc-tiep/south-hobart-vs-south-coast-wolves-14-11-2026/
+https://pull.niur.live/live/stream-491873_lhd.m3u8?txSecret=81df694843c358629690bb3a1c48ad97&txTime=6af83128
+#EXTINF:-1 tvg-id="sutbongtv-co-435a1e934965-7a34acdb" tvg-name="Melbourne Victory Women Vs Adelaide United Women 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T11:00:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-commentator="RÔSI BLV KAN A PÁO",Melbourne Victory Women Vs Adelaide United Women 14 11 2026 | 14/11 11:00 | RÔSI BLV KAN A PÁO | HLS
+#EXTVLCOPT:http-referrer=https://sutbongtv.co/truc-tiep/melbourne-victory-women-vs-adelaide-united-women-14-11-2026/
+https://pull.niur.live/live/stream-9912102_lhd.m3u8?txSecret=df67c4240ff3fa11f46a26ae06ad7719&txTime=6af830ec
+#EXTINF:-1 tvg-id="sutbongtv-co-e3a63b9829c9-384d9bfb" tvg-name="Melbourne City Women Vs Newcastle Jets Women 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T11:00:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-commentator="LUCAS BLV BÉO BLV ENZO",Melbourne City Women Vs Newcastle Jets Women 14 11 2026 | 14/11 11:00 | LUCAS BLV BÉO BLV ENZO | HLS
+#EXTVLCOPT:http-referrer=https://sutbongtv.co/truc-tiep/melbourne-city-women-vs-newcastle-jets-women-14-11-2026/?blv=380460
+https://pull.niues.live/live/stream-380460_lhd.m3u8?auth_key=1794632408-0-0-03549a3600f5820020dceb9ac6ec9931
+#EXTINF:-1 tvg-id="sutbongtv-co-e3a63b9829c9-5bf9588a" tvg-name="Melbourne City Women Vs Newcastle Jets Women 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T11:00:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-commentator="LUCAS BLV BÉO BLV ENZO",Melbourne City Women Vs Newcastle Jets Women 14 11 2026 | 14/11 11:00 | LUCAS BLV BÉO BLV ENZO | HLS
+#EXTVLCOPT:http-referrer=https://sutbongtv.co/truc-tiep/melbourne-city-women-vs-newcastle-jets-women-14-11-2026/?blv=459401
+https://pull.niur.live/live/stream-459401_lhd.m3u8?txSecret=04b89285776404963c46c13b0ecfb10f&txTime=6af830ec
+#EXTINF:-1 tvg-id="sutbongtv-co-e3a63b9829c9-5c0daab0" tvg-name="Melbourne City Women Vs Newcastle Jets Women 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T11:00:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-commentator="LUCAS BLV BÉO BLV ENZO",Melbourne City Women Vs Newcastle Jets Women 14 11 2026 | 14/11 11:00 | LUCAS BLV BÉO BLV ENZO | HLS
+#EXTVLCOPT:http-referrer=https://sutbongtv.co/truc-tiep/melbourne-city-women-vs-newcastle-jets-women-14-11-2026/
+https://pull.niues.live/live/stream-304148_lhd.m3u8?auth_key=1794632408-0-0-3f213a030e0b5af96aa99a5584d74f4e
+#EXTINF:-1 tvg-id="live11-chuoichientv-me-999270-60ef311c" tvg-name="Trực tiếp Hisamitsu Springs W vs PFU Blue Cats W - SV.League W" group-title="Chuối Chiên TV" start="2026-11-14T11:05:00+07:00" x-source="live11-chuoichientv-me" x-source-name="Chuối Chiên TV" x-score="0-0" x-commentator="của Chuối Chiên TV sẽ mang đến cho bạn cảm giác như đang ngồ",Trực tiếp Hisamitsu Springs W vs PFU Blue Cats W - SV.League W | 14/11 11:05 | 0-0 | của Chuối Chiên TV sẽ mang đến cho bạn cảm giác như đang ngồ | HLS
+#EXTVLCOPT:http-referrer=https://fhd-01.cctvsignal.xyz/embed/?id=999270&streamUrl=https%3A%2F%2Fgckc0525.edgemaxcdn.org%2Flive%2Fchuoikem%2Fplaylist.m3u8&autoplay=1&isHome=0
+https://gckc0525.edgemaxcdn.org/live/chuoikem/playlist.m3u8
+#EXTINF:-1 tvg-id="live11-chuoichientv-me-999270-e1ba36e7" tvg-name="Trực tiếp Hisamitsu Springs W vs PFU Blue Cats W - SV.League W" group-title="Chuối Chiên TV" start="2026-11-14T11:05:00+07:00" x-source="live11-chuoichientv-me" x-source-name="Chuối Chiên TV" x-score="0-0" x-commentator="của Chuối Chiên TV sẽ mang đến cho bạn cảm giác như đang ngồ",Trực tiếp Hisamitsu Springs W vs PFU Blue Cats W - SV.League W | 14/11 11:05 | 0-0 | của Chuối Chiên TV sẽ mang đến cho bạn cảm giác như đang ngồ | HLS
+#EXTVLCOPT:http-referrer=https://fhd-01.cctvsignal.xyz/embed/?id=999270&streamUrl=https%3A%2F%2Fgckc0525.edgemaxcdn.org%2Flive%2Fchuoikem%2Fplaylist.m3u8&autoplay=1&isHome=0
+https://tg0z3gr4dymttgwanhc3sfa4urmm8cpisgcbige41h3mrc71s4amacp1gh.100ycdn.com/gckc0525.edgemaxcdn.org/live/chuoikem/playlist.m3u8?wsSession=74f6309d7b75ea2c980aa2c2-179462889218134&wsIPSercert=b0a18c9f93523f1badf3f35306c7b1b2&wsBindIP=2&wsserid=1172662091344090222
+#EXTINF:-1 tvg-id="live11-chuoichientv-me-1632123-d7534488" tvg-name="Trực tiếp Melbourne Victory W vs Adelaide United W - A-League Women" group-title="Chuối Chiên TV" start="2026-11-14T11:00:00+07:00" x-source="live11-chuoichientv-me" x-source-name="Chuối Chiên TV" x-score="0-0" x-commentator="của Chuối Chiên TV sẽ mang đến cho bạn cảm giác như đang ngồ",Trực tiếp Melbourne Victory W vs Adelaide United W - A-League Women | 14/11 11:00 | 0-0 | của Chuối Chiên TV sẽ mang đến cho bạn cảm giác như đang ngồ | HLS
+#EXTVLCOPT:http-referrer=https://fhd-01.cctvsignal.xyz/embed/?id=1632123&streamUrl=https%3A%2F%2Fgckc0525.edgemaxcdn.org%2Flive%2Fchuoisay%2Fplaylist.m3u8&autoplay=1&isHome=0
+https://gckc0525.edgemaxcdn.org/live/chuoisay/playlist.m3u8
+#EXTINF:-1 tvg-id="live11-chuoichientv-me-1632123-3bf6fdbe" tvg-name="Trực tiếp Melbourne Victory W vs Adelaide United W - A-League Women" group-title="Chuối Chiên TV" start="2026-11-14T11:00:00+07:00" x-source="live11-chuoichientv-me" x-source-name="Chuối Chiên TV" x-score="0-0" x-commentator="của Chuối Chiên TV sẽ mang đến cho bạn cảm giác như đang ngồ",Trực tiếp Melbourne Victory W vs Adelaide United W - A-League Women | 14/11 11:00 | 0-0 | của Chuối Chiên TV sẽ mang đến cho bạn cảm giác như đang ngồ | HLS
+#EXTVLCOPT:http-referrer=https://fhd-01.cctvsignal.xyz/embed/?id=1632123&streamUrl=https%3A%2F%2Fgckc0525.edgemaxcdn.org%2Flive%2Fchuoisay%2Fplaylist.m3u8&autoplay=1&isHome=0
+https://tg0z1gr3uomttgr31hctsfaau1ptpc7tssa3ogw3dkmufctusk5mbxbtse5o.100ycdn.com/gckc0525.edgemaxcdn.org/live/chuoisay/playlist.m3u8?wsSession=2ea1aaf0ff9c342d8ec19332-179462889096428&wsIPSercert=b0a18c9f93523f1badf3f35306c7b1b2&wsBindIP=2&wsserid=1177063474757376778
+#EXTINF:-1 tvg-id="nembientv-com-b7e6b42ff67b-d0721a69" tvg-name="CBA 14:30 14-11 Fujian Sắp diễn ra VS Jiangsu Dragons HT" group-title="Ném Biên TV" start="2026-11-14T14:30:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="KAKA Kèo châu Á — Tài/Xỉu — Xem",CBA 14:30 14-11 Fujian Sắp diễn ra VS Jiangsu Dragons HT | 14/11 14:30 | KAKA Kèo châu Á — Tài/Xỉu — Xem | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/a7a65b5f42a180
 https://live.nembientv.com/nembien_tv_wait_hls/index.m3u8
-#EXTINF:-1 tvg-id="nembientv-com-81bdc6df8ef2-8abc0fff" tvg-name="SV.LEAGUE WOMEN 12:05 14-11 Okayama Seagulls W Sắp diễn ra VS NEC Red Rockets W HT" group-title="Ném Biên TV" start="2026-11-14T12:05:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="T REX Kèo châu Á — Tài/Xỉu — Xem",SV.LEAGUE WOMEN 12:05 14-11 Okayama Seagulls W Sắp diễn ra VS NEC Red Rockets W HT | 14/11 12:05 | T REX Kèo châu Á — Tài/Xỉu — Xem | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/c69b00dd947a57
+#EXTINF:-1 tvg-id="nembientv-com-b7e6b42ff67b-c6f5f3ea" tvg-name="CBA 14:30 14-11 Fujian Sắp diễn ra VS Jiangsu Dragons HT" group-title="Ném Biên TV" start="2026-11-14T14:30:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="KAKA Kèo châu Á — Tài/Xỉu — Xem",CBA 14:30 14-11 Fujian Sắp diễn ra VS Jiangsu Dragons HT | 14/11 14:30 | KAKA Kèo châu Á — Tài/Xỉu — Xem | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/a7a65b5f42a180
+https://load.nembientv.com/nembientv_reconnect_blue_hls/index.m3u8
+#EXTINF:-1 tvg-id="nembientv-com-b7e6b42ff67b-8abc0fff" tvg-name="CBA 14:30 14-11 Fujian Sắp diễn ra VS Jiangsu Dragons HT" group-title="Ném Biên TV" start="2026-11-14T14:30:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="KAKA Kèo châu Á — Tài/Xỉu — Xem",CBA 14:30 14-11 Fujian Sắp diễn ra VS Jiangsu Dragons HT | 14/11 14:30 | KAKA Kèo châu Á — Tài/Xỉu — Xem | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/a7a65b5f42a180
 https://nembientv.com/assets/hls-decoy-v13b/channel-01.m3u8
-#EXTINF:-1 tvg-id="nembientv-com-81bdc6df8ef2-c96235ae" tvg-name="SV.LEAGUE WOMEN 12:05 14-11 Okayama Seagulls W Sắp diễn ra VS NEC Red Rockets W HT" group-title="Ném Biên TV" start="2026-11-14T12:05:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="T REX Kèo châu Á — Tài/Xỉu — Xem",SV.LEAGUE WOMEN 12:05 14-11 Okayama Seagulls W Sắp diễn ra VS NEC Red Rockets W HT | 14/11 12:05 | T REX Kèo châu Á — Tài/Xỉu — Xem | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/c69b00dd947a57
+#EXTINF:-1 tvg-id="nembientv-com-b7e6b42ff67b-c96235ae" tvg-name="CBA 14:30 14-11 Fujian Sắp diễn ra VS Jiangsu Dragons HT" group-title="Ném Biên TV" start="2026-11-14T14:30:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="KAKA Kèo châu Á — Tài/Xỉu — Xem",CBA 14:30 14-11 Fujian Sắp diễn ra VS Jiangsu Dragons HT | 14/11 14:30 | KAKA Kèo châu Á — Tài/Xỉu — Xem | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/a7a65b5f42a180
 https://nembientv.com/assets/hls-decoy-v13b/channel-02.m3u8
-#EXTINF:-1 tvg-id="nembientv-com-81bdc6df8ef2-de06e3e1" tvg-name="SV.LEAGUE WOMEN 12:05 14-11 Okayama Seagulls W Sắp diễn ra VS NEC Red Rockets W HT" group-title="Ném Biên TV" start="2026-11-14T12:05:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="T REX Kèo châu Á — Tài/Xỉu — Xem",SV.LEAGUE WOMEN 12:05 14-11 Okayama Seagulls W Sắp diễn ra VS NEC Red Rockets W HT | 14/11 12:05 | T REX Kèo châu Á — Tài/Xỉu — Xem | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/c69b00dd947a57
+#EXTINF:-1 tvg-id="nembientv-com-b7e6b42ff67b-de06e3e1" tvg-name="CBA 14:30 14-11 Fujian Sắp diễn ra VS Jiangsu Dragons HT" group-title="Ném Biên TV" start="2026-11-14T14:30:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="KAKA Kèo châu Á — Tài/Xỉu — Xem",CBA 14:30 14-11 Fujian Sắp diễn ra VS Jiangsu Dragons HT | 14/11 14:30 | KAKA Kèo châu Á — Tài/Xỉu — Xem | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/a7a65b5f42a180
 https://nembientv.com/assets/hls-decoy-v13b/channel-03.m3u8
-#EXTINF:-1 tvg-id="nembientv-com-81bdc6df8ef2-4d843e8b" tvg-name="SV.LEAGUE WOMEN 12:05 14-11 Okayama Seagulls W Sắp diễn ra VS NEC Red Rockets W HT" group-title="Ném Biên TV" start="2026-11-14T12:05:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="T REX Kèo châu Á — Tài/Xỉu — Xem",SV.LEAGUE WOMEN 12:05 14-11 Okayama Seagulls W Sắp diễn ra VS NEC Red Rockets W HT | 14/11 12:05 | T REX Kèo châu Á — Tài/Xỉu — Xem | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/c69b00dd947a57
+#EXTINF:-1 tvg-id="nembientv-com-b7e6b42ff67b-4d843e8b" tvg-name="CBA 14:30 14-11 Fujian Sắp diễn ra VS Jiangsu Dragons HT" group-title="Ném Biên TV" start="2026-11-14T14:30:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="KAKA Kèo châu Á — Tài/Xỉu — Xem",CBA 14:30 14-11 Fujian Sắp diễn ra VS Jiangsu Dragons HT | 14/11 14:30 | KAKA Kèo châu Á — Tài/Xỉu — Xem | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/a7a65b5f42a180
 https://nembientv.com/assets/hls-decoy-v13b/channel-04.m3u8
-#EXTINF:-1 tvg-id="nembientv-com-81bdc6df8ef2-218dabf2" tvg-name="SV.LEAGUE WOMEN 12:05 14-11 Okayama Seagulls W Sắp diễn ra VS NEC Red Rockets W HT" group-title="Ném Biên TV" start="2026-11-14T12:05:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="T REX Kèo châu Á — Tài/Xỉu — Xem",SV.LEAGUE WOMEN 12:05 14-11 Okayama Seagulls W Sắp diễn ra VS NEC Red Rockets W HT | 14/11 12:05 | T REX Kèo châu Á — Tài/Xỉu — Xem | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/c69b00dd947a57
+#EXTINF:-1 tvg-id="nembientv-com-b7e6b42ff67b-218dabf2" tvg-name="CBA 14:30 14-11 Fujian Sắp diễn ra VS Jiangsu Dragons HT" group-title="Ném Biên TV" start="2026-11-14T14:30:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="KAKA Kèo châu Á — Tài/Xỉu — Xem",CBA 14:30 14-11 Fujian Sắp diễn ra VS Jiangsu Dragons HT | 14/11 14:30 | KAKA Kèo châu Á — Tài/Xỉu — Xem | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/a7a65b5f42a180
 https://nembientv.com/assets/hls-decoy-v13b/channel-05.m3u8
-#EXTINF:-1 tvg-id="nembientv-com-81bdc6df8ef2-e604939e" tvg-name="SV.LEAGUE WOMEN 12:05 14-11 Okayama Seagulls W Sắp diễn ra VS NEC Red Rockets W HT" group-title="Ném Biên TV" start="2026-11-14T12:05:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="T REX Kèo châu Á — Tài/Xỉu — Xem",SV.LEAGUE WOMEN 12:05 14-11 Okayama Seagulls W Sắp diễn ra VS NEC Red Rockets W HT | 14/11 12:05 | T REX Kèo châu Á — Tài/Xỉu — Xem | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/c69b00dd947a57
+#EXTINF:-1 tvg-id="nembientv-com-b7e6b42ff67b-e604939e" tvg-name="CBA 14:30 14-11 Fujian Sắp diễn ra VS Jiangsu Dragons HT" group-title="Ném Biên TV" start="2026-11-14T14:30:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="KAKA Kèo châu Á — Tài/Xỉu — Xem",CBA 14:30 14-11 Fujian Sắp diễn ra VS Jiangsu Dragons HT | 14/11 14:30 | KAKA Kèo châu Á — Tài/Xỉu — Xem | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/a7a65b5f42a180
 https://nembientv.com/assets/hls-decoy-v13b/channel-06.m3u8
-#EXTINF:-1 tvg-id="nembientv-com-81bdc6df8ef2-9f4694eb" tvg-name="SV.LEAGUE WOMEN 12:05 14-11 Okayama Seagulls W Sắp diễn ra VS NEC Red Rockets W HT" group-title="Ném Biên TV" start="2026-11-14T12:05:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="T REX Kèo châu Á — Tài/Xỉu — Xem",SV.LEAGUE WOMEN 12:05 14-11 Okayama Seagulls W Sắp diễn ra VS NEC Red Rockets W HT | 14/11 12:05 | T REX Kèo châu Á — Tài/Xỉu — Xem | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/c69b00dd947a57
+#EXTINF:-1 tvg-id="nembientv-com-b7e6b42ff67b-9f4694eb" tvg-name="CBA 14:30 14-11 Fujian Sắp diễn ra VS Jiangsu Dragons HT" group-title="Ném Biên TV" start="2026-11-14T14:30:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="KAKA Kèo châu Á — Tài/Xỉu — Xem",CBA 14:30 14-11 Fujian Sắp diễn ra VS Jiangsu Dragons HT | 14/11 14:30 | KAKA Kèo châu Á — Tài/Xỉu — Xem | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/a7a65b5f42a180
 https://nembientv.com/assets/hls-decoy-v13b/channel-07.m3u8
-#EXTINF:-1 tvg-id="nembientv-com-81bdc6df8ef2-eccae982" tvg-name="SV.LEAGUE WOMEN 12:05 14-11 Okayama Seagulls W Sắp diễn ra VS NEC Red Rockets W HT" group-title="Ném Biên TV" start="2026-11-14T12:05:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="T REX Kèo châu Á — Tài/Xỉu — Xem",SV.LEAGUE WOMEN 12:05 14-11 Okayama Seagulls W Sắp diễn ra VS NEC Red Rockets W HT | 14/11 12:05 | T REX Kèo châu Á — Tài/Xỉu — Xem | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/c69b00dd947a57
+#EXTINF:-1 tvg-id="nembientv-com-b7e6b42ff67b-eccae982" tvg-name="CBA 14:30 14-11 Fujian Sắp diễn ra VS Jiangsu Dragons HT" group-title="Ném Biên TV" start="2026-11-14T14:30:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="KAKA Kèo châu Á — Tài/Xỉu — Xem",CBA 14:30 14-11 Fujian Sắp diễn ra VS Jiangsu Dragons HT | 14/11 14:30 | KAKA Kèo châu Á — Tài/Xỉu — Xem | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/a7a65b5f42a180
 https://nembientv.com/assets/hls-decoy-v13b/channel-08.m3u8
-#EXTINF:-1 tvg-id="nembientv-com-81bdc6df8ef2-9b574de6" tvg-name="SV.LEAGUE WOMEN 12:05 14-11 Okayama Seagulls W Sắp diễn ra VS NEC Red Rockets W HT" group-title="Ném Biên TV" start="2026-11-14T12:05:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="T REX Kèo châu Á — Tài/Xỉu — Xem",SV.LEAGUE WOMEN 12:05 14-11 Okayama Seagulls W Sắp diễn ra VS NEC Red Rockets W HT | 14/11 12:05 | T REX Kèo châu Á — Tài/Xỉu — Xem | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/c69b00dd947a57
+#EXTINF:-1 tvg-id="nembientv-com-b7e6b42ff67b-9b574de6" tvg-name="CBA 14:30 14-11 Fujian Sắp diễn ra VS Jiangsu Dragons HT" group-title="Ném Biên TV" start="2026-11-14T14:30:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="KAKA Kèo châu Á — Tài/Xỉu — Xem",CBA 14:30 14-11 Fujian Sắp diễn ra VS Jiangsu Dragons HT | 14/11 14:30 | KAKA Kèo châu Á — Tài/Xỉu — Xem | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/a7a65b5f42a180
 https://nembientv.com/assets/hls-decoy-v13b/channel-09.m3u8
-#EXTINF:-1 tvg-id="nembientv-com-81bdc6df8ef2-f83ad7aa" tvg-name="SV.LEAGUE WOMEN 12:05 14-11 Okayama Seagulls W Sắp diễn ra VS NEC Red Rockets W HT" group-title="Ném Biên TV" start="2026-11-14T12:05:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="T REX Kèo châu Á — Tài/Xỉu — Xem",SV.LEAGUE WOMEN 12:05 14-11 Okayama Seagulls W Sắp diễn ra VS NEC Red Rockets W HT | 14/11 12:05 | T REX Kèo châu Á — Tài/Xỉu — Xem | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/c69b00dd947a57
+#EXTINF:-1 tvg-id="nembientv-com-b7e6b42ff67b-f83ad7aa" tvg-name="CBA 14:30 14-11 Fujian Sắp diễn ra VS Jiangsu Dragons HT" group-title="Ném Biên TV" start="2026-11-14T14:30:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="KAKA Kèo châu Á — Tài/Xỉu — Xem",CBA 14:30 14-11 Fujian Sắp diễn ra VS Jiangsu Dragons HT | 14/11 14:30 | KAKA Kèo châu Á — Tài/Xỉu — Xem | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/a7a65b5f42a180
 https://nembientv.com/assets/hls-decoy-v13b/channel-10.m3u8
+#EXTINF:-1 tvg-id="nembientv-com-ea33678c6cea-c808bfba" tvg-name="SV.LEAGUE WOMEN 11:05 14-11 LIVE Hisamitsu Springs W Đang diễn ra VS PFU Blue Cats W HT" group-title="Ném Biên TV" start="2026-11-14T11:05:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="LAVIE Kèo châu Á — Tài/Xỉu — Xem",SV.LEAGUE WOMEN 11:05 14-11 LIVE Hisamitsu Springs W Đang diễn ra VS PFU Blue Cats W HT | 14/11 11:05 | LAVIE Kèo châu Á — Tài/Xỉu — Xem | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/277eab011ff50b
+https://ivsplay.saigon999.live/live/live05.m3u8
+#EXTINF:-1 tvg-id="nembientv-com-ea33678c6cea-71959a9e" tvg-name="SV.LEAGUE WOMEN 11:05 14-11 LIVE Hisamitsu Springs W Đang diễn ra VS PFU Blue Cats W HT" group-title="Ném Biên TV" start="2026-11-14T11:05:00+07:00" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="LAVIE Kèo châu Á — Tài/Xỉu — Xem",SV.LEAGUE WOMEN 11:05 14-11 LIVE Hisamitsu Springs W Đang diễn ra VS PFU Blue Cats W HT | 14/11 11:05 | LAVIE Kèo châu Á — Tài/Xỉu — Xem | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/277eab011ff50b
+https://ivsplay.saigon999.live/live/live05.m3u8?hls_ctx=17p8wsk1
