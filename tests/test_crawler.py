@@ -227,3 +227,59 @@ class CrawlerConfigTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+class ApiCrawlerTests(unittest.TestCase):
+    def test_config_contains_four_enabled_api_sources(self):
+        import json
+        with open('config.json', encoding='utf-8') as f:
+            config = json.load(f)
+        self.assertEqual(len(config['apis']), 4)
+        self.assertEqual({x['id'] for x in config['apis']},
+                         {'chuoichientv', 'gavangtv', 'colatv', 'phalangtv'})
+
+    def test_collect_nested_stream_urls(self):
+        from crawler import _api_collect_urls
+        payload = {'data': {'match': {'streams': [
+            {'url': 'https://cdn.example/live/index.m3u8?token=abc'},
+            {'backup': 'https://cdn.example/live/backup.flv'}
+        ]}}}
+        urls = _api_collect_urls(payload, 'https://api.example/matches')
+        self.assertEqual(len(urls), 2)
+        self.assertIn('https://cdn.example/live/index.m3u8?token=abc', urls)
+
+    def test_normalize_common_match_fields(self):
+        from crawler import _api_normalize_match
+        item = _api_normalize_match({
+            'id': 123, 'home_team': 'Guatemala', 'away_team': 'Canada',
+            'status': 'live', 'score': '1-0', 'commentator': 'BLV A',
+            'stream_url': 'https://cdn.example/live.m3u8'
+        }, {'id': 'colatv'}, {}, 'https://api.gvapi.cc/api/matches')
+        self.assertEqual(item['match'], 'Guatemala vs Canada')
+        self.assertEqual(item['status'], 'live')
+        self.assertEqual(item['score'], '1-0')
+
+    def test_sources_file_and_output_name_follow_config(self):
+        import json
+        with open('config.json', encoding='utf-8') as f:
+            config = json.load(f)
+        self.assertEqual(config['sources_file'], 'sources.txt')
+        self.assertEqual(config['output_file'], 'thethao.m3u')
+
+    def test_api_adapter_builds_stream_with_configured_referer(self):
+        from unittest.mock import patch, Mock
+        from crawler import crawl_api_source
+        response = Mock()
+        response.json.return_value = {'data': [{'id': 77, 'home_team': 'Guatemala',
+            'away_team': 'Canada', 'status': 'live', 'score': '1-0',
+            'stream_url': 'https://cdn.example/live/main.m3u8'}]}
+        response.raise_for_status.return_value = None
+        api = {'id': 'demo', 'name': 'Demo TV', 'display_name': 'Demo TV',
+               'url': 'https://api.example/matches', 'method': 'GET',
+               'default_stream_referer': 'https://site.example/', 'headers': {}}
+        with patch('crawler.requests.get', return_value=response):
+            found = crawl_api_source(api, {'request_timeout_seconds': 2,
+                                            'request_retries': 0, 'stream_header_rules': []})
+        self.assertEqual(len(found), 1)
+        self.assertEqual(found[0]['match'], 'Guatemala vs Canada')
+        self.assertEqual(found[0]['referer'], 'https://site.example/')
+        self.assertEqual(found[0]['format'], 'HLS')
