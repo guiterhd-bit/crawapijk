@@ -892,10 +892,268 @@ def finalize(items):
         it["group"] = it.get("source_name") or it.get("source") or "Unknown source"
 
 
+
+def _api_pick(obj, keys):
+    """Pick the first non-empty scalar matching one of the case-insensitive keys."""
+    if not isinstance(obj, dict):
+        return ""
+    lookup = {str(k).lower(): v for k, v in obj.items()}
+    for key in keys:
+        value = lookup.get(key.lower())
+        if isinstance(value, (str, int, float)) and str(value).strip():
+            return str(value).strip()
+    return ""
+
+
+def _api_walk_objects(value):
+    """Yield nested dicts from arbitrary JSON response envelopes."""
+    if isinstance(value, dict):
+        yield value
+        for child in value.values():
+            yield from _api_walk_objects(child)
+    elif isinstance(value, list):
+        for child in value:
+            yield from _api_walk_objects(child)
+
+
+def _api_collect_urls(value, base_url=""):
+    """Collect actual HLS/FLV/DASH URLs from nested JSON, preserving query tokens."""
+    found = []
+    if isinstance(value, dict):
+        for k, v in value.items():
+            if isinstance(v, str):
+                candidate = html.unescape(v.strip()).replace('\\/', '/')
+                if _is_stream_url(candidate):
+                    found.append(urljoin(base_url, candidate))
+            else:
+                found.extend(_api_collect_urls(v, base_url))
+    elif isinstance(value, list):
+        for child in value:
+            found.extend(_api_collect_urls(child, base_url))
+    elif isinstance(value, str):
+        candidate = html.unescape(value.strip()).replace('\\/', '/')
+        if _is_stream_url(candidate):
+            found.append(urljoin(base_url, candidate))
+    return list(dict.fromkeys(x for x in found if x.startswith(('http://', 'https://'))))
+
+
+def _api_player_urls(obj):
+    keys = {'player', 'player_url', 'iframe', 'iframe_url', 'embed', 'embed_url',
+            'watch_url', 'stream_page', 'url_player', 'link_player'}
+    out = []
+    for node in _api_walk_objects(obj):
+        for key, value in node.items():
+            if str(key).lower() in keys and isinstance(value, str) and value.startswith(('http://', 'https://')):
+                if not _is_stream_url(value):
+                    out.append(value)
+    return list(dict.fromkeys(out))
+
+
+def _api_normalize_match(obj, api, config, api_base):
+    """Normalize common match fields across the configured JSON APIs."""
+    match = _api_pick(obj, ('match_name', 'matchName', 'title', 'name', 'fixture_name', 'event_name'))
+    home = _api_pick(obj, ('home_team', 'homeTeam', 'home_name', 'homeName', 'team_home', 'localteam_name', 'home'))
+    away = _api_pick(obj, ('away_team', 'awayTeam', 'away_name', 'awayName', 'team_away', 'visitorteam_name', 'away'))
+    # Nested team objects are common in football APIs.
+    for key, side in ((('home', 'hometeam', 'home_team', 'localteam'), 'home'),
+                      (('away', 'awayteam', 'away_team', 'visitorteam'), 'away')):
+        if side == 'home' and not home or side == 'away' and not away:
+            for k, v in obj.items():
+                if str(k).lower() in key and isinstance(v, dict):
+                    name = _api_pick(v, ('name', 'title', 'team_name', 'short_name'))
+                    if side == 'home': home = name
+                    else: away = name
+    if not match and home and away:
+        match = f'{home} vs {away}'
+    if not is_match_title(match):
+        # A nested fixture may carry teams in a child object.
+        for child in obj.values():
+            if isinstance(child, dict):
+                h = home or _api_pick(child, ('home_team', 'homeTeam', 'home_name', 'homeName'))
+                a = away or _api_pick(child, ('away_team', 'awayTeam', 'away_name', 'awayName'))
+                if h and a:
+                    home, away, match = h, a, f'{h} vs {a}'
+                    break
+    date = _api_pick(obj, ('start_time', 'startTime', 'match_time', 'matchTime', 'kickoff', 'kick_off', 'date_time', 'datetime', 'scheduled_at', 'time'))
+    score = _api_pick(obj, ('score', 'result', 'full_time_score', 'ft_score', 'current_score'))
+    if not re.search(r'\d+\s*[-:]\s*\d+', score):
+        hs = _api_pick(obj, ('home_score', 'homeScore', 'localteam_score'))
+        aw = _api_pick(obj, ('away_score', 'awayScore', 'visitorteam_score'))
+        score = f'{hs}-{aw}' if hs and aw else ''
+    status_raw = _api_pick(obj, ('status', 'match_status', 'state', 'matchState', 'live_status')).lower()
+    status = extract_status(status_raw, include_generic_live=True)
+    if status == 'unknown':
+        if status_raw in ('1', 'live', 'inplay', 'in_play', 'playing', 'started'): status = 'live'
+        elif status_raw in ('0', 'scheduled', 'upcoming', 'not_started', 'ns'): status = 'scheduled'
+        elif status_raw in ('2', 'finished', 'ft', 'ended', 'completed'): status = 'finished'
+    blv = _api_pick(obj, ('commentator', 'commentators', 'blv', 'caster', 'speaker', 'voice'))
+    mid = _api_pick(obj, ('id', 'match_id', 'matchId', 'fixture_id', 'fixtureId'))
+    home_logo = _api_pick(obj, ('home_logo', 'homeLogo', 'home_team_logo', 'homeTeamLogo'))
+    away_logo = _api_pick(obj, ('away_logo', 'awayLogo', 'away_team_logo', 'awayTeamLogo'))
+    when, start = '', ''
+    if date:
+        raw = date.strip()
+        try:
+            if re.fullmatch(r'\d{10,13}', raw):
+                stamp = float(raw) / (1000 if len(raw) == 13 else 1)
+                dt = datetime.fromtimestamp(stamp, tz=timezone.utc)
+            else:
+                dt = datetime.fromisoformat(raw.replace('Z', '+00:00'))
+            if dt.tzinfo is None: dt = dt.replace(tzinfo=VN)
+            dt = dt.astimezone(VN)
+            start = dt.isoformat()
+            when = dt.strftime('%d/%m %H:%M')
+        except Exception:
+            when, start = extract_time('', raw)
+    return {
+        'match': clean_match_title(match) if match else '', 'when': when, 'start': start,
+        'score': score, 'commentator': blv, 'status': status, 'mid': mid,
+        'home_logo': urljoin(api_base, home_logo) if home_logo else '',
+        'away_logo': urljoin(api_base, away_logo) if away_logo else '',
+    }
+
+
+def _api_request(api, url=None, method=None, params=None, body=None, timeout=25, retries=2):
+    headers = dict(api.get('headers') or {})
+    headers.setdefault('User-Agent', UA)
+    verb = (method or api.get('method') or 'GET').upper()
+    for attempt in range(max(1, int(retries) + 1)):
+        try:
+            if verb == 'POST':
+                response = requests.post(url or api['url'], headers=headers, json=body,
+                                         params=params, timeout=timeout)
+            else:
+                response = requests.get(url or api['url'], headers=headers,
+                                        params=params, timeout=timeout)
+            response.raise_for_status()
+            return response.json()
+        except Exception:
+            if attempt == 2: raise
+    return {}
+
+
+def crawl_api_source(api, config):
+    """Crawl an API configured in config.json; supports GET variants and paged POST APIs."""
+    if not api.get('enabled', True):
+        return []
+    name = api.get('display_name') or api.get('name') or api.get('id') or 'API source'
+    timeout = int(config.get('request_timeout_seconds', 25))
+    retries = int(config.get('request_retries', 2))
+    payloads = []
+    variants = api.get('params_variants') or [api.get('params') or {}]
+    pagination = api.get('pagination') or {}
+    try:
+        if api.get('api_type') == 'plapi_graph' or api.get('method', 'GET').upper() == 'POST':
+            body_template = api.get('body') or {}
+            pages = int(pagination.get('max_pages', 1)) if pagination.get('enabled') else 1
+            pages = max(1, min(pages, 100))
+            for page in range(int(pagination.get('start_page', 1)), int(pagination.get('start_page', 1)) + pages):
+                body = dict(body_template)
+                body[pagination.get('page_param', 'page')] = page
+                body[pagination.get('limit_param', 'limit')] = int(pagination.get('limit', body.get('limit', 50)))
+                data = _api_request(api, body=body, timeout=timeout, retries=retries)
+                payloads.append(data)
+                # Stop once API returns no match records on a later page.
+                if page > int(pagination.get('start_page', 1)) and not any(
+                    _api_pick(x, ('id', 'match_id', 'matchId')) for x in _api_walk_objects(data)
+                ):
+                    break
+        else:
+            for params in variants:
+                try:
+                    payloads.append(_api_request(api, params=params, timeout=timeout, retries=retries))
+                except Exception as exc:
+                    print(f'    [i] API {name} với params={params} lỗi: {exc}', file=sys.stderr)
+    except Exception as exc:
+        print(f'[!] API {name} lỗi: {exc}', file=sys.stderr)
+
+    items = []
+    base = api.get('url', '')
+    referer = (api.get('stream_referer') or api.get('default_stream_referer') or
+               (api.get('headers') or {}).get('Referer') or '')
+    rules = config.get('stream_header_rules') or []
+    for rule in rules:
+        if rule.get('host'):
+            # Applied later per actual stream hostname.
+            pass
+    for payload in payloads:
+        nodes = list(_api_walk_objects(payload))
+        for node in nodes:
+            urls = _api_collect_urls(node, base)
+            if not urls:
+                continue
+            meta = _api_normalize_match(node, api, config, base)
+            for stream in urls:
+                stream_host = urlparse(stream).netloc.lower()
+                stream_ref = referer
+                for rule in rules:
+                    if rule.get('host', '').lower() == stream_host:
+                        stream_ref = (rule.get('headers') or {}).get('Referer', stream_ref)
+                items.append({**meta, 'url': stream, 'referer': stream_ref,
+                              'format': stream_format(stream), 'source': api.get('id') or name.lower(),
+                              'source_name': name, 'group': name, 'source_logo': api.get('logo', ''),
+                              'home_logo': meta.get('home_logo', ''), 'away_logo': meta.get('away_logo', '')})
+        # If API returns player/embed pages instead of stream URLs, inspect those pages too.
+        for node in nodes:
+            for player_url in _api_player_urls(node):
+                try:
+                    for found in extract_js(player_url):
+                        meta = _api_normalize_match(node, api, config, base)
+                        items.append({**meta, **found, 'referer': player_url,
+                                      'source': api.get('id') or name.lower(), 'source_name': name,
+                                      'group': name, 'source_logo': api.get('logo', '')})
+                except Exception as exc:
+                    print(f'    [i] Không đọc được player API {player_url}: {exc}', file=sys.stderr)
+
+    # Resolve detail/live endpoints for Phá Làng API, where list records may contain only IDs.
+    if api.get('match_detail_url') or api.get('match_live_url'):
+        seen_ids = set()
+        for payload in payloads:
+            for node in _api_walk_objects(payload):
+                mid = _api_pick(node, ('id', 'match_id', 'matchId', 'fixture_id', 'fixtureId'))
+                looks_like_match = bool(
+                    _api_pick(node, ('home_team', 'homeTeam', 'home_name', 'homeName', 'match_name', 'matchName', 'fixture_name'))
+                    or any(str(k).lower() in ('home', 'hometeam', 'home_team', 'localteam') and isinstance(v, dict)
+                           for k, v in node.items())
+                )
+                if not mid or mid in seen_ids or not looks_like_match: continue
+                seen_ids.add(mid)
+                for endpoint_key, method_key in (('match_detail_url', 'detail_method'), ('match_live_url', 'live_method')):
+                    template = api.get(endpoint_key)
+                    if not template: continue
+                    try:
+                        detail_url = template.replace('{id}', mid)
+                        detail = _api_request({**api, 'method': api.get(method_key, 'GET')}, url=detail_url, timeout=timeout, retries=retries)
+                        meta = _api_normalize_match(node, api, config, detail_url)
+                        for stream in _api_collect_urls(detail, detail_url):
+                            items.append({**meta, 'url': stream, 'format': stream_format(stream),
+                                          'referer': referer, 'source': api.get('id') or name.lower(),
+                                          'source_name': name, 'group': name, 'source_logo': api.get('logo', '')})
+                    except Exception as exc:
+                        print(f'    [i] API {endpoint_key} {mid} lỗi: {exc}', file=sys.stderr)
+    # De-duplicate same source/URL while retaining the richest metadata.
+    merged = {}
+    for item in items:
+        key = item['url']
+        if key not in merged: merged[key] = item
+        else:
+            for field, value in item.items():
+                if value and not merged[key].get(field): merged[key][field] = value
+    print(f'    => API {name}: {len(merged)} link stream thô')
+    return list(merged.values())
+
+
+def load_api_config(path):
+    if not path or not os.path.exists(path):
+        return {}
+    with open(path, encoding='utf-8-sig') as f:
+        return json.load(f)
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--sources", default="sources.txt")
-    ap.add_argument("--out", default="playlist.m3u")
+    ap.add_argument("--sources", default="", help="website source list; defaults to config sources_file or sources.txt")
+    ap.add_argument("--config", default="config.json", help="API source configuration JSON")
+    ap.add_argument("--out", default="", help="output M3U; defaults to config output_file or playlist.m3u")
     ap.add_argument("--js", action="store_true")
     ap.add_argument("--no-check", action="store_true")
     ap.add_argument("--staging", default="")
@@ -907,6 +1165,9 @@ def main():
     args = ap.parse_args()
 
     items = []
+    api_config = load_api_config(args.config)
+    args.sources = args.sources or api_config.get("sources_file") or "sources.txt"
+    args.out = args.out or api_config.get("output_file") or "playlist.m3u"
     sources = read_sources(args.sources)
     print(f"[=] Đã nạp {len(sources)} nguồn từ {args.sources}")
     for source in sources:
@@ -937,6 +1198,15 @@ def main():
                       away_logo=it.get("away_logo") or "",
                       source_logo=source_logo, group=display_name)
         items.extend(found)
+
+    # API streams are additive: merge them with website/browser discoveries.
+    for api in api_config.get("apis", []):
+        api_name = api.get("display_name") or api.get("name") or api.get("id") or "API source"
+        print(f"[+] Quét API {api_name}: {api.get('url', '')}")
+        try:
+            items.extend(crawl_api_source(api, api_config))
+        except Exception as exc:
+            print(f"[!] API {api_name} lỗi ngoài dự kiến: {exc}", file=sys.stderr)
 
     # Keep all detected live matches, plus scheduled kick-offs from now through tomorrow.
     now = datetime.now(VN)
@@ -974,6 +1244,10 @@ def main():
     if not args.no_playlist:
         write_m3u(items, args.out)
         print(f"[✓] Đã ghi {args.out}")
+        # Keep the previous playlist filename available for existing consumers/workflows.
+        if os.path.basename(args.out) != "playlist.m3u":
+            write_m3u(items, "playlist.m3u")
+            print("[✓] Đã đồng bộ playlist.m3u tương thích ngược")
     if args.staging:
         write_staging(items, args.staging)
         print(f"[✓] Đã ghi {args.staging} ({len(items)} link)")

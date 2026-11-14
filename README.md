@@ -68,3 +68,16 @@ Workflow dùng `--scan-lookback-hours 3`: các thẻ trận có giờ bắt đ�
 - Nếu trang trận không cung cấp ảnh logo đội bóng phù hợp, `tvg-logo` để trống; crawler không tự gán logo nhà đài hoặc logo giả.
 
 Logo đội bóng được lấy từ ảnh thực tế trên trang trận; không phải mọi website đều công khai logo đội bóng trong HTML.
+
+
+## Cấu hình nguồn API và website
+
+- `sources.txt`: danh sách website cần crawl. Có thể thêm nguồn mới theo cú pháp hiện tại mà không sửa Python.
+- `config.json`: cấu hình API JSON độc lập với danh sách website. Các API được crawl bổ sung và hợp nhất với kết quả website; một API lỗi không làm dừng các nguồn còn lại.
+- Hỗ trợ API `GET` với `params`/`params_variants`, API `POST` JSON và phân trang; có thể khai báo endpoint chi tiết/trực tiếp theo `{id}`.
+- Crawler tìm URL HLS (`.m3u8`), FLV (`.flv`) và DASH (`.mpd`) trong JSON lồng nhau; nếu API chỉ trả URL player/iframe, crawler thử phân tích trang player bằng cơ chế trình duyệt hiện có.
+- `headers`, `default_stream_referer`/`stream_referer` và `stream_header_rules` được dùng khi truy vấn API và kiểm tra luồng.
+- `output_file` trong `config.json` là playlist chính (`thethao.m3u`); crawler vẫn đồng bộ thêm `playlist.m3u` để tương thích với luồng sử dụng cũ.
+- Trường API không nhận diện được sẽ để trống, không tự tạo tên đội, tỉ số, BLV hoặc logo.
+
+API được cấu hình hiện tại: Chuối Chiên TV, Gà Vàng TV, Cola TV và Phá Làng TV.

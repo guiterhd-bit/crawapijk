@@ -1,0 +1,150 @@
+{
+  "source_logo_base": "https://raw.githubusercontent.com/xiaomi308hd/thumbnail/main",
+  "output_file": "thethao.m3u",
+  "epg_file": "epg.xml",
+  "sources_file": "sources.txt",
+  "request_timeout_seconds": 25,
+  "request_retries": 2,
+  "apis": [
+    {
+      "name": "ChuoiChienTV",
+      "id": "chuoichientv",
+      "display_name": "Chuối Chiên TV",
+      "logo": "https://raw.githubusercontent.com/xiaomi308hd/thumbnail/main/chuoichientv.png",
+      "playlist_file": "thethao-chuoichientv.m3u",
+      "enabled": true,
+      "method": "GET",
+      "url": "https://api-v2.chuoichientv.net/v2/matches",
+      "default_stream_referer": "https://live11.chuoichientv.me/",
+      "headers": {
+        "Accept": "application/json",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "Referer": "https://live11.chuoichientv.me/",
+        "Origin": "https://live11.chuoichientv.me"
+      },
+      "parser": "chuoichientv",
+      "params": {
+        "type": "live",
+        "page": 1,
+        "limit": 500
+      },
+      "params_variants": [
+        {
+          "type": "live",
+          "page": 1,
+          "limit": 500
+        },
+        {
+          "type": "blv",
+          "page": 1,
+          "limit": 500
+        }
+      ]
+    },
+    {
+      "name": "GaVangTV",
+      "id": "gavangtv",
+      "display_name": "Gà Vàng TV",
+      "logo": "https://raw.githubusercontent.com/xiaomi308hd/thumbnail/main/gavangtv.png",
+      "playlist_file": "thethao-gavangtv.m3u",
+      "enabled": true,
+      "method": "GET",
+      "url": "https://gavangtv-api.adviceme.io/api/v1/matches",
+      "headers": {
+        "Accept": "application/json",
+        "User-Agent": "Mozilla/5.0"
+      }
+    },
+    {
+      "id": "colatv",
+      "name": "ColaTV",
+      "logo": "https://raw.githubusercontent.com/xiaomi308hd/thumbnail/main/colatv.png",
+      "url": "https://api.gvapi.cc/api/matches",
+      "method": "GET",
+      "parser": "colatv",
+      "headers": {
+        "Accept": "application/json",
+        "User-Agent": "Mozilla/5.0"
+      },
+      "playlist_file": "thethao-colatv.m3u",
+      "stream_format_priority": [
+        "m3u8",
+        "flv"
+      ]
+    },
+    {
+      "name": "PhaLangTV",
+      "id": "phalangtv",
+      "display_name": "Phá Làng TV",
+      "logo": "https://raw.githubusercontent.com/xiaomi308hd/thumbnail/main/phalangtv.png",
+      "playlist_file": "thethao-plapi.m3u",
+      "enabled": true,
+      "api_type": "plapi_graph",
+      "method": "POST",
+      "url": "https://api.plapi202624081158.com/matches/graph",
+      "headers": {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Referer": "https://phalang2.tv/",
+        "Origin": "https://phalang2.tv",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36"
+      },
+      "body": {
+        "fields": [],
+        "queries": [],
+        "limit": 50,
+        "page": 1,
+        "order_asc": null,
+        "order_desc": null,
+        "query_or": false,
+        "is_count": false,
+        "ignore_fields": []
+      },
+      "pagination": {
+        "enabled": true,
+        "page_param": "page",
+        "limit_param": "limit",
+        "start_page": 1,
+        "limit": 50,
+        "max_pages": 100
+      },
+      "match_detail_url": "https://api.plapi202624081158.com/match/{id}",
+      "match_live_url": "https://api.plapi202624081158.com/match/{id}/live",
+      "league_url": "https://api.plapi202624081158.com/matches/league",
+      "detail_method": "GET",
+      "live_method": "GET",
+      "stream_priority": [
+        "hd_1",
+        "hd_2",
+        "sd_1",
+        "sd_2",
+        "source"
+      ],
+      "default_stream_referer": "",
+      "stream_referer": "https://sv1.phalang.net/",
+      "referer_self_origin": false,
+      "referer_by_host": {}
+    }
+  ],
+  "stream_header_rules": [
+    {
+      "host": "gckc0525.edgemaxcdn.org",
+      "headers": {
+        "Referer": "https://fhd-01.cctvsignal.xyz/"
+      }
+    },
+    {
+      "host": "stm9ee346727718.stream.hdplaylink.com",
+      "headers": {
+        "Referer": "https://fhd-01.cctvsignal.xyz/"
+      }
+    }
+  ],
+  "auto_detect_referers": true,
+  "referer_candidates": [],
+  "include_stream_groups": [
+    "blvs",
+    "blvs_bonglau",
+    "blvs_nguoitho"
+  ]
+}
