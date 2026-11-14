@@ -27,8 +27,11 @@ jobs:
         run: |
           pip install requests playwright
           playwright install --with-deps chromium
+      - name: Test crawler and source configuration
+        run: python -m unittest discover -s tests -v
+
       - name: Crawl all configured sources
-        run: python -u crawler.py --max-pages 0 --workers 16
+        run: python -u crawler.py --max-pages 0 --workers 12
       - name: Commit playlist safely
         shell: bash
         run: |
