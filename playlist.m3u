@@ -1,64 +1,115 @@
 #EXTM3U
-#EXTINF:-1 tvg-id="biaomtv-fun-l7oqdehgzg49r51-88da5641" tvg-name="Shonan Bellmare vs Yokohama FC 12:00 ngày 14/11/2026 xem bóng đá online" group-title="Bia Ôm TV" start="2026-11-14T12:00:00+07:00" x-source="biaomtv-fun" x-source-name="Bia Ôm TV" x-score="0-0" x-commentator="HÀU NƯỚNG",Shonan Bellmare vs Yokohama FC 12:00 ngày 14/11/2026 xem bóng đá online | 14/11 12:00 | 0-0 | HÀU NƯỚNG | HLS
-#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/shonan-bellmare-vs-yokohama-fc-l7oqdehgzg49r51
-https://lilive1.eu.cc/live/06204bb7419ec28303805fe0a6838f0a/playlist.m3u8
-#EXTINF:-1 tvg-id="biaomtv-fun-l7oqdehgzg49r51-4c7ccb13" tvg-name="Shonan Bellmare vs Yokohama FC 12:00 ngày 14/11/2026 xem bóng đá online" group-title="Bia Ôm TV" start="2026-11-14T12:00:00+07:00" x-source="biaomtv-fun" x-source-name="Bia Ôm TV" x-score="0-0" x-commentator="HÀU NƯỚNG",Shonan Bellmare vs Yokohama FC 12:00 ngày 14/11/2026 xem bóng đá online | 14/11 12:00 | 0-0 | HÀU NƯỚNG | HLS
-#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/shonan-bellmare-vs-yokohama-fc-l7oqdehgzg49r51
-https://lilive1.eu.cc/live/0e9807566fbeda1e47d7a55ee171078b/playlist.m3u8
-#EXTINF:-1 tvg-id="biaomtv-fun-l7oqdehgzg49r51-f5640e64" tvg-name="Shonan Bellmare vs Yokohama FC 12:00 ngày 14/11/2026 xem bóng đá online" group-title="Bia Ôm TV" start="2026-11-14T12:00:00+07:00" x-source="biaomtv-fun" x-source-name="Bia Ôm TV" x-score="0-0" x-commentator="HÀU NƯỚNG",Shonan Bellmare vs Yokohama FC 12:00 ngày 14/11/2026 xem bóng đá online | 14/11 12:00 | 0-0 | HÀU NƯỚNG | HLS
-#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/shonan-bellmare-vs-yokohama-fc-l7oqdehgzg49r51
+#EXTINF:-1 tvg-id="colatv79-live-63kvlsop2oeux7e-90220b70" tvg-name="Chicago Bulls Vs Atlanta Hawks" group-title="Cola TV" x-source="colatv79-live" x-source-name="Cola TV" x-commentator="TARZAAN",Chicago Bulls Vs Atlanta Hawks | 14/11 01:00 | TARZAAN | HLS
+#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/chicago-bulls-vs-atlanta-hawks-luc-0800-ngay-14-11-2026-63kvlsop2oeux7e
+https://live05.wecile.app/live/56998120.m3u8
+#EXTINF:-1 tvg-id="colatv79-live-o17pjiojl58by7j-fe57b64f" tvg-name="Neftchi Fargona Vs Clb Kuruvchi Bunyodkor" group-title="Cola TV" x-source="colatv79-live" x-source-name="Cola TV" x-commentator="TEPPY",Neftchi Fargona Vs Clb Kuruvchi Bunyodkor | 14/11 13:00 | TEPPY | HLS
+#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/neftchi-fargona-vs-clb-kuruvchi-bunyodkor-luc-2000-ngay-14-11-2026-o17pjiojl58by7j
+https://colatv88xi.cc/video2/output.m3u8
+#EXTINF:-1 tvg-id="colatv79-live-8lk2ys6zy6waz73-94fb9fa7" tvg-name="Miami Heat Vs Cleveland Cavaliers" group-title="Cola TV" x-source="colatv79-live" x-source-name="Cola TV" x-commentator="247",Miami Heat Vs Cleveland Cavaliers | 14/11 01:00 | 247 | HLS
+#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/miami-heat-vs-cleveland-cavaliers-luc-0800-ngay-14-11-2026-8lk2ys6zy6waz73
+https://live05.wecile.app/live/90865415.m3u8
+#EXTINF:-1 tvg-id="colatv79-live-82054853-29d77082" tvg-name="Indiana Pacers Vs New York Knicks" group-title="Cola TV" start="2026-11-14T07:00:00+07:00" x-source="colatv79-live" x-source-name="Cola TV" x-commentator="ROCKSTAR",Indiana Pacers Vs New York Knicks | 14/11 07:00 | ROCKSTAR | HLS
+#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/indiana-pacers-vs-new-york-knicks-luc-0700-ngay-14-11-2026-34kgps1lw1gieko?houseId=82054853
+https://live05.wecile.app/live/82054853.m3u8
+#EXTINF:-1 tvg-id="colatv79-live-87379114-6e0b7b81" tvg-name="San Antonio Spurs Vs Golden State Warriors" group-title="Cola TV" start="2026-11-14T09:30:00+07:00" x-source="colatv79-live" x-source-name="Cola TV" x-commentator="Lịch thi đấu",San Antonio Spurs Vs Golden State Warriors | 14/11 09:30 | Lịch thi đấu | HLS
+#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/san-antonio-spurs-vs-golden-state-warriors-luc-0930-ngay-14-11-2026-vrqw9s9dz9du47n?houseId=87379114
+https://live05.wecile.app/live/87379114.m3u8
+#EXTINF:-1 tvg-id="colatv79-live-75915087-2f425ba3" tvg-name="Peru Vs Bolivia" group-title="Cola TV" x-source="colatv79-live" x-source-name="Cola TV" x-score="1-0" x-commentator="MONSTER",Peru Vs Bolivia | 14/11 01:00 | 1-0 | MONSTER | HLS
+#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/peru-vs-bolivia-luc-0800-ngay-14-11-2026-527r3i3em4ws47e?houseId=75915087
+https://live05.wecile.app/live/75915087.m3u8
+#EXTINF:-1 tvg-id="colatv79-live-59444581-a47eeade" tvg-name="Guatemala Vs Canada" group-title="Cola TV" x-source="colatv79-live" x-source-name="Cola TV" x-commentator="PEPSI",Guatemala Vs Canada | 14/11 02:00 | PEPSI | HLS
+#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/guatemala-vs-canada-luc-0900-ngay-14-11-2026-g6763ipvl12uo7r?houseId=59444581
+https://live05.wecile.app/live/59444581.m3u8
+#EXTINF:-1 tvg-id="colatv79-live-19919577-19aab1e3" tvg-name="Houston Rockets Vs Utah Jazz" group-title="Cola TV" start="2026-11-14T08:30:00+07:00" x-source="colatv79-live" x-source-name="Cola TV" x-commentator="Lịch thi đấu",Houston Rockets Vs Utah Jazz | 14/11 08:30 | Lịch thi đấu | HLS
+#EXTVLCOPT:http-referrer=https://colatv79.live/truc-tiep/houston-rockets-vs-utah-jazz-luc-0830-ngay-14-11-2026-o07dzsmrgm9smkn?houseId=19919577
+https://live05.wecile.app/live/19919577.m3u8
+#EXTINF:-1 tvg-id="biaomtv-fun-l5ergph4z4lwr8k-f5640e64" tvg-name="Okinawa SV vs Yokogawa Musashino FC 11:00 ngày 14/11/2026 Link phát sóng" group-title="Bia Ôm TV" start="2026-11-14T11:00:00+07:00" x-source="biaomtv-fun" x-source-name="Bia Ôm TV" x-score="0-0" x-commentator="HÀU NƯỚNG",Okinawa SV vs Yokogawa Musashino FC 11:00 ngày 14/11/2026 Link phát sóng | 14/11 11:00 | 0-0 | HÀU NƯỚNG | HLS
+#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/okinawa-sv-vs-yokogawa-musashino-fc-l5ergph4z4lwr8k
 https://lilive1.eu.cc/live/1de5a466fd5b81d8dfaa96ec012e949b/playlist.m3u8
-#EXTINF:-1 tvg-id="biaomtv-fun-l7oqdehgzg49r51-1e37f933" tvg-name="Shonan Bellmare vs Yokohama FC 12:00 ngày 14/11/2026 xem bóng đá online" group-title="Bia Ôm TV" start="2026-11-14T12:00:00+07:00" x-source="biaomtv-fun" x-source-name="Bia Ôm TV" x-score="0-0" x-commentator="HÀU NƯỚNG",Shonan Bellmare vs Yokohama FC 12:00 ngày 14/11/2026 xem bóng đá online | 14/11 12:00 | 0-0 | HÀU NƯỚNG | HLS
-#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/shonan-bellmare-vs-yokohama-fc-l7oqdehgzg49r51
+#EXTINF:-1 tvg-id="biaomtv-fun-l5ergph4z4lwr8k-1e37f933" tvg-name="Okinawa SV vs Yokogawa Musashino FC 11:00 ngày 14/11/2026 Link phát sóng" group-title="Bia Ôm TV" start="2026-11-14T11:00:00+07:00" x-source="biaomtv-fun" x-source-name="Bia Ôm TV" x-score="0-0" x-commentator="HÀU NƯỚNG",Okinawa SV vs Yokogawa Musashino FC 11:00 ngày 14/11/2026 Link phát sóng | 14/11 11:00 | 0-0 | HÀU NƯỚNG | HLS
+#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/okinawa-sv-vs-yokogawa-musashino-fc-l5ergph4z4lwr8k
 https://lilive1.eu.cc/live/20ece04249a85162dfbab82c3961589b/playlist.m3u8
-#EXTINF:-1 tvg-id="biaomtv-fun-l7oqdehgzg49r51-b52ab6a9" tvg-name="Shonan Bellmare vs Yokohama FC 12:00 ngày 14/11/2026 xem bóng đá online" group-title="Bia Ôm TV" start="2026-11-14T12:00:00+07:00" x-source="biaomtv-fun" x-source-name="Bia Ôm TV" x-score="0-0" x-commentator="HÀU NƯỚNG",Shonan Bellmare vs Yokohama FC 12:00 ngày 14/11/2026 xem bóng đá online | 14/11 12:00 | 0-0 | HÀU NƯỚNG | HLS
-#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/shonan-bellmare-vs-yokohama-fc-l7oqdehgzg49r51
+#EXTINF:-1 tvg-id="biaomtv-fun-l5ergph4z4lwr8k-b52ab6a9" tvg-name="Okinawa SV vs Yokogawa Musashino FC 11:00 ngày 14/11/2026 Link phát sóng" group-title="Bia Ôm TV" start="2026-11-14T11:00:00+07:00" x-source="biaomtv-fun" x-source-name="Bia Ôm TV" x-score="0-0" x-commentator="HÀU NƯỚNG",Okinawa SV vs Yokogawa Musashino FC 11:00 ngày 14/11/2026 Link phát sóng | 14/11 11:00 | 0-0 | HÀU NƯỚNG | HLS
+#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/okinawa-sv-vs-yokogawa-musashino-fc-l5ergph4z4lwr8k
 https://lilive1.eu.cc/live/607914f2d5f21f6f027313c0e79b555b/playlist.m3u8
-#EXTINF:-1 tvg-id="biaomtv-fun-l7oqdehgzg49r51-3f4a0b96" tvg-name="Shonan Bellmare vs Yokohama FC 12:00 ngày 14/11/2026 xem bóng đá online" group-title="Bia Ôm TV" start="2026-11-14T12:00:00+07:00" x-source="biaomtv-fun" x-source-name="Bia Ôm TV" x-score="0-0" x-commentator="HÀU NƯỚNG",Shonan Bellmare vs Yokohama FC 12:00 ngày 14/11/2026 xem bóng đá online | 14/11 12:00 | 0-0 | HÀU NƯỚNG | HLS
-#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/shonan-bellmare-vs-yokohama-fc-l7oqdehgzg49r51
+#EXTINF:-1 tvg-id="biaomtv-fun-l5ergph4z4lwr8k-3f4a0b96" tvg-name="Okinawa SV vs Yokogawa Musashino FC 11:00 ngày 14/11/2026 Link phát sóng" group-title="Bia Ôm TV" start="2026-11-14T11:00:00+07:00" x-source="biaomtv-fun" x-source-name="Bia Ôm TV" x-score="0-0" x-commentator="HÀU NƯỚNG",Okinawa SV vs Yokogawa Musashino FC 11:00 ngày 14/11/2026 Link phát sóng | 14/11 11:00 | 0-0 | HÀU NƯỚNG | HLS
+#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/okinawa-sv-vs-yokogawa-musashino-fc-l5ergph4z4lwr8k
 https://lilive1.eu.cc/live/6ebf070a33dc1c6572827dfb72b6abe1/playlist.m3u8
-#EXTINF:-1 tvg-id="biaomtv-fun-l7oqdehgzg49r51-0929f717" tvg-name="Shonan Bellmare vs Yokohama FC 12:00 ngày 14/11/2026 xem bóng đá online" group-title="Bia Ôm TV" start="2026-11-14T12:00:00+07:00" x-source="biaomtv-fun" x-source-name="Bia Ôm TV" x-score="0-0" x-commentator="HÀU NƯỚNG",Shonan Bellmare vs Yokohama FC 12:00 ngày 14/11/2026 xem bóng đá online | 14/11 12:00 | 0-0 | HÀU NƯỚNG | HLS
-#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/shonan-bellmare-vs-yokohama-fc-l7oqdehgzg49r51
+#EXTINF:-1 tvg-id="biaomtv-fun-l5ergph4z4lwr8k-0929f717" tvg-name="Okinawa SV vs Yokogawa Musashino FC 11:00 ngày 14/11/2026 Link phát sóng" group-title="Bia Ôm TV" start="2026-11-14T11:00:00+07:00" x-source="biaomtv-fun" x-source-name="Bia Ôm TV" x-score="0-0" x-commentator="HÀU NƯỚNG",Okinawa SV vs Yokogawa Musashino FC 11:00 ngày 14/11/2026 Link phát sóng | 14/11 11:00 | 0-0 | HÀU NƯỚNG | HLS
+#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/okinawa-sv-vs-yokogawa-musashino-fc-l5ergph4z4lwr8k
 https://lilive1.eu.cc/live/993fd10b399bce427296fda9ef810e8a/playlist.m3u8
-#EXTINF:-1 tvg-id="gavangtv33-pro-l7oqdehjn90dr51-2fa1c7d0" tvg-name="Trực tiếp Bangladesh vs Pakistan hôm nay" group-title="Gà Vàng 33" x-source="gavangtv33-pro" x-source-name="Gà Vàng 33" x-score="0-0" x-commentator="Gà Siêu Tồ",Trực tiếp Bangladesh vs Pakistan hôm nay | 14/11 21:30 | 0-0 | Gà Siêu Tồ | HLS
-#EXTVLCOPT:http-referrer=https://gavangtv33.pro/truc-tiep/bangladesh-vs-pakistan-luc-2130-ngay-14-11-2026-l7oqdehjn90dr51?blv=6aa14fd12a33b8ed65eea01c
-https://live2.zktsva.app/live/796315.m3u8
-#EXTINF:-1 tvg-id="gavangtv33-pro-dn1m1gh94p53moe-8fe8b32c" tvg-name="Trực tiếp Guatemala vs Canada hôm nay" group-title="Gà Vàng 33" x-source="gavangtv33-pro" x-source-name="Gà Vàng 33" x-score="0-0" x-commentator="Gà Siêu Son",Trực tiếp Guatemala vs Canada hôm nay | 14/11 09:00 | 0-0 | Gà Siêu Son | HLS
-#EXTVLCOPT:http-referrer=https://gavangtv33.pro/truc-tiep/guatemala-vs-canada-luc-0900-ngay-14-11-2026-dn1m1gh94p53moe?blv=69fc581d696b57b6f1dae269
-https://live2.zktsva.app/live/306290.m3u8
-#EXTINF:-1 tvg-id="gavangtv33-pro-vjxm8ghk42ewr6o-86f2ee80" tvg-name="Trực tiếp Ecuador vs Costa Rica hôm nay" group-title="Gà Vàng 33" x-source="gavangtv33-pro" x-source-name="Gà Vàng 33" x-score="1-0" x-commentator="Gà Siêu Tốc",Trực tiếp Ecuador vs Costa Rica hôm nay | 14/11 07:00 | 1-0 | Gà Siêu Tốc | HLS
-#EXTVLCOPT:http-referrer=https://gavangtv33.pro/truc-tiep/ecuador-vs-costa-rica-luc-0700-ngay-14-11-2026-vjxm8ghk42ewr6o?blv=69fcb2b17f55d5be198f16aa
-https://live2.zktsva.app/live/307240.m3u8
-#EXTINF:-1 tvg-id="nembientv-com-499eb4dbf358-d0721a69" tvg-name="B7C20067Ff19Ee" group-title="Ném Biên TV" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="LAVIE",B7C20067Ff19Ee | LAVIE | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/b7c20067ff19ee
+#EXTINF:-1 tvg-id="biaomtv-fun-l5ergph4z4lwr8k-02225525" tvg-name="Okinawa SV vs Yokogawa Musashino FC 11:00 ngày 14/11/2026 Link phát sóng" group-title="Bia Ôm TV" start="2026-11-14T11:00:00+07:00" x-source="biaomtv-fun" x-source-name="Bia Ôm TV" x-score="0-0" x-commentator="HÀU NƯỚNG",Okinawa SV vs Yokogawa Musashino FC 11:00 ngày 14/11/2026 Link phát sóng | 14/11 11:00 | 0-0 | HÀU NƯỚNG | HLS
+#EXTVLCOPT:http-referrer=https://biaomtv.fun/live/okinawa-sv-vs-yokogawa-musashino-fc-l5ergph4z4lwr8k
+https://lilive1.eu.cc/live/e0cb4d85e765f2d1fc74638df7cd6871/playlist.m3u8
+#EXTINF:-1 tvg-id="sutbongtv-co-3f4385fab3ff-0e081856" tvg-name="Guatemala Vs Canada 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T09:00:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-commentator="COCA",Guatemala Vs Canada 14 11 2026 | 14/11 09:00 | COCA | HLS
+#EXTVLCOPT:http-referrer=https://sutbongtv.co/truc-tiep/guatemala-vs-canada-14-11-2026/
+https://pull.niues.live/live/stream-627718_lhd.m3u8?auth_key=1794626768-0-0-36c1ee8ebeb407ba4df82dfda597942b
+#EXTINF:-1 tvg-id="sutbongtv-co-056c43ede50f-2a01f404" tvg-name="Wellington Phoenix Reserve Vs Auckland City 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T08:00:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-commentator="CHIVAS",Wellington Phoenix Reserve Vs Auckland City 14 11 2026 | 14/11 08:00 | CHIVAS | HLS
+#EXTVLCOPT:http-referrer=https://sutbongtv.co/truc-tiep/wellington-phoenix-reserve-vs-auckland-city-14-11-2026/
+https://pull.niur.live/live/stream-485739_lhd.m3u8?txSecret=ae906d6436c85a9e257dd5d8a89f2a74&txTime=6af81b20
+#EXTINF:-1 tvg-id="sutbongtv-co-3f4385fab3ff-ff8f0c9b" tvg-name="Guatemala Vs Canada 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T09:00:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-commentator="COCA",Guatemala Vs Canada 14 11 2026 | 14/11 09:00 | COCA | HLS
+#EXTVLCOPT:http-referrer=https://sutbongtv.co/truc-tiep/guatemala-vs-canada-14-11-2026/?blv=327159
+https://pull.niues.live/live/stream-327159_lhd.m3u8?auth_key=1794626768-0-0-3188f53a12c0a5c89853100f71fdce8e
+#EXTINF:-1 tvg-id="sutbongtv-co-3f4385fab3ff-dd7a2544" tvg-name="Guatemala Vs Canada 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T09:00:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-commentator="COCA",Guatemala Vs Canada 14 11 2026 | 14/11 09:00 | COCA | HLS
+#EXTVLCOPT:http-referrer=https://sutbongtv.co/truc-tiep/guatemala-vs-canada-14-11-2026/?blv=387694
+https://pull.niues.live/live/stream-387694_lhd.m3u8?auth_key=1794626768-0-0-36fcb3b0aea29b6d84447fb2ee7850a5
+#EXTINF:-1 tvg-id="sutbongtv-co-612d4e64d1d2-68b29fa5" tvg-name="Peru Vs Bolivia 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T08:00:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-commentator="TOMIA",Peru Vs Bolivia 14 11 2026 | 14/11 08:00 | TOMIA | HLS
+#EXTVLCOPT:http-referrer=https://sutbongtv.co/truc-tiep/peru-vs-bolivia-14-11-2026/?blv=598119
+https://pull.niur.live/live/stream-9912139_lhd.m3u8?txSecret=55d3fe123afbc94c5af0c1a02bc0bff7&txTime=6af81b20
+#EXTINF:-1 tvg-id="sutbongtv-co-612d4e64d1d2-ee377482" tvg-name="Peru Vs Bolivia 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T08:00:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-commentator="TOMIA",Peru Vs Bolivia 14 11 2026 | 14/11 08:00 | TOMIA | HLS
+#EXTVLCOPT:http-referrer=https://sutbongtv.co/truc-tiep/peru-vs-bolivia-14-11-2026/?blv=187579
+https://pull.niues.live/live/stream-9912008_lhd.m3u8?auth_key=1794626768-0-0-5426d09bd1ff8895c5e7e298ad103134
+#EXTINF:-1 tvg-id="sutbongtv-co-056c43ede50f-ca260d98" tvg-name="Wellington Phoenix Reserve Vs Auckland City 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T08:00:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-commentator="CHIVAS",Wellington Phoenix Reserve Vs Auckland City 14 11 2026 | 14/11 08:00 | CHIVAS | HLS
+#EXTVLCOPT:http-referrer=https://sutbongtv.co/truc-tiep/wellington-phoenix-reserve-vs-auckland-city-14-11-2026/?blv=619561
+https://pull.niues.live/live/stream-619561_lhd.m3u8?auth_key=1794626768-0-0-728032e98e9dad20a943c05e4f36c9fa
+#EXTINF:-1 tvg-id="sutbongtv-co-3f4385fab3ff-323cee32" tvg-name="Guatemala Vs Canada 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T09:00:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-commentator="COCA",Guatemala Vs Canada 14 11 2026 | 14/11 09:00 | COCA | HLS
+#EXTVLCOPT:http-referrer=https://sutbongtv.co/truc-tiep/guatemala-vs-canada-14-11-2026/?blv=168740
+https://pull.niues.live/live/stream-9912145_lhd.m3u8?auth_key=1794626768-0-0-4224f7e73ce4f9873eef45df27dff5d9
+#EXTINF:-1 tvg-id="sutbongtv-co-e1b087966359-5d4a401b" tvg-name="Internacional De Bogota Vs Independiente Santa Fe 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T08:30:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-commentator="CUỘI",Internacional De Bogota Vs Independiente Santa Fe 14 11 2026 | 14/11 08:30 | CUỘI | HLS
+#EXTVLCOPT:http-referrer=https://sutbongtv.co/truc-tiep/internacional-de-bogota-vs-independiente-santa-fe-14-11-2026/?blv=235232
+https://pull.niues.live/live/stream-235232_lhd.m3u8?auth_key=1794626768-0-0-70a33fc4af37b0eb4092d079027d32a1
+#EXTINF:-1 tvg-id="sutbongtv-co-612d4e64d1d2-af6732b8" tvg-name="Peru Vs Bolivia 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T08:00:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-commentator="TOMIA",Peru Vs Bolivia 14 11 2026 | 14/11 08:00 | TOMIA | HLS
+#EXTVLCOPT:http-referrer=https://sutbongtv.co/truc-tiep/peru-vs-bolivia-14-11-2026/?blv=620084
+https://pull.niues.live/live/stream-620084_lhd.m3u8?auth_key=1794626768-0-0-e6ed2d77e2e29299125f7bbbe74c591b
+#EXTINF:-1 tvg-id="sutbongtv-co-612d4e64d1d2-e3eae488" tvg-name="Peru Vs Bolivia 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T08:00:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-commentator="TOMIA",Peru Vs Bolivia 14 11 2026 | 14/11 08:00 | TOMIA | HLS
+#EXTVLCOPT:http-referrer=https://sutbongtv.co/truc-tiep/peru-vs-bolivia-14-11-2026/?blv=621887
+https://pull.niues.live/live/stream-621887_lhd.m3u8?auth_key=1794626768-0-0-d5d5fb45aaaf8db3c51f3f47e162c73c
+#EXTINF:-1 tvg-id="sutbongtv-co-3f4385fab3ff-2bb24f93" tvg-name="Guatemala Vs Canada 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T09:00:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-commentator="COCA",Guatemala Vs Canada 14 11 2026 | 14/11 09:00 | COCA | HLS
+#EXTVLCOPT:http-referrer=https://sutbongtv.co/truc-tiep/guatemala-vs-canada-14-11-2026/?blv=118206
+https://pull.niues.live/live/stream-9912144_lhd.m3u8?auth_key=1794626768-0-0-c871b2e07ad482947d8581e2fb9a34c0
+#EXTINF:-1 tvg-id="sutbongtv-co-e1b087966359-78573581" tvg-name="Internacional De Bogota Vs Independiente Santa Fe 14 11 2026" group-title="Sút Bóng TV" start="2026-11-14T08:30:00+07:00" x-source="sutbongtv-co" x-source-name="Sút Bóng TV" x-commentator="CUỘI",Internacional De Bogota Vs Independiente Santa Fe 14 11 2026 | 14/11 08:30 | CUỘI | HLS
+#EXTVLCOPT:http-referrer=https://sutbongtv.co/truc-tiep/internacional-de-bogota-vs-independiente-santa-fe-14-11-2026/?blv=627318
+https://pull.niues.live/live/stream-627318_lhd.m3u8?auth_key=1794626768-0-0-34785dc463b75b4375b94e238d9e0ba4
+#EXTINF:-1 tvg-id="nembientv-com-f5de71ca61c3-d0721a69" tvg-name="Volleyball_217648" group-title="Ném Biên TV" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="KAKA",Volleyball_217648 | KAKA | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/volleyball_217648
 https://live.nembientv.com/nembien_tv_wait_hls/index.m3u8
-#EXTINF:-1 tvg-id="nembientv-com-499eb4dbf358-8abc0fff" tvg-name="B7C20067Ff19Ee" group-title="Ném Biên TV" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="LAVIE",B7C20067Ff19Ee | LAVIE | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/b7c20067ff19ee
+#EXTINF:-1 tvg-id="nembientv-com-f5de71ca61c3-8abc0fff" tvg-name="Volleyball_217648" group-title="Ném Biên TV" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="KAKA",Volleyball_217648 | KAKA | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/volleyball_217648
 https://nembientv.com/assets/hls-decoy-v13b/channel-01.m3u8
-#EXTINF:-1 tvg-id="nembientv-com-499eb4dbf358-c96235ae" tvg-name="B7C20067Ff19Ee" group-title="Ném Biên TV" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="LAVIE",B7C20067Ff19Ee | LAVIE | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/b7c20067ff19ee
+#EXTINF:-1 tvg-id="nembientv-com-f5de71ca61c3-c96235ae" tvg-name="Volleyball_217648" group-title="Ném Biên TV" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="KAKA",Volleyball_217648 | KAKA | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/volleyball_217648
 https://nembientv.com/assets/hls-decoy-v13b/channel-02.m3u8
-#EXTINF:-1 tvg-id="nembientv-com-499eb4dbf358-de06e3e1" tvg-name="B7C20067Ff19Ee" group-title="Ném Biên TV" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="LAVIE",B7C20067Ff19Ee | LAVIE | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/b7c20067ff19ee
+#EXTINF:-1 tvg-id="nembientv-com-f5de71ca61c3-de06e3e1" tvg-name="Volleyball_217648" group-title="Ném Biên TV" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="KAKA",Volleyball_217648 | KAKA | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/volleyball_217648
 https://nembientv.com/assets/hls-decoy-v13b/channel-03.m3u8
-#EXTINF:-1 tvg-id="nembientv-com-499eb4dbf358-4d843e8b" tvg-name="B7C20067Ff19Ee" group-title="Ném Biên TV" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="LAVIE",B7C20067Ff19Ee | LAVIE | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/b7c20067ff19ee
+#EXTINF:-1 tvg-id="nembientv-com-f5de71ca61c3-4d843e8b" tvg-name="Volleyball_217648" group-title="Ném Biên TV" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="KAKA",Volleyball_217648 | KAKA | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/volleyball_217648
 https://nembientv.com/assets/hls-decoy-v13b/channel-04.m3u8
-#EXTINF:-1 tvg-id="nembientv-com-499eb4dbf358-218dabf2" tvg-name="B7C20067Ff19Ee" group-title="Ném Biên TV" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="LAVIE",B7C20067Ff19Ee | LAVIE | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/b7c20067ff19ee
+#EXTINF:-1 tvg-id="nembientv-com-f5de71ca61c3-218dabf2" tvg-name="Volleyball_217648" group-title="Ném Biên TV" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="KAKA",Volleyball_217648 | KAKA | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/volleyball_217648
 https://nembientv.com/assets/hls-decoy-v13b/channel-05.m3u8
-#EXTINF:-1 tvg-id="nembientv-com-499eb4dbf358-e604939e" tvg-name="B7C20067Ff19Ee" group-title="Ném Biên TV" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="LAVIE",B7C20067Ff19Ee | LAVIE | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/b7c20067ff19ee
+#EXTINF:-1 tvg-id="nembientv-com-f5de71ca61c3-e604939e" tvg-name="Volleyball_217648" group-title="Ném Biên TV" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="KAKA",Volleyball_217648 | KAKA | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/volleyball_217648
 https://nembientv.com/assets/hls-decoy-v13b/channel-06.m3u8
-#EXTINF:-1 tvg-id="nembientv-com-499eb4dbf358-9f4694eb" tvg-name="B7C20067Ff19Ee" group-title="Ném Biên TV" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="LAVIE",B7C20067Ff19Ee | LAVIE | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/b7c20067ff19ee
+#EXTINF:-1 tvg-id="nembientv-com-f5de71ca61c3-9f4694eb" tvg-name="Volleyball_217648" group-title="Ném Biên TV" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="KAKA",Volleyball_217648 | KAKA | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/volleyball_217648
 https://nembientv.com/assets/hls-decoy-v13b/channel-07.m3u8
-#EXTINF:-1 tvg-id="nembientv-com-499eb4dbf358-eccae982" tvg-name="B7C20067Ff19Ee" group-title="Ném Biên TV" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="LAVIE",B7C20067Ff19Ee | LAVIE | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/b7c20067ff19ee
+#EXTINF:-1 tvg-id="nembientv-com-f5de71ca61c3-eccae982" tvg-name="Volleyball_217648" group-title="Ném Biên TV" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="KAKA",Volleyball_217648 | KAKA | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/volleyball_217648
 https://nembientv.com/assets/hls-decoy-v13b/channel-08.m3u8
-#EXTINF:-1 tvg-id="nembientv-com-499eb4dbf358-9b574de6" tvg-name="B7C20067Ff19Ee" group-title="Ném Biên TV" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="LAVIE",B7C20067Ff19Ee | LAVIE | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/b7c20067ff19ee
+#EXTINF:-1 tvg-id="nembientv-com-f5de71ca61c3-9b574de6" tvg-name="Volleyball_217648" group-title="Ném Biên TV" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="KAKA",Volleyball_217648 | KAKA | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/volleyball_217648
 https://nembientv.com/assets/hls-decoy-v13b/channel-09.m3u8
-#EXTINF:-1 tvg-id="nembientv-com-499eb4dbf358-f83ad7aa" tvg-name="B7C20067Ff19Ee" group-title="Ném Biên TV" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="LAVIE",B7C20067Ff19Ee | LAVIE | HLS
-#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/b7c20067ff19ee
+#EXTINF:-1 tvg-id="nembientv-com-f5de71ca61c3-f83ad7aa" tvg-name="Volleyball_217648" group-title="Ném Biên TV" x-source="nembientv-com" x-source-name="Ném Biên TV" x-commentator="KAKA",Volleyball_217648 | KAKA | HLS
+#EXTVLCOPT:http-referrer=https://nembientv.com/truc-tiep/volleyball_217648
 https://nembientv.com/assets/hls-decoy-v13b/channel-10.m3u8
