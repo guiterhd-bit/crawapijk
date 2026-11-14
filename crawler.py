@@ -34,23 +34,31 @@ TIME_RE = re.compile(r"luc-(\d{2})(\d{2})-ngay-(\d{2})-(\d{2})-(\d{4})", re.I)
 BLV_RE = re.compile(r"\bBLV\b\s*[:\-]?\s*([^\n|,;]{2,60})", re.I)
 PAGE_META_JS = r"""() => {
   const q = s => document.querySelector(s) || {};
+  const imageInfo = root => [...(root || document).querySelectorAll('img')].map(img => ({
+    url: [img.currentSrc, img.getAttribute('src'), img.getAttribute('data-src'), img.getAttribute('data-lazy-src'), img.getAttribute('data-original')]
+      .map(v => v ? new URL(v, document.baseURI).href : '')
+      .find(v => /^https?:/i.test(v)) || '',
+    alt: img.alt || img.getAttribute('title') || '',
+    hint: ((img.className || '') + ' ' + (img.parentElement && img.parentElement.className || '')).toString()
+  })).filter(x => x.url && /^https?:/i.test(x.url));
   const a = [...document.querySelectorAll('a[href]')];
-  const cards = {};
+  const cards = {}, cardImages = {};
   for (const el of a) {
     let p = el, candidates = [];
     for (let i=0; i<7 && p; i++, p=p.parentElement) {
       const t = (p.innerText || '').replace(/\s+/g, ' ').trim();
-      if (t.length >= 12 && t.length <= 1800) candidates.push(t);
+      if (t.length >= 12 && t.length <= 1800) candidates.push({t, p});
     }
-    // Prefer the smallest ancestor containing matchup + date/time, rather than
-    // the anchor's short label (often only "Xem ngay" or "Trực tiếp").
-    const ranked = candidates.map(t => ({t, score:
-      (/\b(vs|v)\b/i.test(t) ? 8 : 0) +
-      (/(?:\d{1,2}:\d{2}\s*[-–/]\s*\d{1,2}[/-]\d{1,2}|\d{1,2}[/-]\d{1,2}[/-]20\d{2})/.test(t) ? 6 : 0) +
-      (/(\d{1,2}:\d{2})/.test(t) ? 2 : 0) - Math.max(0, t.length-350)/350
+    const ranked = candidates.map(x => ({...x, score:
+      (/\b(vs|v)\b/i.test(x.t) ? 8 : 0) +
+      (/(?:\d{1,2}:\d{2}\s*[-–/]\s*\d{1,2}[/-]\d{1,2}|\d{1,2}[/-]\d{1,2}[/-]20\d{2})/.test(x.t) ? 6 : 0) +
+      (/(\d{1,2}:\d{2})/.test(x.t) ? 2 : 0) - Math.max(0, x.t.length-350)/350
     }));
     ranked.sort((x,y) => y.score-x.score || x.t.length-y.t.length);
-    if (ranked.length) cards[el.href] = ranked[0].t;
+    if (ranked.length) {
+      cards[el.href] = ranked[0].t;
+      cardImages[el.href] = imageInfo(ranked[0].p);
+    }
   }
   return {
     img: q('meta[property="og:image"]').content || '',
@@ -61,7 +69,9 @@ PAGE_META_JS = r"""() => {
     scripts: [...document.scripts].map(s => s.textContent || '').join('\n').slice(0, 150000),
     media: [...document.querySelectorAll('iframe[src], video[src], video source[src], source[src]')]
       .map(el => el.src || el.getAttribute('src') || '').filter(Boolean),
-    cards
+    images: imageInfo(document),
+    cards,
+    cardImages
   };
 }"""
 
@@ -446,7 +456,53 @@ async def _record_async_response(response, urls, url_refs=None):
                 pass
 
 
-async def _scan_match(browser, link, sem, card_text="", wait_ms=6000):
+
+def extract_team_logos(match, candidates):
+    """Resolve two team logo URLs from image metadata collected around a match card/page."""
+    if not match or not candidates:
+        return "", ""
+    sides = re.split(r"\s+(?:vs\.?|v\.?|versus)\s+", match, maxsplit=1, flags=re.I)
+    if len(sides) != 2:
+        return "", ""
+    def norm(value):
+        value = html.unescape(str(value or "")).lower()
+        value = re.sub(r"https?://|www\.", "", value)
+        return re.sub(r"[^a-z0-9]+", "", value)
+    team_keys = [norm(x) for x in sides]
+    scored = [[], []]
+    for item in candidates:
+        if not isinstance(item, dict):
+            continue
+        url = item.get("url", "")
+        if not url.startswith(("http://", "https://")):
+            continue
+        hint = norm(" ".join([item.get("alt", ""), item.get("hint", "")]))
+        for idx, key in enumerate(team_keys):
+            # Exact team name in alt/title/class is the strongest signal.
+            score = 3 if key and key in hint else 0
+            if score:
+                scored[idx].append((score, url))
+    result = []
+    for bucket in scored:
+        bucket.sort(key=lambda x: -x[0])
+        result.append(bucket[0][1] if bucket else "")
+    # If names are not exposed, use only a pair of explicitly team/logo-marked images.
+    if not all(result):
+        marked = []
+        for item in candidates:
+            if not isinstance(item, dict):
+                continue
+            url = item.get("url", "")
+            hint = norm(" ".join([item.get("alt", ""), item.get("hint", "")]))
+            if url.startswith(("http://", "https://")) and any(x in hint for x in ("teamlogo", "clublogo", "teamcrest", "clubcrest")):
+                if url not in marked:
+                    marked.append(url)
+        if len(marked) == 2:
+            result = marked
+    return tuple(result)
+
+
+async def _scan_match(browser, link, sem, card_text="", card_images=None, wait_ms=6000):
     """Scan one match page for every HLS/FLV request and extract visible match metadata."""
     async with sem:
         urls = set()
@@ -518,10 +574,12 @@ async def _scan_match(browser, link, sem, card_text="", wait_ms=6000):
     status = extract_status(card_text)
     if status == "unknown":
         status = extract_status(meta.get("body", ""), include_generic_live=False)
-    print(f"    {match}: {len(urls)} link HLS/FLV | trạng thái={status} | giờ={when or 'không rõ'}")
+    logo_candidates = list(card_images or []) + list(meta.get("images", []) or [])
+    home_logo, away_logo = extract_team_logos(match, logo_candidates)
+    print(f"    {match}: {len(urls)} link HLS/FLV | logo={'đủ 2 đội' if home_logo and away_logo else 'chưa đủ'} | trạng thái={status} | giờ={when or 'không rõ'}")
     return [{
         "url": u, "referer": url_refs.get(u, link), "match": match, "when": when, "start": start,
-        "mid": match_id(link), "logo": "", "score": score,
+        "mid": match_id(link), "logo": "", "home_logo": home_logo, "away_logo": away_logo, "score": score,
         "commentator": commentator, "status": status,
         "format": stream_format(u) or "HLS"
     } for u in sorted(urls)]
@@ -638,7 +696,8 @@ async def _follow_async(home_url, pattern, max_pages, workers, budget=90, lookba
             if max_pages > 0:
                 links = links[:max_pages]
             sem = asyncio.Semaphore(workers)
-            tasks = [asyncio.create_task(_scan_match(browser, l, sem, card_map.get(l, ""))) for l in links]
+            tasks = [asyncio.create_task(_scan_match(browser, l, sem, card_map.get(l, ""),
+                                                       card_images_map.get(l, []))) for l in links]
             done, pending = await asyncio.wait(tasks, timeout=budget)
             if pending:
                 print(f"    [!] Hết {budget}s, còn {len(pending)} trang chưa quét", file=sys.stderr)
@@ -690,7 +749,8 @@ def write_staging(items, path):
         "is_hls": i.get("format") == "HLS", "format": i.get("format", ""),
         "site": i["source_name"], "site_id": i["source"],
         "match": i.get("match", ""), "league": "",
-        "logo": i.get("logo", ""), "page": i.get("referer", ""),
+        "logo": i.get("logo", ""), "home_logo": i.get("home_logo", ""),
+        "away_logo": i.get("away_logo", ""), "page": i.get("referer", ""),
         "match_time": i.get("start", ""), "time_label": i.get("when", ""),
         "score": i.get("score", ""), "commentator": i.get("commentator", ""),
         "status": i.get("status", "unknown"),
@@ -753,7 +813,9 @@ def write_m3u(items, path):
             f.write("#EXTINF:-1"
                     + attr("tvg-id", i["tvg_id"])
                     + attr("tvg-name", i["tvg_name"])
-                    + attr("tvg-logo", i.get("logo"))
+                     + attr("tvg-logo", i.get("logo"))
+                    + attr("x-home-logo", i.get("home_logo"))
+                    + attr("x-away-logo", i.get("away_logo"))
                     + attr("group-title", i["group"])
                     + attr("start", i.get("start"))
                     + attr("x-source", i["source"])

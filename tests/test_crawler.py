@@ -4,7 +4,7 @@ from crawler import (read_sources, clean_match_title, stream_format, finalize,
                      match_in_playlist_window, extract_status, parse_match_datetime,
                      extract_time, extract_card_matchup, extract_card_score, extract_card_time,
                      merge_match_metadata, prioritize_discovered_links,
-                     extract_stream_candidates)
+                     extract_stream_candidates, extract_team_logos)
 
 
 class CrawlerConfigTests(unittest.TestCase):
@@ -152,6 +152,21 @@ class CrawlerConfigTests(unittest.TestCase):
         links = ["https://site.test/match/yesterday"]
         cards = {links[0]: "Team A vs Team B - 20:00-13/11/2026"}
         self.assertEqual(prioritize_discovered_links(links, cards, now, 1), links)
+
+
+    def test_extracts_both_team_logos_from_image_alt_text(self):
+        logos = extract_team_logos("Manchester City vs Arsenal", [
+            {"url": "https://cdn.test/city.png", "alt": "Manchester City", "hint": "team-logo"},
+            {"url": "https://cdn.test/arsenal.png", "alt": "Arsenal FC", "hint": "team-logo"},
+        ])
+        self.assertEqual(logos, ("https://cdn.test/city.png", "https://cdn.test/arsenal.png"))
+
+    def test_team_logo_fallback_requires_exactly_two_marked_images(self):
+        logos = extract_team_logos("Team A vs Team B", [
+            {"url": "https://cdn.test/a.png", "alt": "", "hint": "team-logo"},
+            {"url": "https://cdn.test/b.png", "alt": "", "hint": "club-crest"},
+        ])
+        self.assertEqual(logos, ("https://cdn.test/a.png", "https://cdn.test/b.png"))
 
     def test_stream_ids_are_stable_and_unique_per_url(self):
         rows = [

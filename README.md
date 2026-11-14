@@ -52,3 +52,8 @@ Workflow dành tối đa 90 giây cho mỗi nguồn để quét trang trận (tr
 ### Bổ sung nhận diện luồng player cho Chuối Chiên TV và các nguồn tương tự
 
 Khi quét trang trận, crawler không chỉ bắt request mạng `.m3u8`/`.flv`/`.mpd` và response có Content-Type tương ứng. Crawler còn đọc cấu hình player trong HTML/script nội tuyến, các thẻ `video`/`source` và URL iframe để lấy manifest được nhúng sẵn nhưng chưa phát request do người dùng chưa nhấn Play. Với request phát sinh trong iframe, crawler lưu URL frame làm `Referer` ứng viên để kiểm tra luồng. Đây là cơ chế bổ sung, không thay thế cách bắt request/response hiện có.
+
+
+### Thu thập logo hai đội bóng
+
+Crawler đọc ảnh trong thẻ trận và trang chi tiết, ưu tiên ảnh có `alt`/`title` chứa tên đội; nếu website không gắn tên, chỉ dùng cặp ảnh được đánh dấu rõ là team logo/club crest. Hai URL được xuất riêng qua thuộc tính M3U `x-home-logo` và `x-away-logo`, đồng thời có trong staging JSON dưới khóa `home_logo` và `away_logo`. `tvg-logo` vẫn giữ nguyên ý nghĩa logo kênh/nguồn để không làm hỏng ứng dụng cũ. Ứng dụng cần đọc hai thuộc tính mở rộng này để hiển thị logo hai đội.
