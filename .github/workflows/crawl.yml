@@ -31,7 +31,7 @@ jobs:
         run: python -m unittest discover -s tests -v
 
       - name: Crawl all configured sources
-        run: python -u crawler.py --max-pages 0 --workers 12 --scan-budget 90 --scan-lookback-days 1
+        run: python -u crawler.py --max-pages 0 --workers 12 --scan-budget 90 --scan-lookback-hours 3
       - name: Commit playlist safely
         shell: bash
         run: |
