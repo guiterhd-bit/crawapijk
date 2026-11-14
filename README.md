@@ -47,13 +47,13 @@ Các giá trị đã trích xuất hợp lệ không bị ghi đè; parser bổ 
 
 ### Tối ưu thời gian quét trang trận
 
-Workflow dành tối đa 90 giây cho mỗi nguồn để quét trang trận (trước đây là 45 giây), với giới hạn job 30 phút. Trước khi mở từng trang trận, crawler ưu tiên trận đang trực tiếp, sau đó đến trận sắp diễn ra; các thẻ có ngày rõ ràng cũ hơn 1 ngày sẽ được bỏ qua. Thẻ không có ngày hoặc không đọc được ngày vẫn được giữ lại để hạn chế bỏ sót nguồn. Có thể điều chỉnh bằng `--scan-budget` và `--scan-lookback-days`.
+Workflow dành tối đa 90 giây cho mỗi nguồn để quét trang trận (trước đây là 45 giây), với giới hạn job 30 phút. Trước khi mở từng trang trận, crawler ưu tiên trận đang trực tiếp, sau đó đến trận sắp diễn ra; các thẻ có giờ bắt đầu rõ ràng cũ hơn 3 giờ sẽ được bỏ qua. Trận đang trực tiếp và thẻ không có giờ hoặc không đọc được giờ vẫn được giữ lại để hạn chế bỏ sót nguồn. Có thể điều chỉnh bằng `--scan-budget` và `--scan-lookback-hours`.
 
 ### Bổ sung nhận diện luồng player cho Chuối Chiên TV và các nguồn tương tự
 
 Khi quét trang trận, crawler không chỉ bắt request mạng `.m3u8`/`.flv`/`.mpd` và response có Content-Type tương ứng. Crawler còn đọc cấu hình player trong HTML/script nội tuyến, các thẻ `video`/`source` và URL iframe để lấy manifest được nhúng sẵn nhưng chưa phát request do người dùng chưa nhấn Play. Với request phát sinh trong iframe, crawler lưu URL frame làm `Referer` ứng viên để kiểm tra luồng. Đây là cơ chế bổ sung, không thay thế cách bắt request/response hiện có.
 
 
-### Thu thập logo hai đội bóng
+### Cửa sổ ưu tiên quét trận
 
-Crawler đọc ảnh trong thẻ trận và trang chi tiết, ưu tiên ảnh có `alt`/`title` chứa tên đội; nếu website không gắn tên, chỉ dùng cặp ảnh được đánh dấu rõ là team logo/club crest. Hai URL được xuất riêng qua thuộc tính M3U `x-home-logo` và `x-away-logo`, đồng thời có trong staging JSON dưới khóa `home_logo` và `away_logo`. `tvg-logo` vẫn giữ nguyên ý nghĩa logo kênh/nguồn để không làm hỏng ứng dụng cũ. Ứng dụng cần đọc hai thuộc tính mở rộng này để hiển thị logo hai đội.
+Workflow dùng `--scan-lookback-hours 3`: các thẻ trận có giờ bắt đầu cũ hơn 3 giờ so với thời điểm chạy (múi giờ Việt Nam) sẽ bị bỏ qua khi mở trang trận. Trận được nhận diện đang trực tiếp và thẻ không có thời gian phân tích được vẫn được giữ lại. Có thể điều chỉnh bằng tham số `--scan-lookback-hours`, ví dụ `6` để giữ lại các trận trong 6 giờ gần nhất.

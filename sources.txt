@@ -1,10 +1,10 @@
-# Tên nhà đài | https://example.com/ >> /truc-tiep/ ;; id=example
+# Mỗi dòng: URL trang chủ >> mẫu URL trận ;;
 # Crawl trang trận ở mọi trạng thái (sắp diễn ra/đang diễn ra/đã kết thúc).
 # Playlist group-title luôn lấy theo name của nguồn; không lấy tên giải đấu.
 # Không khai báo logo giả/placeholder. Có thể thêm logo=https://... khi có URL ảnh thật.
-Cola TV | https://colatv79.live/ >> /truc-tiep/ ;;
+Cola TV | https://colatv98.live/ >> /truc-tiep/ ;;
 Bia Ôm TV | https://biaomtv.fun/ >> /live/ ;;
-Sút Bóng TV | https://sutbongtv.co/ >> /truc-tiep/ ;;
+Sút Bóng TV | https://sutbongtv.com/ >> /room/ ;;
 Chuối Chiên TV | https://live11.chuoichientv.me/ >> /live/ ;;
 Gà Vàng 33 | https://gavangtv33.pro/ >> /truc-tiep/ ;;
 Phá Làng TV | https://sv1.phalang.net/ >> /truc-tiep/ ;;

@@ -4,7 +4,7 @@ from crawler import (read_sources, clean_match_title, stream_format, finalize,
                      match_in_playlist_window, extract_status, parse_match_datetime,
                      extract_time, extract_card_matchup, extract_card_score, extract_card_time,
                      merge_match_metadata, prioritize_discovered_links,
-                     extract_stream_candidates, extract_team_logos)
+                     extract_stream_candidates)
 
 
 class CrawlerConfigTests(unittest.TestCase):
@@ -144,29 +144,28 @@ class CrawlerConfigTests(unittest.TestCase):
             links[1]: "Team C vs Team D - 20:00-15/11/2026",
             links[2]: "LIVE Team E vs Team F",
         }
-        ordered = prioritize_discovered_links(links, cards, now, lookback_days=1)
+        ordered = prioritize_discovered_links(links, cards, now, lookback_hours=3)
         self.assertEqual(ordered, [links[2], links[1], links[3]])
 
-    def test_discovery_retains_recent_past_cards_within_lookback(self):
+    def test_discovery_retains_recent_past_cards_within_three_hours(self):
         now = datetime.fromisoformat("2026-11-14T08:00:00+07:00")
-        links = ["https://site.test/match/yesterday"]
-        cards = {links[0]: "Team A vs Team B - 20:00-13/11/2026"}
-        self.assertEqual(prioritize_discovered_links(links, cards, now, 1), links)
+        links = ["https://site.test/match/recent", "https://site.test/match/stale"]
+        cards = {
+            links[0]: "Team A vs Team B - 06:00-14/11/2026",
+            links[1]: "Team C vs Team D - 04:30-14/11/2026",
+        }
+        self.assertEqual(prioritize_discovered_links(links, cards, now, 3), [links[0]])
 
+    def test_discovery_keeps_live_even_when_kickoff_is_older_than_three_hours(self):
+        now = datetime.fromisoformat("2026-11-14T08:00:00+07:00")
+        link = "https://site.test/match/live-old-kickoff"
+        cards = {link: "LIVE Team A vs Team B - 01:00-14/11/2026"}
+        self.assertEqual(prioritize_discovered_links([link], cards, now, 3), [link])
 
-    def test_extracts_both_team_logos_from_image_alt_text(self):
-        logos = extract_team_logos("Manchester City vs Arsenal", [
-            {"url": "https://cdn.test/city.png", "alt": "Manchester City", "hint": "team-logo"},
-            {"url": "https://cdn.test/arsenal.png", "alt": "Arsenal FC", "hint": "team-logo"},
-        ])
-        self.assertEqual(logos, ("https://cdn.test/city.png", "https://cdn.test/arsenal.png"))
-
-    def test_team_logo_fallback_requires_exactly_two_marked_images(self):
-        logos = extract_team_logos("Team A vs Team B", [
-            {"url": "https://cdn.test/a.png", "alt": "", "hint": "team-logo"},
-            {"url": "https://cdn.test/b.png", "alt": "", "hint": "club-crest"},
-        ])
-        self.assertEqual(logos, ("https://cdn.test/a.png", "https://cdn.test/b.png"))
+    def test_discovery_keeps_unknown_time_cards(self):
+        now = datetime.fromisoformat("2026-11-14T08:00:00+07:00")
+        link = "https://site.test/match/no-time"
+        self.assertEqual(prioritize_discovered_links([link], {}, now, 3), [link])
 
     def test_stream_ids_are_stable_and_unique_per_url(self):
         rows = [

@@ -34,31 +34,23 @@ TIME_RE = re.compile(r"luc-(\d{2})(\d{2})-ngay-(\d{2})-(\d{2})-(\d{4})", re.I)
 BLV_RE = re.compile(r"\bBLV\b\s*[:\-]?\s*([^\n|,;]{2,60})", re.I)
 PAGE_META_JS = r"""() => {
   const q = s => document.querySelector(s) || {};
-  const imageInfo = root => [...(root || document).querySelectorAll('img')].map(img => ({
-    url: [img.currentSrc, img.getAttribute('src'), img.getAttribute('data-src'), img.getAttribute('data-lazy-src'), img.getAttribute('data-original')]
-      .map(v => v ? new URL(v, document.baseURI).href : '')
-      .find(v => /^https?:/i.test(v)) || '',
-    alt: img.alt || img.getAttribute('title') || '',
-    hint: ((img.className || '') + ' ' + (img.parentElement && img.parentElement.className || '')).toString()
-  })).filter(x => x.url && /^https?:/i.test(x.url));
   const a = [...document.querySelectorAll('a[href]')];
-  const cards = {}, cardImages = {};
+  const cards = {};
   for (const el of a) {
     let p = el, candidates = [];
     for (let i=0; i<7 && p; i++, p=p.parentElement) {
       const t = (p.innerText || '').replace(/\s+/g, ' ').trim();
-      if (t.length >= 12 && t.length <= 1800) candidates.push({t, p});
+      if (t.length >= 12 && t.length <= 1800) candidates.push(t);
     }
-    const ranked = candidates.map(x => ({...x, score:
-      (/\b(vs|v)\b/i.test(x.t) ? 8 : 0) +
-      (/(?:\d{1,2}:\d{2}\s*[-–/]\s*\d{1,2}[/-]\d{1,2}|\d{1,2}[/-]\d{1,2}[/-]20\d{2})/.test(x.t) ? 6 : 0) +
-      (/(\d{1,2}:\d{2})/.test(x.t) ? 2 : 0) - Math.max(0, x.t.length-350)/350
+    // Prefer the smallest ancestor containing matchup + date/time, rather than
+    // the anchor's short label (often only "Xem ngay" or "Trực tiếp").
+    const ranked = candidates.map(t => ({t, score:
+      (/\b(vs|v)\b/i.test(t) ? 8 : 0) +
+      (/(?:\d{1,2}:\d{2}\s*[-–/]\s*\d{1,2}[/-]\d{1,2}|\d{1,2}[/-]\d{1,2}[/-]20\d{2})/.test(t) ? 6 : 0) +
+      (/(\d{1,2}:\d{2})/.test(t) ? 2 : 0) - Math.max(0, t.length-350)/350
     }));
     ranked.sort((x,y) => y.score-x.score || x.t.length-y.t.length);
-    if (ranked.length) {
-      cards[el.href] = ranked[0].t;
-      cardImages[el.href] = imageInfo(ranked[0].p);
-    }
+    if (ranked.length) cards[el.href] = ranked[0].t;
   }
   return {
     img: q('meta[property="og:image"]').content || '',
@@ -69,9 +61,7 @@ PAGE_META_JS = r"""() => {
     scripts: [...document.scripts].map(s => s.textContent || '').join('\n').slice(0, 150000),
     media: [...document.querySelectorAll('iframe[src], video[src], video source[src], source[src]')]
       .map(el => el.src || el.getAttribute('src') || '').filter(Boolean),
-    images: imageInfo(document),
-    cards,
-    cardImages
+    cards
   };
 }"""
 
@@ -456,53 +446,7 @@ async def _record_async_response(response, urls, url_refs=None):
                 pass
 
 
-
-def extract_team_logos(match, candidates):
-    """Resolve two team logo URLs from image metadata collected around a match card/page."""
-    if not match or not candidates:
-        return "", ""
-    sides = re.split(r"\s+(?:vs\.?|v\.?|versus)\s+", match, maxsplit=1, flags=re.I)
-    if len(sides) != 2:
-        return "", ""
-    def norm(value):
-        value = html.unescape(str(value or "")).lower()
-        value = re.sub(r"https?://|www\.", "", value)
-        return re.sub(r"[^a-z0-9]+", "", value)
-    team_keys = [norm(x) for x in sides]
-    scored = [[], []]
-    for item in candidates:
-        if not isinstance(item, dict):
-            continue
-        url = item.get("url", "")
-        if not url.startswith(("http://", "https://")):
-            continue
-        hint = norm(" ".join([item.get("alt", ""), item.get("hint", "")]))
-        for idx, key in enumerate(team_keys):
-            # Exact team name in alt/title/class is the strongest signal.
-            score = 3 if key and key in hint else 0
-            if score:
-                scored[idx].append((score, url))
-    result = []
-    for bucket in scored:
-        bucket.sort(key=lambda x: -x[0])
-        result.append(bucket[0][1] if bucket else "")
-    # If names are not exposed, use only a pair of explicitly team/logo-marked images.
-    if not all(result):
-        marked = []
-        for item in candidates:
-            if not isinstance(item, dict):
-                continue
-            url = item.get("url", "")
-            hint = norm(" ".join([item.get("alt", ""), item.get("hint", "")]))
-            if url.startswith(("http://", "https://")) and any(x in hint for x in ("teamlogo", "clublogo", "teamcrest", "clubcrest")):
-                if url not in marked:
-                    marked.append(url)
-        if len(marked) == 2:
-            result = marked
-    return tuple(result)
-
-
-async def _scan_match(browser, link, sem, card_text="", card_images=None, wait_ms=6000):
+async def _scan_match(browser, link, sem, card_text="", wait_ms=6000):
     """Scan one match page for every HLS/FLV request and extract visible match metadata."""
     async with sem:
         urls = set()
@@ -574,12 +518,10 @@ async def _scan_match(browser, link, sem, card_text="", card_images=None, wait_m
     status = extract_status(card_text)
     if status == "unknown":
         status = extract_status(meta.get("body", ""), include_generic_live=False)
-    logo_candidates = list(card_images or []) + list(meta.get("images", []) or [])
-    home_logo, away_logo = extract_team_logos(match, logo_candidates)
-    print(f"    {match}: {len(urls)} link HLS/FLV | logo={'đủ 2 đội' if home_logo and away_logo else 'chưa đủ'} | trạng thái={status} | giờ={when or 'không rõ'}")
+    print(f"    {match}: {len(urls)} link HLS/FLV | trạng thái={status} | giờ={when or 'không rõ'}")
     return [{
         "url": u, "referer": url_refs.get(u, link), "match": match, "when": when, "start": start,
-        "mid": match_id(link), "logo": "", "home_logo": home_logo, "away_logo": away_logo, "score": score,
+        "mid": match_id(link), "logo": "", "score": score,
         "commentator": commentator, "status": status,
         "format": stream_format(u) or "HLS"
     } for u in sorted(urls)]
@@ -620,14 +562,14 @@ def is_match_title(value):
     return bool(value and len(value) < 180 and re.search(r"\bvs\b|\bv\b|\s-\s", value, re.I))
 
 
-def prioritize_discovered_links(links, card_map, now=None, lookback_days=1):
-    """Drop clearly stale cards and scan live/near-future matches first.
+def prioritize_discovered_links(links, card_map, now=None, lookback_hours=3):
+    """Drop cards whose kickoff is older than the rolling lookback window and scan live/near-future matches first.
 
     Cards without a parseable date are retained to avoid missing sources whose
     homepage does not expose kickoff metadata.
     """
     now = now or datetime.now(VN)
-    cutoff = now - timedelta(days=max(0, lookback_days))
+    cutoff = now - timedelta(hours=max(0, lookback_hours))
     ranked = []
     for index, link in enumerate(links):
         card = card_map.get(link, "") or ""
@@ -654,14 +596,14 @@ def prioritize_discovered_links(links, card_map, now=None, lookback_days=1):
     return [link for _, link in ranked]
 
 
-async def _follow_async(home_url, pattern, max_pages, workers, budget=90, lookback_days=1):
+async def _follow_async(home_url, pattern, max_pages, workers, budget=90, lookback_hours=3):
     from playwright.async_api import async_playwright
 
     async with async_playwright() as p:
         browser = await p.chromium.launch()
         try:
             page = await browser.new_page(user_agent=UA)
-            title, hrefs, card_map, card_images_map = "", [], {}, {}
+            title, hrefs, card_map = "", [], {}
             try:
                 await page.goto(home_url, wait_until="domcontentloaded", timeout=30000)
                 await page.wait_for_timeout(3500)
@@ -671,7 +613,6 @@ async def _follow_async(home_url, pattern, max_pages, workers, budget=90, lookba
                 data = await page.evaluate(PAGE_META_JS)
                 title = data.get("title", "")
                 card_map = data.get("cards", {})
-                card_images_map = data.get("cardImages", {})
                 hrefs = await page.eval_on_selector_all("a[href]", "els => els.map(e => e.href)")
             except Exception as e:
                 print(f"[!] Lỗi trang chủ {home_url}: {e}", file=sys.stderr)
@@ -688,8 +629,8 @@ async def _follow_async(home_url, pattern, max_pages, workers, budget=90, lookba
                     links.append(href)
             links = list(dict.fromkeys(links))
             discovered_count = len(links)
-            links = prioritize_discovered_links(links, card_map, lookback_days=lookback_days)
-            print(f"    Trang chủ: {len(hrefs)} thẻ <a> | {discovered_count} trang trận khớp; còn {len(links)} sau lọc trận cũ hơn {lookback_days} ngày")
+            links = prioritize_discovered_links(links, card_map, lookback_hours=lookback_hours)
+            print(f"    Trang chủ: {len(hrefs)} thẻ <a> | {discovered_count} trang trận khớp; còn {len(links)} sau lọc trận cũ hơn {lookback_hours} giờ")
             if not links:
                 print("    -> Không tìm thấy link trận; cần kiểm tra lại mẫu URL hoặc cơ chế tải JS.")
                 return []
@@ -697,8 +638,7 @@ async def _follow_async(home_url, pattern, max_pages, workers, budget=90, lookba
             if max_pages > 0:
                 links = links[:max_pages]
             sem = asyncio.Semaphore(workers)
-            tasks = [asyncio.create_task(_scan_match(browser, l, sem, card_map.get(l, ""),
-                                                       card_images_map.get(l, []))) for l in links]
+            tasks = [asyncio.create_task(_scan_match(browser, l, sem, card_map.get(l, ""))) for l in links]
             done, pending = await asyncio.wait(tasks, timeout=budget)
             if pending:
                 print(f"    [!] Hết {budget}s, còn {len(pending)} trang chưa quét", file=sys.stderr)
@@ -711,8 +651,8 @@ async def _follow_async(home_url, pattern, max_pages, workers, budget=90, lookba
     return [it for result in results for it in result]
 
 
-def extract_follow_js(home_url, pattern, max_pages=0, workers=16, budget=90, lookback_days=1):
-    return asyncio.run(_follow_async(home_url, pattern, max_pages, workers, budget, lookback_days))
+def extract_follow_js(home_url, pattern, max_pages=0, workers=16, budget=90, lookback_hours=3):
+    return asyncio.run(_follow_async(home_url, pattern, max_pages, workers, budget, lookback_hours))
 
 
 def check_stream(item):
@@ -750,8 +690,7 @@ def write_staging(items, path):
         "is_hls": i.get("format") == "HLS", "format": i.get("format", ""),
         "site": i["source_name"], "site_id": i["source"],
         "match": i.get("match", ""), "league": "",
-        "logo": i.get("logo", ""), "home_logo": i.get("home_logo", ""),
-        "away_logo": i.get("away_logo", ""), "page": i.get("referer", ""),
+        "logo": i.get("logo", ""), "page": i.get("referer", ""),
         "match_time": i.get("start", ""), "time_label": i.get("when", ""),
         "score": i.get("score", ""), "commentator": i.get("commentator", ""),
         "status": i.get("status", "unknown"),
@@ -814,9 +753,7 @@ def write_m3u(items, path):
             f.write("#EXTINF:-1"
                     + attr("tvg-id", i["tvg_id"])
                     + attr("tvg-name", i["tvg_name"])
-                     + attr("tvg-logo", i.get("logo"))
-                    + attr("x-home-logo", i.get("home_logo"))
-                    + attr("x-away-logo", i.get("away_logo"))
+                    + attr("tvg-logo", i.get("logo"))
                     + attr("group-title", i["group"])
                     + attr("start", i.get("start"))
                     + attr("x-source", i["source"])
@@ -860,7 +797,7 @@ def main():
     ap.add_argument("--max-pages", type=int, default=0, help="maximum match pages per source; 0 = unlimited")
     ap.add_argument("--workers", type=int, default=16)
     ap.add_argument("--scan-budget", type=int, default=90, help="maximum seconds to scan match pages per source")
-    ap.add_argument("--scan-lookback-days", type=int, default=1, help="skip dated non-live cards older than this many days; 0 = today only")
+    ap.add_argument("--scan-lookback-hours", type=float, default=3, help="skip dated non-live cards older than this many hours; live and unknown-time cards are retained")
     args = ap.parse_args()
 
     items = []
@@ -875,7 +812,7 @@ def main():
         try:
             if pattern:
                 found = extract_follow_js(home, pattern, args.max_pages, args.workers,
-                                          args.scan_budget, args.scan_lookback_days)
+                                          args.scan_budget, args.scan_lookback_hours)
             else:
                 found = extract_js(home) if args.js else extract_static(home)
         except Exception as e:
