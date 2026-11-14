@@ -15,7 +15,7 @@ concurrency:
 jobs:
   crawl:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v6
         with:
@@ -31,7 +31,7 @@ jobs:
         run: python -m unittest discover -s tests -v
 
       - name: Crawl all configured sources
-        run: python -u crawler.py --max-pages 0 --workers 12
+        run: python -u crawler.py --max-pages 0 --workers 12 --scan-budget 90 --scan-lookback-days 1
       - name: Commit playlist safely
         shell: bash
         run: |
