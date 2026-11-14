@@ -46,7 +46,15 @@ PAGE_META_JS = r"""() => {
   for (const el of a) {
     let p = el, candidates = [];
     for (let i=0; i<7 && p; i++, p=p.parentElement) {
-      const t = (p.innerText || '').replace(/\s+/g, ' ').trim();
+      let t = (p.innerText || '').replace(/\s+/g, ' ').trim();
+
+      // Loại bỏ thông tin cá cược và nút xem trận
+      t = t.replace(
+        /(?:Kèo\s*châu\s*Á|Kèo\s*châu\s*Âu|Tài\s*\/?\s*Xỉu|Tài\s*Xỉu|Xem\s*ngay|Xem\s*trận|Xem\s*)/gi,
+        ' '
+      );
+      t = t.replace(/\s+/g, ' ').trim();
+
       if (t.length >= 12 && t.length <= 1800) candidates.push({t, p});
     }
     const ranked = candidates.map(x => ({...x, score:
