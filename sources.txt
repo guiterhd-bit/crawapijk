@@ -12,5 +12,4 @@ Socolive TV | https://socolivex.in/ >> /truc-tiep/ ;; id=socolive
 Ném Biên TV | https://nembientv.com/ >> /truc-tiep/ ;; id=nembientv
 90 Phút TV | https://90phutzao.tv/ >> /truc-tiep/ ;; id=90phut
 Vào Rồi TV | https://vaoroizss.cc/ >> /truc-tiep/ ;; id=vaoroi
-Xôi Lạc TV | https://xoilaczzw.mobi/ >> /truc-tiep/ ;; id=xoilac
-Xôi Gấc TV | https://xoigac.top/ >> /truc-tiep/ ;; id=xoigac
+Xôi Lạc TV| https://xoilaczzw.mobi/ >> /truc-tiep/ ;; id=xoilac

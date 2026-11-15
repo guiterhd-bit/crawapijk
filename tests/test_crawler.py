@@ -263,6 +263,43 @@ class ApiCrawlerTests(unittest.TestCase):
         self.assertEqual({x['id'] for x in config['apis']},
                          {'chuoichientv', 'gavangtv', 'colatv', 'phalangtv'})
 
+    def test_api_discovered_stream_uses_same_mhd_extinf_schema(self):
+        import tempfile
+        from pathlib import Path
+        from unittest.mock import patch
+        from crawler import crawl_api_source, finalize, write_m3u
+
+        payload = {"data": [{
+            "id": 5366,
+            "home": {"name": "Guadalajara W", "logo": "https://media.test/home.png"},
+            "away": {"name": "Juárez W", "logo": "https://media.test/away.png"},
+            "start_time": "2026-11-15T10:00:00+07:00",
+            "commentator": "Chuối Tây",
+            "streams": {"hd_1": {"url": "https://cdn.test/match/hd1.m3u8"}}
+        }]}
+        api = {
+            "id": "chuoichientv", "display_name": "Chuối Chiên TV",
+            "url": "https://api.test/matches", "method": "GET",
+            "logo": "https://assets.test/chuoichientv.png",
+            "default_stream_referer": "https://live.example/"
+        }
+        with patch("crawler._api_request", return_value=payload):
+            rows = crawl_api_source(api, {"request_timeout_seconds": 5, "request_retries": 0})
+        self.assertTrue(rows)
+        finalize(rows)
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "playlist.m3u"
+            write_m3u(rows, path)
+            content = path.read_text(encoding="utf-8")
+        self.assertIn('tvg-id="mhd-match-', content)
+        self.assertIn('tvg-name="Guadalajara W vs Juárez W - Chuối Tây - HD1"', content)
+        self.assertIn('tvg-logo="https://media.test/home.png"', content)
+        self.assertIn('group-title="Chuối Chiên TV"', content)
+        self.assertIn('x-source="chuoichientv"', content)
+        self.assertIn('group-logo="https://assets.test/chuoichientv.png"', content)
+        self.assertIn('x-away-logo="https://media.test/away.png"', content)
+        self.assertIn(',Guadalajara W vs Juárez W | 15/11 10:00 | Chuối Tây | HD1', content)
+
     def test_api_stream_slot_key_becomes_hd_label(self):
         from crawler import _api_stream_label_for_url
         payload = {"streams": {"hd_1": {"url": "https://cdn.test/live.m3u8"}}}

@@ -1034,6 +1034,18 @@ def _api_normalize_match(obj, api, config, api_base):
     mid = _api_pick(obj, ('id', 'match_id', 'matchId', 'fixture_id', 'fixtureId'))
     home_logo = _api_pick(obj, ('home_logo', 'homeLogo', 'home_team_logo', 'homeTeamLogo'))
     away_logo = _api_pick(obj, ('away_logo', 'awayLogo', 'away_team_logo', 'awayTeamLogo'))
+    # Some APIs nest crest URLs inside home/away team objects rather than
+    # exposing flat home_logo / away_logo fields. Resolve those before writing EXTINF.
+    if not home_logo or not away_logo:
+        for key, value in obj.items():
+            key_lower = str(key).lower()
+            if not isinstance(value, dict):
+                continue
+            nested_logo = _api_pick(value, ('logo', 'image', 'image_url', 'crest', 'badge', 'team_logo'))
+            if nested_logo and any(token in key_lower for token in ('home', 'local')) and not home_logo:
+                home_logo = nested_logo
+            if nested_logo and any(token in key_lower for token in ('away', 'visitor', 'opponent')) and not away_logo:
+                away_logo = nested_logo
     when, start = '', ''
     if date:
         raw = date.strip()
@@ -1051,7 +1063,7 @@ def _api_normalize_match(obj, api, config, api_base):
             when, start = extract_time('', raw)
     return {
         'match': clean_match_title(match) if match else '', 'when': when, 'start': start,
-        'score': score, 'commentator': blv, 'stream_label': stream_label, 'sport': 'FOOTBALL', 'status': status, 'mid': mid,
+        'score': score, 'commentator': blv, 'stream_label': stream_label, 'sport': api.get('sport') or 'FOOTBALL', 'status': status, 'mid': mid,
         'home_logo': urljoin(api_base, home_logo) if home_logo else '',
         'away_logo': urljoin(api_base, away_logo) if away_logo else '',
     }
