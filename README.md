@@ -81,3 +81,18 @@ Logo đội bóng được lấy từ ảnh thực tế trên trang trận; khô
 - Trường API không nhận diện được sẽ để trống, không tự tạo tên đội, tỉ số, BLV hoặc logo.
 
 API được cấu hình hiện tại: Chuối Chiên TV, Gà Vàng TV, Cola TV và Phá Làng TV.
+
+
+### Cấu trúc EXTINF theo chuẩn MHD Sports
+
+Cả `thethao.m3u` và `playlist.m3u` được ghi cùng một cấu trúc metadata cho mỗi luồng:
+
+- `tvg-id`: ID ổn định dạng `mhd-match-<hash>`, dùng chung cho các luồng thuộc cùng trận đấu.
+- `tvg-name`: tên đội bóng kèm BLV và nhãn luồng nếu website/API cung cấp, ví dụ `Guadalajara W vs Juárez W - Chuối Tây - HD1`.
+- `tvg-logo`: logo đội chủ nhà; để trống nếu không tìm thấy logo đội thật.
+- `group-title`: tên nhà đài; `group-logo`: logo nhà đài.
+- `x-source`: mã nguồn ổn định; `x-sport`: mặc định `FOOTBALL`.
+- Nội dung sau dấu phẩy có dạng `Tên đội 1 vs Tên đội 2 | dd/MM HH:mm | BLV | HD1`. Những trường không có dữ liệu sẽ được bỏ qua.
+- `x-away-logo` tiếp tục lưu logo đội khách riêng; Referer của luồng vẫn được ghi bằng `#EXTVLCOPT:http-referrer`.
+
+Nếu API trả nhãn stream theo key như `hd_1` hoặc `sd_2`, crawler chuẩn hóa thành `HD1` hoặc `SD2`. Nếu không có nhãn, crawler dùng định dạng luồng (HLS/FLV/DASH) làm nhãn dự phòng.

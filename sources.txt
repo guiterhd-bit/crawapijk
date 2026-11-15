@@ -2,14 +2,14 @@
 # Crawl trang trận ở mọi trạng thái (sắp diễn ra/đang diễn ra/đã kết thúc).
 # Playlist group-title luôn lấy theo name của nguồn; không lấy tên giải đấu.
 # Không khai báo logo giả/placeholder. Có thể thêm logo=https://... khi có URL ảnh thật.
-Cola TV | https://colatv98.live/ >> /truc-tiep/ ;;
-Bia Ôm TV | https://biaomtv.fun/ >> /live/ ;;
-Sút Bóng TV | https://sutbongtv.com/ >> /room/ ;;
-Chuối Chiên TV | https://live11.chuoichientv.me/ >> /live/ ;;
-Gà Vàng 33 | https://gavangtv33.pro/ >> /truc-tiep/ ;;
-Phá Làng TV | https://sv1.phalang.net/ >> /truc-tiep/ ;;
-Socolive TV | https://socolivex.in/ >> /truc-tiep/ ;;
-Ném Biên TV | https://nembientv.com/ >> /truc-tiep/ ;;
-90 Phút TV | https://90phutzao.tv/ >> /truc-tiep/ ;;
-Vào Rồi TV | https://vaoroizss.cc/ >> /truc-tiep/ ;;
-Xôi Lạc TV| https://xoilaczzw.mobi/ >> /truc-tiep/ ;;
+Cola TV | https://colatv98.live/ >> /truc-tiep/ ;; id=colatv
+Bia Ôm TV | https://biaomtv.fun/ >> /live/ ;; id=biaomtv
+Sút Bóng TV | https://sutbongtv.com/ >> /room/ ;; id=sutbongtv
+Chuối Chiên TV | https://live11.chuoichientv.me/ >> /live/ ;; id=chuoichientv
+Gà Vàng 33 | https://gavangtv33.pro/ >> /truc-tiep/ ;; id=gavangtv
+Phá Làng TV | https://sv1.phalang.net/ >> /truc-tiep/ ;; id=phalangtv
+Socolive TV | https://socolivex.in/ >> /truc-tiep/ ;; id=socolive
+Ném Biên TV | https://nembientv.com/ >> /truc-tiep/ ;; id=nembientv
+90 Phút TV | https://90phutzao.tv/ >> /truc-tiep/ ;; id=90phut
+Vào Rồi TV | https://vaoroizss.cc/ >> /truc-tiep/ ;; id=vaoroi
+Xôi Lạc TV| https://xoilaczzw.mobi/ >> /truc-tiep/ ;; id=xoilac

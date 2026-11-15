@@ -211,18 +211,44 @@ class CrawlerConfigTests(unittest.TestCase):
         self.assertIn('x-away-logo="https://teams.example/team-b.png"', content)
         self.assertNotIn('tvg-logo="https://station.example/logo.png"', content)
 
-    def test_stream_ids_are_stable_and_unique_per_url(self):
+    def test_match_id_is_stable_and_shared_by_all_streams_of_match(self):
         rows = [
-            {"url": "https://cdn.test/a.m3u8", "source": "example", "source_name": "Example TV", "match": "A vs B", "mid": "match1"},
-            {"url": "https://cdn.test/b.m3u8", "source": "example", "source_name": "Example TV", "match": "A vs B", "mid": "match1"},
+            {"url": "https://cdn.test/a.m3u8", "source": "example", "source_name": "Example TV", "match": "A vs B", "start": "2026-11-15T10:00:00+07:00"},
+            {"url": "https://cdn.test/b.m3u8", "source": "example", "source_name": "Example TV", "match": "A vs B", "start": "2026-11-15T10:00:00+07:00"},
         ]
         finalize(rows)
         ids = [row["tvg_id"] for row in rows]
-        self.assertEqual(len(ids), len(set(ids)))
+        self.assertEqual(ids[0], ids[1])
+        self.assertTrue(ids[0].startswith("mhd-match-"))
         self.assertTrue(all(row["group"] == "Example TV" for row in rows))
         before = ids[:]
         finalize(rows)
         self.assertEqual(before, [row["tvg_id"] for row in rows])
+
+    def test_mhd_extinf_schema_matches_requested_layout(self):
+        import tempfile
+        from pathlib import Path
+        row = {
+            "url": "https://cdn.example/live/hd_1.m3u8", "source": "chuoichientv",
+            "source_name": "Chuối Chiên TV", "source_logo": "https://assets.test/chuoichientv.png",
+            "match": "Guadalajara W vs Juárez W", "when": "15/11 10:00",
+            "commentator": "Chuối Tây", "home_logo": "https://media.test/home.png",
+            "away_logo": "https://media.test/away.png", "start": "2026-11-15T10:00:00+07:00",
+            "format": "HLS"
+        }
+        finalize([row])
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "thethao.m3u"
+            write_m3u([row], path)
+            content = path.read_text(encoding="utf-8")
+        self.assertIn('tvg-id="mhd-match-', content)
+        self.assertIn('tvg-name="Guadalajara W vs Juárez W - Chuối Tây - HD1"', content)
+        self.assertIn('tvg-logo="https://media.test/home.png"', content)
+        self.assertIn('group-title="Chuối Chiên TV"', content)
+        self.assertIn('x-source="chuoichientv"', content)
+        self.assertIn('x-sport="FOOTBALL"', content)
+        self.assertIn('group-logo="https://assets.test/chuoichientv.png"', content)
+        self.assertIn(',Guadalajara W vs Juárez W | 15/11 10:00 | Chuối Tây | HD1', content)
 
 
 if __name__ == "__main__":
@@ -236,6 +262,14 @@ class ApiCrawlerTests(unittest.TestCase):
         self.assertEqual(len(config['apis']), 4)
         self.assertEqual({x['id'] for x in config['apis']},
                          {'chuoichientv', 'gavangtv', 'colatv', 'phalangtv'})
+
+    def test_api_stream_slot_key_becomes_hd_label(self):
+        from crawler import _api_stream_label_for_url
+        payload = {"streams": {"hd_1": {"url": "https://cdn.test/live.m3u8"}}}
+        self.assertEqual(
+            _api_stream_label_for_url(payload, "https://cdn.test/live.m3u8"),
+            "HD1"
+        )
 
     def test_collect_nested_stream_urls(self):
         from crawler import _api_collect_urls

@@ -850,45 +850,68 @@ def attr(key, value):
     return f' {key}="{str(value).replace(chr(34), chr(39))}"' if value not in (None, "") else ""
 
 
+def _stream_label(item):
+    """Return a source-provided stream label (for example HD1), if available."""
+    value = (item.get("stream_label") or item.get("stream_name") or
+             item.get("quality") or item.get("resolution") or item.get("channel_name") or "")
+    value = re.sub(r"\s+", " ", str(value)).strip()
+    if not value:
+        url = str(item.get("url", ""))
+        m = re.search(r"(?:^|[/_.-])(fhd|uhd|hd|sd)[ _-]?(\d+)(?=$|[/?#_.-])", url, re.I)
+        if m:
+            value = f"{m.group(1)}{m.group(2)}"
+    if value:
+        # Normalize common API keys such as hd_1 / sd_2 to the playlist style HD1 / SD2.
+        m = re.fullmatch(r"(hd|sd|fhd|uhd)[ _-]*(\d+)", value, re.I)
+        if m:
+            return f"{m.group(1).upper()}{m.group(2)}"
+        return value
+    return ""
+
+
 def write_m3u(items, path):
+    """Write the MHD match-oriented EXTINF schema to every playlist output."""
     with open(path, "w", encoding="utf-8") as f:
         f.write("#EXTM3U\n")
         for i in items:
+            # The team/home badge belongs in tvg-logo; broadcaster art is group-logo.
+            home_logo = i.get("home_logo") or i.get("logo") or ""
+            display_parts = [i.get("match", ""), i.get("when", ""),
+                             i.get("commentator", ""), _stream_label(i) or i.get("format", "")]
+            display_name = " | ".join(str(x) for x in display_parts if x)
             f.write("#EXTINF:-1"
                     + attr("tvg-id", i["tvg_id"])
                     + attr("tvg-name", i["tvg_name"])
-                    + attr("tvg-logo", i.get("home_logo") or i.get("logo"))
-                    + attr("x-home-logo", i.get("home_logo") or i.get("logo"))
-                    + attr("x-away-logo", i.get("away_logo"))
+                    + attr("tvg-logo", home_logo)
                     + attr("group-title", i["group"])
-                    + attr("start", i.get("start"))
                     + attr("x-source", i["source"])
-                    + attr("x-source-name", i["source_name"])
-                    + attr("x-source-logo", i.get("source_logo"))
+                    + attr("x-sport", i.get("sport", "FOOTBALL"))
+                    + attr("group-logo", i.get("source_logo"))
+                    + attr("x-away-logo", i.get("away_logo"))
                     + attr("x-score", i.get("score"))
                     + attr("x-commentator", i.get("commentator"))
-                    + f',{i["name"]}\n')
+                    + f',{display_name}\n')
             if i.get("referer"):
                 f.write(f'#EXTVLCOPT:http-referrer={i["referer"]}\n')
             f.write(f'{i["url"]}\n')
 
 
 def finalize(items):
-    """Create stable per-match/per-stream identifiers and source-only groups."""
+    """Create stable match IDs and the MHD match-oriented display metadata."""
     import hashlib
-    for n, it in enumerate(items, 1):
+    for it in items:
         match = clean_match_title(it.get("match", ""), it.get("referer", ""))
         it["match"] = match or it.get("source_name") or "Trận đấu"
         fmt = it.get("format") or stream_format(it["url"]) or "HLS"
         it["format"] = fmt
-        parts = [it["match"], it.get("when", ""), it.get("score", ""),
-                 it.get("commentator", ""), fmt]
-        it["name"] = " | ".join(x for x in parts if x)
-        it["tvg_name"] = it["match"]
-        # Same match ID stays stable across runs; each distinct stream gets a stable suffix.
-        mid = it.get("mid") or hashlib.sha1(it["match"].casefold().encode("utf-8")).hexdigest()[:12]
-        stream_key = hashlib.sha1(it["url"].encode("utf-8")).hexdigest()[:8]
-        it["tvg_id"] = f'{it["source"]}-{mid}-{stream_key}'
+        stream_label = _stream_label(it)
+        suffix = " - ".join(x for x in (it.get("commentator", ""), stream_label) if x)
+        it["tvg_name"] = f'{it["match"]} - {suffix}' if suffix else it["match"]
+        # Stable ID is shared by streams/providers for the same matchup and kickoff date.
+        match_key = (it["match"] + "|" + (it.get("start", "")[:10])).casefold()
+        match_hash = hashlib.sha1(match_key.encode("utf-8")).hexdigest()[:12]
+        it["tvg_id"] = f"mhd-match-{match_hash}"
+        it["sport"] = it.get("sport") or "FOOTBALL"
         it["group"] = it.get("source_name") or it.get("source") or "Unknown source"
 
 
@@ -936,6 +959,26 @@ def _api_collect_urls(value, base_url=""):
             found.append(urljoin(base_url, candidate))
     return list(dict.fromkeys(x for x in found if x.startswith(('http://', 'https://'))))
 
+
+
+def _api_stream_label_for_url(value, target_url, base_url=""):
+    """Find a keyed stream slot label (e.g. hd_1) for a URL nested in an API object."""
+    if isinstance(value, dict):
+        for key, child in value.items():
+            label = str(key).strip()
+            if re.fullmatch(r"(?:hd|sd|fhd|uhd)[ _-]*\d+", label, re.I):
+                candidates = _api_collect_urls(child, base_url)
+                if target_url in candidates:
+                    return _stream_label({"stream_label": label})
+            found = _api_stream_label_for_url(child, target_url, base_url)
+            if found:
+                return found
+    elif isinstance(value, list):
+        for child in value:
+            found = _api_stream_label_for_url(child, target_url, base_url)
+            if found:
+                return found
+    return ""
 
 def _api_player_urls(obj):
     keys = {'player', 'player_url', 'iframe', 'iframe_url', 'embed', 'embed_url',
@@ -987,6 +1030,7 @@ def _api_normalize_match(obj, api, config, api_base):
         elif status_raw in ('0', 'scheduled', 'upcoming', 'not_started', 'ns'): status = 'scheduled'
         elif status_raw in ('2', 'finished', 'ft', 'ended', 'completed'): status = 'finished'
     blv = _api_pick(obj, ('commentator', 'commentators', 'blv', 'caster', 'speaker', 'voice'))
+    stream_label = _api_pick(obj, ('stream_label', 'stream_name', 'quality', 'resolution', 'channel_name', 'channel'))
     mid = _api_pick(obj, ('id', 'match_id', 'matchId', 'fixture_id', 'fixtureId'))
     home_logo = _api_pick(obj, ('home_logo', 'homeLogo', 'home_team_logo', 'homeTeamLogo'))
     away_logo = _api_pick(obj, ('away_logo', 'awayLogo', 'away_team_logo', 'awayTeamLogo'))
@@ -1007,7 +1051,7 @@ def _api_normalize_match(obj, api, config, api_base):
             when, start = extract_time('', raw)
     return {
         'match': clean_match_title(match) if match else '', 'when': when, 'start': start,
-        'score': score, 'commentator': blv, 'status': status, 'mid': mid,
+        'score': score, 'commentator': blv, 'stream_label': stream_label, 'sport': 'FOOTBALL', 'status': status, 'mid': mid,
         'home_logo': urljoin(api_base, home_logo) if home_logo else '',
         'away_logo': urljoin(api_base, away_logo) if away_logo else '',
     }
@@ -1090,7 +1134,7 @@ def crawl_api_source(api, config):
                     if rule.get('host', '').lower() == stream_host:
                         stream_ref = (rule.get('headers') or {}).get('Referer', stream_ref)
                 items.append({**meta, 'url': stream, 'referer': stream_ref,
-                              'format': stream_format(stream), 'source': api.get('id') or name.lower(),
+                              'format': stream_format(stream), 'stream_label': meta.get('stream_label') or _api_stream_label_for_url(node, stream, base), 'source': api.get('id') or name.lower(),
                               'source_name': name, 'group': name, 'source_logo': api.get('logo', ''),
                               'home_logo': meta.get('home_logo', ''), 'away_logo': meta.get('away_logo', '')})
         # If API returns player/embed pages instead of stream URLs, inspect those pages too.
@@ -1127,6 +1171,7 @@ def crawl_api_source(api, config):
                         meta = _api_normalize_match(node, api, config, detail_url)
                         for stream in _api_collect_urls(detail, detail_url):
                             items.append({**meta, 'url': stream, 'format': stream_format(stream),
+                                          'stream_label': meta.get('stream_label') or _api_stream_label_for_url(detail, stream, detail_url),
                                           'referer': referer, 'source': api.get('id') or name.lower(),
                                           'source_name': name, 'group': name, 'source_logo': api.get('logo', '')})
                     except Exception as exc:
